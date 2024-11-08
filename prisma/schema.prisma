@@ -11,14 +11,14 @@ datasource db {
 }
 
 model Club {
-  id   Int    @id @default(autoincrement())
+  id   String    @id @default(cuid())
   name String @unique
   teams Team[]
 }
 
 model Team {
   id       String      @id @default(cuid())
-  clubId   Int
+  clubId   String
   name     String
   club     Club    @relation(fields: [clubId], references: [id])
   players  Player[]
@@ -36,11 +36,11 @@ model Player {
 
 model Match {
   id           String      @id @default(cuid())
-  enemyClubId  String
   teamId       String
   matchDateTime DateTime
   team         Team      @relation(fields: [teamId], references: [id])
-  // TODO enemyClub
+  enemyClubName String
+  isHomeGame Boolean
   locations    Location[]
   lineups      Lineup[]
 }
