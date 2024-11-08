@@ -10,7 +10,57 @@ datasource db {
   url      = "file:./database.db"
 }
 
-model Post {
-  id      String   @id @default(cuid())
-  name    String  
+model Club {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  teams Team[]
 }
+
+model Team {
+  id       String      @id @default(cuid())
+  clubId   Int
+  name     String
+  club     Club    @relation(fields: [clubId], references: [id])
+  players  Player[]
+  matches  Match[]
+}
+
+model Player {
+  id       String      @id @default(cuid())
+  teamId   String
+  firstName String
+  lastName  String
+  team     Team  @relation(fields: [teamId], references: [id])
+  lineups  Lineup[]
+}
+
+model Match {
+  id           String      @id @default(cuid())
+  enemyClubId  String
+  teamId       String
+  matchDateTime DateTime
+  team         Team      @relation(fields: [teamId], references: [id])
+  // TODO enemyClub
+  locations    Location[]
+  lineups      Lineup[]
+}
+
+model Location {
+  id          String      @id @default(cuid())
+  matchId     String
+  hallName    String
+  streetAddress String
+  postalCode  String
+  city        String
+  match       Match  @relation(fields: [matchId], references: [id])
+}
+
+model Lineup {
+  id        String      @id @default(cuid())
+  matchId   String
+  playerId  String
+  position  Int
+  match     Match  @relation(fields: [matchId], references: [id])
+  player    Player @relation(fields: [playerId], references: [id])
+}
+
