@@ -37,3 +37,8 @@ next-env.d.ts
 
 # bun
 bun.lockb
+
+# database
+*.db
+prisma/migrations/*
+*.db-journal
