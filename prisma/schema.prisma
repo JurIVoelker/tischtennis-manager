@@ -13,12 +13,14 @@ datasource db {
 
 model Club {
   id   String    @id @default(cuid())
-  name String @unique
+  slug String    @unique 
+  name String    @unique
   teams Team[]
 }
 
 model Team {
   id       String      @id @default(cuid())
+  slug String    @unique 
   clubId   String
   name     String
   club     Club    @relation(fields: [clubId], references: [id])

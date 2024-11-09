@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma/prisma";
 import readline from "node:readline";
+import slugify from "slugify";
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -7,18 +8,22 @@ const rl = readline.createInterface({
 });
 
 const executeDatabaseScripts = async () => {
+  const clubName = "Test Club";
   const clubId = (
     await prisma.club.create({
       data: {
-        name: "Test Club",
+        name: clubName,
+        slug: slugify(clubName),
       },
     })
   ).id;
 
+  const teamName = "Herren I";
   const teamId = (
     await prisma.team.create({
       data: {
-        name: "Herren I",
+        name: teamName,
+        slug: slugify(teamName),
         clubId,
       },
     })
