@@ -2,12 +2,14 @@
   "name": "tischtennis-manager",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate-db": "npx prisma migrate dev"
+    "db:migrate": "npx prisma migrate dev",
+    "db:setup-test-data": "npx tsx ./testing/databaseTestData.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -21,7 +23,8 @@
     "react-dom": "^18",
     "sqlite3": "^5.1.7",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "typescript": "^5",
