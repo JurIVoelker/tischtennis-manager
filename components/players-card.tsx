@@ -1,17 +1,22 @@
-import { Prisma } from "@prisma/client";
+import { Player, Prisma } from "@prisma/client";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 
 interface PlayersCardProps {
-  players: any; // TODO TYPE
+  players: Player[] | undefined; // TODO TYPE
 }
 
 const PlayersCard = ({ players }: PlayersCardProps) => {
   return (
-    <Card className="p-6 flex flex-wrap gap-1">
-      {players.map((player) => (
-        <Badge variant="outline">{player.firstName}</Badge>
-      ))}
+    <Card className="p-6 ">
+      <h2 className="mb-4">Spieler</h2>
+      <div className="flex flex-wrap gap-2">
+        {!players && <p>Keine Spieler gefunden</p>}
+        {players &&
+          players.map((player) => (
+            <Badge variant="secondary">{`${player.firstName}`}</Badge>
+          ))}
+      </div>
     </Card>
   );
 };

@@ -26,8 +26,7 @@ const ClubTeamPage = async ({
 
   return (
     <div>
-      {/* <p>Club: {JSON.stringify(club)}</p> */}
-      <PlayersCard players={players}></PlayersCard>
+      <PlayersCard players={players} />
     </div>
   );
 };
