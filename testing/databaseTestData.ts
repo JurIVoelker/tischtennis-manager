@@ -54,6 +54,27 @@ const executeDatabaseScripts = async () => {
     })
   ).id;
 
+  const match2Id = (
+    await prisma.match.create({
+      data: {
+        teamId,
+        matchDateTime: new Date().toISOString(),
+        enemyClubName: "Other Enemy II",
+        isHomeGame: false,
+      },
+    })
+  ).id;
+
+  await prisma.location.create({
+    data: {
+      hallName: "Location Hall",
+      streetAddress: "Test Street",
+      postalCode: "12345",
+      city: "City 2",
+      matchId: match2Id,
+    },
+  });
+
   await prisma.location.create({
     data: {
       hallName: "Test Location",

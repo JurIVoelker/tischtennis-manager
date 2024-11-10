@@ -14,14 +14,14 @@ const Lineup: React.FC<LineupProps> = async ({ matchId }) => {
     include: { player: true },
   });
 
-  if (!lineup)
+  if (!lineup || !lineup.length)
     return (
-      <Typography variant="p-gray" className="[&:not(:first-child)]:mt-0">
+      <Typography variant="p-gray" className="[&:not(:first-child)]:mt-2">
         Der Mannschaftsführer hat noch keine Aufstellung ausgewählt.
       </Typography>
     );
   return (
-    <div className="flex gap-2 flex-col">
+    <div className="flex gap-2 flex-col mt-2">
       {lineup.map((lineup) => (
         <PositonIndicator position={lineup.position}>
           {lineup.player.firstName}

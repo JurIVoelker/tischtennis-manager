@@ -23,6 +23,7 @@ const ClubTeamPage = async ({
           matches: {
             include: {
               locations: true,
+              lineups: true,
             },
           },
         },
@@ -35,13 +36,19 @@ const ClubTeamPage = async ({
   return (
     <div className="flex flex-col gap-8 p-6">
       <PlayersCard players={players} />
-      <div>
-        {matches &&
-          matches.map((match) => {
-            const location = match.locations[0];
-            return <GameCard match={match} location={location} />;
-          })}
-      </div>
+      {matches &&
+        matches.map((match, id) => {
+          const location = match.locations[0];
+          const isLineup = Boolean(match.lineups.length);
+          return (
+            <GameCard
+              match={match}
+              location={location}
+              isLineup={isLineup}
+              key={id}
+            />
+          );
+        })}
     </div>
   );
 };

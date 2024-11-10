@@ -9,9 +9,14 @@ import Lineup from "./lineup";
 interface GameCardProps {
   match: Match;
   location: Location;
+  isLineup: boolean;
 }
 
-const GameCard: React.FC<GameCardProps> = async ({ match, location }) => {
+const GameCard: React.FC<GameCardProps> = async ({
+  match,
+  location,
+  isLineup,
+}) => {
   const { matchDateTime: dateTime } = match;
   const dateString = `${dateTime.getDay()}.${dateTime.getMonth()}.${dateTime.getFullYear()}`;
   const timeString = `${dateTime.getHours()}:${dateTime.getMinutes()}`;
@@ -19,6 +24,7 @@ const GameCard: React.FC<GameCardProps> = async ({ match, location }) => {
 
   const { hallName, streetAddress, city, postalCode } = location;
   const locationString = `${hallName}, ${streetAddress} ${postalCode}, ${city}`;
+
   return (
     <Card className="p-6">
       {/* Game Card Header */}
@@ -31,19 +37,23 @@ const GameCard: React.FC<GameCardProps> = async ({ match, location }) => {
       {/* Game Card Body */}
       <div className="py-4">
         <Typography variant="p-gray">{dateTimeString}</Typography>
-        <Typography variant="p-gray" className="[&:not(:first-child)]:mt-0">
+        <Typography variant="p-gray" className="[&:not(:first-child)]:mt-1">
           {locationString}
         </Typography>
-        <Typography variant="h5" className="mt-6 mb-2">
+        <Typography variant="h5" className="mt-6">
           Aufstellung
         </Typography>
         <Lineup matchId={match.id} />
       </div>
       {/* Footer */}
-      <Typography variant="h5" className="mb-2 mt-8">
-        Hast du Zeit zu spielen?
-      </Typography>
-      <AvailabiltyButtons />
+      {!isLineup && (
+        <div className=" mt-8">
+          <Typography variant="h5" className="mb-2">
+            Hast du Zeit zu spielen?
+          </Typography>
+          <AvailabiltyButtons />
+        </div>
+      )}
     </Card>
   );
 };
