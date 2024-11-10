@@ -1,3 +1,4 @@
+import { AppSidebar } from "@/components/app-sidebar";
 import GameCard from "@/components/game-card";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
@@ -37,6 +38,7 @@ const ClubTeamPage = async ({
   return (
     <>
       <Navbar title={teamName} />
+      <AppSidebar clubSlug={clubSlug} teamSlug={teamSlug} />
       <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
         <PlayersCard players={players} />
         {matches &&
