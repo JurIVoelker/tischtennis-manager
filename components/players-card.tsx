@@ -4,7 +4,7 @@ import { Badge } from "./ui/badge";
 import Typography from "./typography";
 
 interface PlayersCardProps {
-  players: Player[] | undefined; // TODO TYPE
+  players: Player[] | undefined;
 }
 
 const PlayersCard = ({ players }: PlayersCardProps) => {

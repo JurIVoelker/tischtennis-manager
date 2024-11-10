@@ -23,7 +23,6 @@ const ClubTeamPage = async ({
           matches: {
             include: {
               locations: true,
-              lineups: { include: { player: true } },
             },
           },
         },
@@ -40,10 +39,7 @@ const ClubTeamPage = async ({
         {matches &&
           matches.map((match) => {
             const location = match.locations[0];
-            const lineup = match.lineups[0];
-            return (
-              <GameCard match={match} location={location} lineup={lineup} />
-            );
+            return <GameCard match={match} location={location} />;
           })}
       </div>
     </div>

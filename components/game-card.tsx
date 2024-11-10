@@ -2,7 +2,6 @@ import { Lineup as LineupType, Location, Match } from "@prisma/client";
 import React, { useState } from "react";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
 import AvailabiltyButtons from "./game-avaliabilty-buttons";
 import Typography from "./typography";
 import Lineup from "./lineup";
@@ -10,10 +9,9 @@ import Lineup from "./lineup";
 interface GameCardProps {
   match: Match;
   location: Location;
-  lineup: LineupType;
 }
 
-const GameCard: React.FC<GameCardProps> = ({ match, location, lineup }) => {
+const GameCard: React.FC<GameCardProps> = async ({ match, location }) => {
   const { matchDateTime: dateTime } = match;
   const dateString = `${dateTime.getDay()}.${dateTime.getMonth()}.${dateTime.getFullYear()}`;
   const timeString = `${dateTime.getHours()}:${dateTime.getMinutes()}`;
@@ -36,13 +34,13 @@ const GameCard: React.FC<GameCardProps> = ({ match, location, lineup }) => {
         <Typography variant="p-gray" className="[&:not(:first-child)]:mt-0">
           {locationString}
         </Typography>
-        <Typography variant="h5" className="mt-6">
+        <Typography variant="h5" className="mt-6 mb-2">
           Aufstellung
         </Typography>
-        <Lineup lineup={lineup} />
+        <Lineup matchId={match.id} />
       </div>
       {/* Footer */}
-      <Typography variant="h5" className="mb-2 mt-6">
+      <Typography variant="h5" className="mb-2 mt-8">
         Hast du Zeit zu spielen?
       </Typography>
       <AvailabiltyButtons />
