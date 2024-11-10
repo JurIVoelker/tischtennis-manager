@@ -34,7 +34,7 @@ const ClubTeamPage = async ({
   const { players, matches } = club?.teams[0] || {};
 
   return (
-    <div className="flex flex-col gap-8 p-6">
+    <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
       <PlayersCard players={players} />
       {matches &&
         matches.map((match, id) => {
