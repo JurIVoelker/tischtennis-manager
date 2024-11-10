@@ -1,3 +1,4 @@
+import GameCard from "@/components/game-card";
 import PlayersCard from "@/components/players-card";
 import {
   ClubTeamParams,
@@ -17,16 +18,34 @@ const ClubTeamPage = async ({
     where: { slug: clubSlug, teams: { some: { slug: teamSlug } } },
     include: {
       teams: {
-        include: { players: true },
+        include: {
+          players: true,
+          matches: {
+            include: {
+              locations: true,
+              lineups: { include: { player: true } },
+            },
+          },
+        },
       },
     },
   });
 
-  const { players } = club?.teams[0] || {};
+  const { players, matches } = club?.teams[0] || {};
 
   return (
-    <div>
+    <div className="flex flex-col gap-8 p-6">
       <PlayersCard players={players} />
+      <div>
+        {matches &&
+          matches.map((match) => {
+            const location = match.locations[0];
+            const lineup = match.lineups[0];
+            return (
+              <GameCard match={match} location={location} lineup={lineup} />
+            );
+          })}
+      </div>
     </div>
   );
 };

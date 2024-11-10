@@ -47,6 +47,15 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --positive-dark: #396922;
+    --positive-light: #deffde;
+    --positive-border: #a1caa1;
+    --negative-dark: #c32733;
+    --negative-light: #ffdee0;
+    --negative-border: #f39fa5;
+    --neutral-dark: #845719;
+    --neutral-light: #fff6de;
+    --neutral-border: #e5c393;
   }
   .dark {
     --background: 0 0% 3.9%;
