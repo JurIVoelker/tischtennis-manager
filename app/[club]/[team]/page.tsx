@@ -1,4 +1,5 @@
 import GameCard from "@/components/game-card";
+import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
 import {
   ClubTeamParams,
@@ -31,25 +32,28 @@ const ClubTeamPage = async ({
     },
   });
 
-  const { players, matches } = club?.teams[0] || {};
+  const { players, matches, name: teamName } = club?.teams[0] || {};
 
   return (
-    <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
-      <PlayersCard players={players} />
-      {matches &&
-        matches.map((match, id) => {
-          const location = match.locations[0];
-          const isLineup = Boolean(match.lineups.length);
-          return (
-            <GameCard
-              match={match}
-              location={location}
-              isLineup={isLineup}
-              key={id}
-            />
-          );
-        })}
-    </div>
+    <>
+      <Navbar title={teamName} />
+      <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
+        <PlayersCard players={players} />
+        {matches &&
+          matches.map((match, id) => {
+            const location = match.locations[0];
+            const isLineup = Boolean(match.lineups.length);
+            return (
+              <GameCard
+                match={match}
+                location={location}
+                isLineup={isLineup}
+                key={id}
+              />
+            );
+          })}
+      </div>
+    </>
   );
 };
 
