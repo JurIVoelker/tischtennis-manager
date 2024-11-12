@@ -1,57 +1,44 @@
+import Navbar from "@/components/navbar";
+import UserLoginForm from "@/components/user-login-form";
+import {
+  ClubTeamParams,
+  decodeClubTeamParams,
+  generateTeamPageParams,
+} from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
-import slugify from "slugify";
 
 const ClubUserLoginPage = async ({
   params,
 }: {
-  params: Promise<{ club: string }>;
+  params: Promise<ClubTeamParams>;
 }) => {
-  const clubSlug = decodeURIComponent((await params).club);
+  const { clubSlug, teamSlug } = await decodeClubTeamParams(params);
+
   const club = await prisma.club.findUnique({
-    where: { slug: clubSlug },
+    where: { slug: clubSlug, teams: { some: { slug: teamSlug } } },
     include: {
       teams: {
-        include: { players: true },
+        include: {
+          players: true,
+        },
       },
     },
   });
 
-  const teams = club?.teams || [];
+  const players = club?.teams[0].players;
 
   return (
-    <div>
-      <p>{club?.name}</p>
-      {teams.map((team) => (
-        <div>
-          <p>{team.name}</p>
-          {team.players.map((player) => (
-            <p>{player.firstName}</p>
-          ))}
-        </div>
-      ))}
-    </div>
+    <>
+      <Navbar title="Login" />
+      <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
+        <UserLoginForm players={players} />
+      </div>
+    </>
   );
 };
 
 export default ClubUserLoginPage;
 
 export async function generateStaticParams() {
-  const clubs = await prisma.club.findMany({
-    include: {
-      teams: true,
-    },
-  });
-
-  const paths: { club: String; team: String }[] = [];
-
-  clubs.forEach((club) => {
-    club.teams.forEach((team) => {
-      paths.push({
-        club: slugify(club.slug),
-        team: slugify(team.slug),
-      });
-    });
-  });
-
-  return paths;
+  return await generateTeamPageParams();
 }
