@@ -17,7 +17,7 @@ const InvalidLinkPage = () => {
       "Es ist ein unerwarteter Fehler aufgetreten. Bitte kontaktiere einen Administrator.";
     if (statusCode === MIDDLEWARE_STATUS_UNAUTHORIZED)
       statusText =
-        "Authentisierung fehlgeschlagen. Bitte überprüfe, ob der Link gültig ist und kontaktiere deinen Mannschaftsführer.";
+        "Authentifizierung fehlgeschlagen. Bitte überprüfe, ob der Link gültig ist und kontaktiere deinen Mannschaftsführer.";
     if (statusCode === MIDDLEWARE_STATUS_CLUB_NOT_FOUND)
       statusText = "Der von dir gesuchte Verein wurde nicht gefunden";
     setStatusText(statusText);
