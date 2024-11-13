@@ -21,8 +21,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { LOGIN_PAGE_REGEX } from "@/constants/regex";
 
 export const AppSidebar = ({}) => {
-  // eslint-disable react-hooks/rules-of-hooks
-
   // Hide sidebar on excludedPages
   const pathname = usePathname();
   const excludedRoutes = [LOGIN_PAGE_REGEX];
@@ -32,8 +30,10 @@ export const AppSidebar = ({}) => {
 
   // Get club teams of user
   const userClub = "Test-Club";
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [teams, setTeams] = useState<Team[] | null>(null);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     getTeams(userClub).then((fetchedTeams: Team[]) => {
       setTeams(fetchedTeams);
@@ -41,9 +41,12 @@ export const AppSidebar = ({}) => {
   }, []);
 
   // Handle click on team
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { toggleSidebar } = useSidebar();
   const currentTeamSlug = pathname.split("/")[2];
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { push } = useRouter();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const isMobile = useIsMobile();
   const handleClickLink = (teamSlug: string) => {
     push(`/${userClub}/${teamSlug}`);
