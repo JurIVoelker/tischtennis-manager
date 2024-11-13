@@ -31,7 +31,7 @@ const GameCard: React.FC<GameCardProps> = async ({
   const locationString = `${hallName}, ${streetAddress} ${postalCode}, ${city}`;
 
   return (
-    <Card className="p-6 space-y-4">
+    <Card className="p-6 space-y-6">
       {/* Game Card Header */}
       <div className="flex justify-between mb-6">
         <Typography variant="h4">{match.enemyClubName}</Typography>

@@ -15,7 +15,7 @@ const Lineup: React.FC<LineupProps> = async ({ matchId }) => {
 
   if (!lineup || !lineup.length)
     return (
-      <Typography variant="p-gray" className="[&:not(:first-child)]:mt-2">
+      <Typography variant="p-gray" className="leading-0 mt-1">
         Der Mannschaftsführer hat noch keine Aufstellung ausgewählt.
       </Typography>
     );
