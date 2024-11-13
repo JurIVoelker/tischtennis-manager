@@ -3,6 +3,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import GameCard from "@/components/game-card";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
+import Typography from "@/components/typography";
 import {
   ClubTeamParams,
   decodeClubTeamParams,
@@ -60,6 +61,9 @@ const ClubTeamPage = async ({
                   />
                 );
               })}
+              {!matches.length && (
+                <Typography variant="p-gray">Keine Spiele gefunden</Typography>
+              )}
             </div>
           )}
         </div>

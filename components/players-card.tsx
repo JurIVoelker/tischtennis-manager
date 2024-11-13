@@ -16,7 +16,9 @@ const PlayersCard = ({ players, className }: PlayersCardProps) => {
         Spieler
       </Typography>
       <div className="flex flex-wrap gap-2">
-        {!players && <p>Keine Spieler gefunden</p>}
+        {!players?.length && (
+          <Typography variant="p-gray">Keine Spieler gefunden</Typography>
+        )}
         {players &&
           players.map((player) => (
             <Badge variant="secondary">{`${player.firstName}`}</Badge>
