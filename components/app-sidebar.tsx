@@ -18,10 +18,20 @@ import { Skeleton } from "./ui/skeleton";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { LOGIN_PAGE_REGEX } from "@/constants/regex";
 
 export const AppSidebar = ({}) => {
-  const userClub = "Test-Club";
 
+  // Hide sidebar on excludedPages
+  const pathname = usePathname();
+  const excludedRoutes = [LOGIN_PAGE_REGEX]
+  if (excludedRoutes.some((route) => new RegExp(route).test(pathname))) {
+    return <></>
+  }
+
+
+  // Get club teams of user
+  const userClub = "Test-Club";
   const [teams, setTeams] = useState<Team[] | null>(null);
 
   useEffect(() => {
@@ -30,15 +40,11 @@ export const AppSidebar = ({}) => {
     });
   }, []);
 
+  // Handle click on team
   const { toggleSidebar } = useSidebar();
-
-  const pathname = usePathname();
   const currentTeamSlug = pathname.split("/")[2];
-
   const { push } = useRouter();
-
   const isMobile = useIsMobile();
-
   const handleClickLink = (teamSlug: string) => {
     push(`/${userClub}/${teamSlug}`);
     if (isMobile) toggleSidebar();
