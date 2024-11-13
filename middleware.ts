@@ -45,8 +45,7 @@ export async function middleware(request: NextRequest) {
     setTeamTokenCookie(response, clubSlug, teamSlug, authorizationStatus);
     return response;
   } else if (authorizationStatus instanceof NextResponse) {
-    // If the user could not be authorized, redirect to the unauthorized link page
-    authorizationStatus.cookies.delete(teamCookieName(teamSlug, clubSlug));
+    authorizationStatus.cookies.delete(teamCookieName(clubSlug, teamSlug));
     return authorizationStatus;
   }
 }
