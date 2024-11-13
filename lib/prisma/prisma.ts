@@ -15,7 +15,7 @@ export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
 
-export function handlePrismaError(error: any) {
+export function handlePrismaError(error: unknown) {
   const {
     UNKNOWN_ERROR,
     DATABASE_USER_UNAUTHORIZED,

@@ -40,7 +40,9 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ players }) => {
     resolver: zodResolver(FormSchema),
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {}
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log(data);
+  }
 
   return (
     <Card className="p-6">

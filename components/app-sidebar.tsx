@@ -21,14 +21,14 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { LOGIN_PAGE_REGEX } from "@/constants/regex";
 
 export const AppSidebar = ({}) => {
+  // eslint-disable react-hooks/rules-of-hooks
 
   // Hide sidebar on excludedPages
   const pathname = usePathname();
-  const excludedRoutes = [LOGIN_PAGE_REGEX]
+  const excludedRoutes = [LOGIN_PAGE_REGEX];
   if (excludedRoutes.some((route) => new RegExp(route).test(pathname))) {
-    return <></>
+    return <></>;
   }
-
 
   // Get club teams of user
   const userClub = "Test-Club";

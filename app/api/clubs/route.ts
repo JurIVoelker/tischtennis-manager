@@ -1,6 +1,4 @@
 import { handlePrismaError, prisma } from "@/lib/prisma/prisma";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-
 export const dynamic = "force-dynamic"; // defaults to auto
 export async function GET() {
   let response;
@@ -12,7 +10,7 @@ export async function GET() {
   return new Response(JSON.stringify({ data: response }));
 }
 
-export async function POST(request: Request) {
+export async function POST() {
   // TODO IMPLEMENT
   return new Response("Method not implemented", { status: 501 });
 }

@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import Typography from "@/components/typography";
 import UserLoginForm from "@/components/user-login-form";
 import {
   ClubTeamParams,
@@ -26,11 +27,20 @@ const ClubUserLoginPage = async ({
   });
 
   const players = club?.teams[0].players;
+  const teamName = club?.teams[0].name;
 
   return (
     <div className="w-full">
       <Navbar title="Login" />
       <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
+        <div>
+          <Typography variant="h3">{teamName}</Typography>
+          <Typography
+            variant="p"
+            className="mt-4"
+          >{`Du wurdest eingeladen ${teamName} beizutreten. Wähle deinen Namen aus um fortzufahren.`}</Typography>
+        </div>
+
         <UserLoginForm players={players} />
       </div>
     </div>
