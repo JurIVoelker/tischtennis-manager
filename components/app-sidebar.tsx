@@ -1,26 +1,23 @@
 "use client";
-
-import axios from "axios";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-  SidebarInset,
   SidebarMenuButton,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { prisma } from "@/lib/prisma/prisma";
 import { Button, buttonVariants } from "./ui/button";
 import React, { useEffect, useState } from "react";
 import Typography from "./typography";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { Club, Team } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { Team } from "@prisma/client";
 import { getTeams } from "@/hooks/useGetUserTeams";
 import { Skeleton } from "./ui/skeleton";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const AppSidebar = ({}) => {
   const userClub = "Test-Club";
@@ -33,8 +30,19 @@ export const AppSidebar = ({}) => {
     });
   }, []);
 
+  const { toggleSidebar } = useSidebar();
+
   const pathname = usePathname();
   const currentTeamSlug = pathname.split("/")[2];
+
+  const { push } = useRouter();
+
+  const isMobile = useIsMobile();
+
+  const handleClickLink = (teamSlug: string) => {
+    push(`/${userClub}/${teamSlug}`);
+    if (isMobile) toggleSidebar();
+  };
 
   return (
     <Sidebar>
@@ -45,24 +53,31 @@ export const AppSidebar = ({}) => {
           <div className="flex flex-col gap-2 pt-2">
             {teams &&
               teams.map((team) => {
+                const isCurrentTeam = team.slug === currentTeamSlug;
                 const buttonStyles = buttonVariants({
-                  variant:
-                    team.slug === currentTeamSlug ? "default" : "secondary",
+                  variant: isCurrentTeam ? "default" : "ghost",
                 });
+                const customButtonStyles = isCurrentTeam
+                  ? "hover:text-primary-foreground"
+                  : "bg-transparent text-primary hover:bg-sidebar-accent";
                 return (
                   <SidebarMenuButton asChild key={team.id}>
-                    <Link
-                      href={`/${userClub}/${team.slug}`}
-                      className={cn(buttonStyles, "justify-start")}
+                    <Button
+                      className={cn(
+                        buttonStyles,
+                        customButtonStyles,
+                        "justify-start"
+                      )}
+                      onClick={() => handleClickLink(team.slug)}
                     >
                       {team.name}
-                    </Link>
+                    </Button>
                   </SidebarMenuButton>
                 );
               })}
             {teams === null &&
               Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="w-full h-8" />
+                <Skeleton key={i} className="w-full h-10" />
               ))}
             {Array.isArray(teams) && teams.length === 0 && (
               <Typography variant="muted">
