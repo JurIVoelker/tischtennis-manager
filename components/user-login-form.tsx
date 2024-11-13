@@ -17,12 +17,22 @@ import { Button } from "@/components/ui/button";
 import { Player } from "@prisma/client";
 import React from "react";
 import { RadioGroupItem } from "./ui/radio-group";
+import { setUserData } from "@/lib/localstorageUtils";
+import { useRouter } from "next/navigation";
 
 interface UserLoginFormProps {
   players: Player[] | undefined;
+  teamName: string;
+  clubSlug: string;
+  teamSlug: string;
 }
 
-const UserLoginForm: React.FC<UserLoginFormProps> = ({ players }) => {
+const UserLoginForm: React.FC<UserLoginFormProps> = ({
+  players,
+  teamName,
+  clubSlug,
+  teamSlug,
+}) => {
   const playersSchema = players?.map((player) => player.firstName) || [""];
 
   const FormSchema = z.object({
@@ -40,7 +50,13 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ players }) => {
     resolver: zodResolver(FormSchema),
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {}
+  const { push } = useRouter();
+
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    const { playerName } = data;
+    setUserData({ name: playerName, team: teamName });
+    push(`/${clubSlug}/${teamSlug}`);
+  }
 
   return (
     <Card className="p-6">
