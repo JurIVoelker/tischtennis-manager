@@ -29,6 +29,28 @@ const executeDatabaseScripts = async () => {
     })
   ).id;
 
+  const teamName2 = "Herren II";
+  const teamId2 = (
+    await prisma.team.create({
+      data: {
+        name: teamName2,
+        slug: slugify(teamName2),
+        clubId,
+      },
+    })
+  ).id;
+
+  const teamName3 = "Herren III";
+  const teamId3 = (
+    await prisma.team.create({
+      data: {
+        name: teamName3,
+        slug: slugify(teamName3),
+        clubId,
+      },
+    })
+  ).id;
+
   const playerNames = ["Max", "Moritz", "Erika", "Hans", "Klaus"];
 
   const playerIds = [];

@@ -54,11 +54,11 @@ const Typography: React.FC<TypographyProps> = ({
     },
     p: {
       component: "p",
-      className: "leading-7 [&:not(:first-child)]:mt-6",
+      className: "leading-7",
     },
     "p-gray": {
       component: "p",
-      className: "leading-7 [&:not(:first-child)]:mt-6 text-muted-foreground",
+      className: "leading-7 text-muted-foreground",
     },
     blockquote: {
       component: "blockquote",

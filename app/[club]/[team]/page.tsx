@@ -1,3 +1,4 @@
+export const dynamicParams = false;
 import { AppSidebar } from "@/components/app-sidebar";
 import GameCard from "@/components/game-card";
 import Navbar from "@/components/navbar";
@@ -17,7 +18,7 @@ const ClubTeamPage = async ({
   const { clubSlug, teamSlug } = await decodeClubTeamParams(params);
 
   const club = await prisma.club.findUnique({
-    where: { slug: clubSlug, teams: { some: { slug: teamSlug } } },
+    where: { slug: clubSlug },
     include: {
       teams: {
         include: {
@@ -33,27 +34,35 @@ const ClubTeamPage = async ({
     },
   });
 
-  const { players, matches, name: teamName } = club?.teams[0] || {};
+  const {
+    players,
+    matches,
+    name: teamName,
+  } = club?.teams?.find((team) => team.slug === teamSlug) || {};
 
   return (
     <>
-      <Navbar title={teamName} />
-      <AppSidebar clubSlug={clubSlug} teamSlug={teamSlug} />
-      <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
-        <PlayersCard players={players} />
-        {matches &&
-          matches.map((match, id) => {
-            const location = match.locations[0];
-            const isLineup = Boolean(match.lineups.length);
-            return (
-              <GameCard
-                match={match}
-                location={location}
-                isLineup={isLineup}
-                key={id}
-              />
-            );
-          })}
+      <div className="w-full">
+        <Navbar title={teamName} />
+        <div className="px-6 pb-6 pt-16 ">
+          <PlayersCard players={players} className="mb-8" />
+          {matches && (
+            <div className="flex flex-col gap-8 md:grid md:grid-cols-2 xl:grid-cols-3">
+              {matches.map((match, id) => {
+                const location = match.locations[0];
+                const isLineup = Boolean(match.lineups.length);
+                return (
+                  <GameCard
+                    match={match}
+                    location={location}
+                    isLineup={isLineup}
+                    key={id}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
