@@ -30,8 +30,6 @@ const ClubUserLoginPage = async ({
   const players = club?.teams[0]?.players;
   const teamName = club?.teams[0]?.name;
 
-  console.log(clubSlug, teamSlug, players, teamName);
-
   return (
     <div className="w-full">
       <Navbar title="Login" />

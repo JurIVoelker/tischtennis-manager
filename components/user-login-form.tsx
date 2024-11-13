@@ -19,6 +19,8 @@ import React from "react";
 import { RadioGroupItem } from "./ui/radio-group";
 import { setUserData } from "@/lib/localstorageUtils";
 import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
+import Typography from "./typography";
 
 interface UserLoginFormProps {
   players: Player[] | undefined;
@@ -55,6 +57,16 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const { playerName } = data;
     setUserData({ name: playerName, team: teamName });
+    toast({
+      title: "Login erfolgreich",
+      description: (
+        <div className="mt-2 w-[340px]">
+          <Typography variant="p-gray" className="leading-1">
+            Wilkommen {playerName}! Du wurdest erfolgreich eingeloggt.
+          </Typography>
+        </div>
+      ),
+    });
     push(`/${clubSlug}/${teamSlug}`);
   }
 

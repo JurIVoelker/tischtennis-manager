@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
 interface TypographyProps {
@@ -91,7 +92,7 @@ const Typography: React.FC<TypographyProps> = ({
   const selectedVariant = variants[variant];
   return React.createElement(
     selectedVariant.component,
-    { className: `${selectedVariant.className} ${className || ""}` },
+    { className: cn(selectedVariant.className, className || "") },
     children
   );
 };
