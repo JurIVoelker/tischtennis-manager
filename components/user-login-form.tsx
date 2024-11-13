@@ -126,8 +126,13 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
             )}
           />
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading && <Loader2 className="animate-spin" />}
-            Fortfahren
+            {isLoading && (
+              <>
+                <Loader2 className="animate-spin" />
+                Laden...
+              </>
+            )}
+            {!isLoading && "Einloggen"}
           </Button>
         </form>
       </Form>
