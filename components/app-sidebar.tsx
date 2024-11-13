@@ -59,7 +59,7 @@ export const AppSidebar = ({}) => {
       <SidebarContent>
         <SidebarGroup className="mt-28">
           <Typography variant="muted">Alle Mannschaften</Typography>
-          <div className="flex flex-col gap-2 pt-2">
+          <div className="flex flex-col gap-2 pt-4">
             {teams &&
               teams.map((team) => {
                 const isCurrentTeam = team.slug === currentTeamSlug;
