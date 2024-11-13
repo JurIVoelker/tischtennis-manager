@@ -1,34 +1,74 @@
+import Navbar from "@/components/navbar";
+import Typography from "@/components/typography";
+import UserLoginForm from "@/components/user-login-form";
+import {
+  ClubTeamParams,
+  decodeClubTeamParams,
+  generateTeamPageParams,
+} from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
-import slugify from "slugify";
 
 const ClubUserLoginPage = async ({
   params,
 }: {
-  params: Promise<{ club: string }>;
+  params: Promise<ClubTeamParams>;
 }) => {
-  const clubSlug = decodeURIComponent((await params).club);
+  const { clubSlug, teamSlug } = await decodeClubTeamParams(params);
+
   const club = await prisma.club.findUnique({
     where: { slug: clubSlug },
     include: {
       teams: {
-        include: { players: true },
+        where: { slug: teamSlug },
+        include: {
+          players: true,
+        },
       },
     },
   });
 
-  const teams = club?.teams || [];
+  const players = club?.teams[0]?.players;
+  const teamName = club?.teams[0]?.name;
 
   return (
-    <div>
-      <p>{club?.name}</p>
-      {teams.map((team) => (
-        <div>
-          <p>{team.name}</p>
-          {team.players.map((player) => (
-            <p>{player.firstName}</p>
-          ))}
-        </div>
-      ))}
+    <div className="w-full">
+      <Navbar title="Login" />
+      <div className="space-y-12 px-6 pb-6 pt-16">
+        {teamName && Boolean(players?.length) && (
+          <>
+            <div className="space-y-2">
+              <Typography variant="h3">{teamName}</Typography>
+              <Typography variant="p-gray">{`Du wurdest eingeladen ${teamName} beizutreten. Wähle deinen Namen aus um fortzufahren.`}</Typography>
+            </div>
+            <UserLoginForm
+              players={players}
+              teamName={teamName}
+              clubSlug={clubSlug}
+              teamSlug={teamSlug}
+            />
+          </>
+        )}
+        {/* Error handling */}
+        {players?.length === 0 ? (
+          <div className="space-y-2">
+            <Typography variant="h3">Keine Spieler gefunden</Typography>
+            <Typography variant="p-gray">
+              Es scheint so als ob es keine Spieler in dieser Mannschaft gibt.
+              Bitte kontaktiere deinen Mannschaftsführer.
+            </Typography>
+          </div>
+        ) : !teamName ? (
+          <div className="space-y-2">
+            <Typography variant="h3">Ungültiger Link</Typography>
+            <Typography variant="p-gray">
+              Es scheint so als ob dieser Link nicht gültig ist. Bitte
+              kontaktiere deinen Mannschaftsführer.
+            </Typography>
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 };
@@ -36,22 +76,5 @@ const ClubUserLoginPage = async ({
 export default ClubUserLoginPage;
 
 export async function generateStaticParams() {
-  const clubs = await prisma.club.findMany({
-    include: {
-      teams: true,
-    },
-  });
-
-  const paths: { club: String; team: String }[] = [];
-
-  clubs.forEach((club) => {
-    club.teams.forEach((team) => {
-      paths.push({
-        club: slugify(club.slug),
-        team: slugify(team.slug),
-      });
-    });
-  });
-
-  return paths;
+  return await generateTeamPageParams();
 }

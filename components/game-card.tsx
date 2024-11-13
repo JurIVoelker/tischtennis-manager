@@ -1,5 +1,5 @@
-import { Lineup as LineupType, Location, Match } from "@prisma/client";
-import React, { useState } from "react";
+import { Location, Match } from "@prisma/client";
+import React from "react";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import AvailabiltyButtons from "./game-avaliabilty-buttons";

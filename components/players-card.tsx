@@ -1,4 +1,4 @@
-import { Player, Prisma } from "@prisma/client";
+import { Player } from "@prisma/client";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import Typography from "./typography";
@@ -21,7 +21,10 @@ const PlayersCard = ({ players, className }: PlayersCardProps) => {
         )}
         {players &&
           players.map((player) => (
-            <Badge variant="secondary">{`${player.firstName}`}</Badge>
+            <Badge
+              variant="secondary"
+              key={player.id}
+            >{`${player.firstName}`}</Badge>
           ))}
       </div>
     </Card>

@@ -1,4 +1,3 @@
-import { Lineup as LineupType } from "@prisma/client";
 import React from "react";
 import Typography from "./typography";
 import { prisma } from "@/lib/prisma/prisma";
@@ -23,7 +22,7 @@ const Lineup: React.FC<LineupProps> = async ({ matchId }) => {
   return (
     <div className="flex gap-2 flex-col mt-2">
       {lineup.map((lineup) => (
-        <PositonIndicator position={lineup.position}>
+        <PositonIndicator position={lineup.position} key={lineup.id}>
           {lineup.player.firstName}
         </PositonIndicator>
       ))}
