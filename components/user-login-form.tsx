@@ -89,7 +89,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
                     {players?.map((player) => (
                       <FormItem
                         key={player.id}
-                        className="flex items-center space-x-3 space-y-0"
+                        className="flex items-center space-x-2 space-y-0"
                       >
                         <FormControl>
                           <RadioGroupItem value={player.firstName} />

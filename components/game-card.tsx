@@ -5,6 +5,11 @@ import { Badge } from "./ui/badge";
 import AvailabiltyButtons from "./game-avaliabilty-buttons";
 import Typography from "./typography";
 import Lineup from "./lineup";
+import {
+  Calendar01Icon,
+  Calendar02Icon,
+  Location01Icon,
+} from "hugeicons-react";
 
 interface GameCardProps {
   match: Match;
@@ -36,10 +41,18 @@ const GameCard: React.FC<GameCardProps> = async ({
       </div>
       {/* Game Card Body */}
       <div className="py-4">
-        <Typography variant="p-gray">{dateTimeString}</Typography>
-        <Typography variant="p-gray" className="[&:not(:first-child)]:mt-1">
-          {locationString}
-        </Typography>
+        <div className="inline-flex items-center gap-1 mb-2">
+          <Calendar02Icon size={20} stroke="4" className="shrink-0" />
+          <Typography variant="p-gray" className="leading-0">
+            {dateTimeString}
+          </Typography>
+        </div>
+        <div className="inline-flex items-center gap-1">
+          <Location01Icon size={20} stroke="4" className="shrink-0" />
+          <Typography variant="p-gray" className="leading-0">
+            {locationString}
+          </Typography>
+        </div>
         <Typography variant="h5" className="mt-6">
           Aufstellung
         </Typography>
