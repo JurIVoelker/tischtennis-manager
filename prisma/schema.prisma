@@ -26,6 +26,15 @@ model Team {
   club     Club        @relation(fields: [clubId], references: [id])
   players  Player[]
   matches  Match[]
+  teamAuth  TeamAuth[]
+}
+
+model TeamAuth {
+  createdAt DateTime @default(now())
+  id      String @id @default(cuid())
+  teamId  String @unique 
+  token   String @default(cuid())
+  team    Team   @relation(fields: [teamId], references: [id])
 }
 
 model Player {
