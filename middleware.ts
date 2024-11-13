@@ -5,7 +5,6 @@ import { handleUnauthorizedUser } from "./lib/middlewareUtils";
 import { getValidToken } from "./lib/APIUtils";
 import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 
-// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   const clubSlug = "Test-Club";
   const teamSlug = "Herren-I";
