@@ -28,12 +28,12 @@ const ClubUserLoginPage = async ({
   const players = club?.teams[0].players;
 
   return (
-    <>
+    <div className="w-full">
       <Navbar title="Login" />
       <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
         <UserLoginForm players={players} />
       </div>
-    </>
+    </div>
   );
 };
 

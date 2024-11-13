@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
 import { Player } from "@prisma/client";
 import React from "react";
 import { RadioGroupItem } from "./ui/radio-group";
@@ -24,40 +23,35 @@ interface UserLoginFormProps {
 }
 
 const UserLoginForm: React.FC<UserLoginFormProps> = ({ players }) => {
+  const playersSchema = players?.map((player) => player.firstName) || [""];
+
   const FormSchema = z.object({
-    type: z.enum(["all", "mentions", "none"], {
-      required_error: "You need to select a notification type.",
-    }),
+    playerName: z.enum(
+      playersSchema.length > 0
+        ? (playersSchema as [string, ...string[]])
+        : ["default"],
+      {
+        required_error: "Du musst einen Namen auswälen um fortzufahren.",
+      }
+    ),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
+  function onSubmit(data: z.infer<typeof FormSchema>) {}
 
   return (
     <Card className="p-6">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-2/3 space-y-6"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
           <FormField
             control={form.control}
-            name="type"
+            name="playerName"
             render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel>Notify me about...</FormLabel>
+              <FormItem className="w-full mb-4">
+                <FormLabel>Wähle deinen Namen aus...</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -67,10 +61,10 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ players }) => {
                     {players?.map((player) => (
                       <FormItem
                         key={player.id}
-                        className="flex items-center space-x-3 space-y-0"
+                        className="flex items-center space-x-3 space-y-2"
                       >
                         <FormControl>
-                          <RadioGroupItem value={player.id} />
+                          <RadioGroupItem value={player.firstName} />
                         </FormControl>
                         <FormLabel className="font-normal">
                           {player.firstName}
@@ -83,7 +77,9 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ players }) => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" className="w-full">
+            Fortfahren
+          </Button>
         </form>
       </Form>
     </Card>
