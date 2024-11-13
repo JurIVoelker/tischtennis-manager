@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import { setTeamTokenCookie, teamCookieName } from "./lib/cookieUtils";
 import { handleUnauthorizedUser } from "./lib/middlewareUtils";
 import { getValidToken } from "./lib/APIUtils";
+import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
@@ -19,8 +20,13 @@ export async function middleware(request: NextRequest) {
    */
   if (userToken) {
     const token = await getValidToken(request, clubSlug, teamSlug);
-    if (token instanceof NextResponse) {
-      return token;
+    if (token === null) {
+      return NextResponse.redirect(
+        new URL(
+          `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,
+          request.url
+        )
+      );
     }
     if (token === userToken) {
       const response = NextResponse.next();

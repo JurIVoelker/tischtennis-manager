@@ -19,11 +19,8 @@ export const handleUnauthorizedUser = async (
     );
 
   const token = await getValidToken(request, clubSlug, teamSlug);
-  if (typeof token !== "string" && token instanceof Promise) {
-    return token;
-  }
 
-  if (token !== inviteToken) {
+  if (token !== inviteToken || token === null) {
     return NextResponse.redirect(
       new URL(
         `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,
