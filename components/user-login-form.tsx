@@ -15,12 +15,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Player } from "@prisma/client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RadioGroupItem } from "./ui/radio-group";
-import { setUserData } from "@/lib/localstorageUtils";
+import { getUserData, setUserData } from "@/lib/localstorageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import Typography from "./typography";
+import { Loader2 } from "lucide-react";
 
 interface UserLoginFormProps {
   players: Player[] | undefined;
@@ -36,6 +37,24 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   teamSlug,
 }) => {
   const playersSchema = players?.map((player) => player.firstName) || [""];
+
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const userData = getUserData();
+    const teamData = userData[teamName];
+    if (teamData) {
+      const { name } = teamData;
+      if (name && players?.some((player) => player.firstName === name)) {
+        push(`/${clubSlug}/${teamSlug}`);
+      } else {
+        setUserData({ [teamName]: {} });
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   const FormSchema = z.object({
     playerName: z.enum(
@@ -55,8 +74,9 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   const { push } = useRouter();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    setLoading(true);
     const { playerName } = data;
-    setUserData({ name: playerName, team: teamName });
+    setUserData({ [teamName]: { name: playerName } });
     toast({
       title: "Login erfolgreich",
       description: (
@@ -105,7 +125,8 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading && <Loader2 className="animate-spin" />}
             Fortfahren
           </Button>
         </form>

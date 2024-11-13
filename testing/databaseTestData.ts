@@ -29,6 +29,14 @@ const executeDatabaseScripts = async () => {
     })
   ).id;
 
+  const teamAuth = await prisma.teamAuth.create({
+    data: {
+      teamId,
+    },
+  });
+
+  console.log(teamAuth);
+
   const teamName2 = "Herren II";
   const teamId2 = (
     await prisma.team.create({
@@ -163,6 +171,7 @@ const setupDatabase = async () => {
           "match",
           "team",
           "club",
+          "teamAuth",
         ];
         for (const model of models) {
           // @ts-ignore
