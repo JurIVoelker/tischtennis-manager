@@ -32,12 +32,12 @@ const ClubUserLoginPage = async ({
   return (
     <div className="w-full">
       <Navbar title="Login" />
-      <div className="flex flex-col gap-8 px-6 pb-6 pt-16">
+      <div className="space-y-12 px-6 pb-6 pt-16">
         <div>
           <Typography variant="h3">{teamName}</Typography>
           <Typography
-            variant="p"
-            className="mt-4"
+            variant="p-gray"
+            className="mt-2"
           >{`Du wurdest eingeladen ${teamName} beizutreten. Wähle deinen Namen aus um fortzufahren.`}</Typography>
         </div>
 
