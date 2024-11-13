@@ -31,7 +31,7 @@ const GameCard: React.FC<GameCardProps> = async ({
   const locationString = `${hallName}, ${streetAddress} ${postalCode}, ${city}`;
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 space-y-4">
       {/* Game Card Header */}
       <div className="flex justify-between mb-6">
         <Typography variant="h4">{match.enemyClubName}</Typography>
@@ -40,7 +40,7 @@ const GameCard: React.FC<GameCardProps> = async ({
         </Badge>
       </div>
       {/* Game Card Body */}
-      <div className="py-4">
+      <div>
         <div className="inline-flex items-center gap-1 mb-2">
           <Calendar02Icon size={20} stroke="4" className="shrink-0" />
           <Typography variant="p-gray" className="leading-0">
