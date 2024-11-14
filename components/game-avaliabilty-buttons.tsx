@@ -33,7 +33,6 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     const userName = userData[teamName]?.name;
     if (!userName) {
       setButtonDisabled(true);
-      console.log(userName);
     }
     setLoading(false);
   }, [teamName]);

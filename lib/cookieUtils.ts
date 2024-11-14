@@ -45,7 +45,6 @@ export const getAuthCookies = (
   allTokens?: string[];
 } => {
   const cookieValues = getAllCookieTokens(request, clubSlug);
-  console.log("cookieValues", cookieValues);
   if (!cookieValues) return { token: null };
   return {
     token: cookieValues[teamSlug],
