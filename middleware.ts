@@ -6,6 +6,17 @@ import { getValidToken } from "./lib/APIUtils";
 import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 
 export async function middleware(request: NextRequest) {
+  // Skip ignored routes
+  const ignoredRoutes = ["ungueltiger-link"];
+  if (
+    ignoredRoutes.some((route) =>
+      new RegExp(`^https?://[^/]+/${route}`).test(request.url)
+    )
+  ) {
+    return NextResponse.next();
+  }
+
+  // Get club and team slug
   const clubSlug = "Test-Club";
   const teamSlug = "Herren-I";
 
@@ -58,6 +69,6 @@ export async function middleware(request: NextRequest) {
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|ungueltiger-link).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
   ],
 };
