@@ -21,7 +21,7 @@ const InvalidLinkPage = () => {
     if (statusCode === MIDDLEWARE_STATUS_CLUB_NOT_FOUND)
       statusText = "Der von dir gesuchte Verein wurde nicht gefunden";
     setStatusText(statusText);
-  }, []);
+  }, [searchParams]);
 
   const skeletonLinesCount = 3;
 

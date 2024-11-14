@@ -18,7 +18,7 @@ export const handleUnauthorizedUser = async (
       )
     );
 
-  const token = await getValidToken(request, clubSlug, teamSlug);
+  const { token } = await getValidToken(request, clubSlug, teamSlug);
 
   if (token !== inviteToken || token === null) {
     return NextResponse.redirect(

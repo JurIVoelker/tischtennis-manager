@@ -36,7 +36,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
       console.log(userName);
     }
     setLoading(false);
-  }, []);
+  }, [teamName]);
 
   const selectableOptions: selectableOptionsType[] = [
     { name: "Ja", variant: "positive" },

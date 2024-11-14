@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { setTeamTokenCookie, teamCookieName } from "./lib/cookieUtils";
+import {
+  setTeamTokenCookie,
+  getAuthCookieName,
+  getAuthCookies as getUserAuthCookie,
+} from "./lib/cookieUtils";
 import { handleUnauthorizedUser } from "./lib/middlewareUtils";
 import { getValidToken } from "./lib/APIUtils";
 import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
-import { LOGIN_PAGE_REGEX, TEAM_CLUB_PAGES_REGEX } from "./constants/regex";
+import { LOGIN_PAGE_REGEX } from "./constants/regex";
 
 export async function middleware(request: NextRequest) {
   // Skip ignored routes
@@ -31,7 +35,7 @@ export async function middleware(request: NextRequest) {
    * Get valid token serverside
    */
 
-  const token = await getValidToken(request, clubSlug, teamSlug);
+  const { token, allTokens } = await getValidToken(request, clubSlug, teamSlug);
 
   if (token === null) {
     return NextResponse.redirect(
@@ -50,17 +54,37 @@ export async function middleware(request: NextRequest) {
 
   const loginPageUrl = new URL(`/${clubSlug}/${teamSlug}/login`, request.url);
 
-  const userToken = request.cookies.get(
-    teamCookieName(clubSlug, teamSlug)
-  )?.value;
+  const { token: userToken, allTokens: allUserTokens } = getUserAuthCookie(
+    request,
+    clubSlug,
+    teamSlug
+  );
 
-  if (token === userToken) {
-    const response = NextResponse.next();
-    setTeamTokenCookie(response, clubSlug, teamSlug, token);
-    return response;
-  } else if (!LOGIN_PAGE_REGEX.test(urlPath)) {
-    const response = NextResponse.redirect(loginPageUrl);
-    response.cookies.delete(teamCookieName(clubSlug, teamSlug));
+  if (userToken || allUserTokens) {
+    if (!LOGIN_PAGE_REGEX.test(urlPath)) {
+      // If not on login page, check if the token is valid for one team
+      if (allTokens.includes(token)) {
+        if (
+          Array.isArray(allUserTokens) &&
+          allUserTokens.some((userToken) => allTokens.includes(userToken))
+        )
+          return NextResponse.next();
+      }
+    } else {
+      // If on login page, check if the token is valid for the exact team
+      if (token === userToken) {
+        const response = NextResponse.next();
+        setTeamTokenCookie(request, response, clubSlug, teamSlug, token);
+        return response;
+      }
+    }
+    const response = NextResponse.redirect(
+      new URL(
+        `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,
+        request.url
+      )
+    );
+    response.cookies.delete(getAuthCookieName(clubSlug));
     return response;
   }
 
@@ -77,10 +101,16 @@ export async function middleware(request: NextRequest) {
     if (typeof authorizationStatus === "string") {
       // If the user could be authorized, by checking the invite token, redirect to the login page
       const response = NextResponse.redirect(loginPageUrl);
-      setTeamTokenCookie(response, clubSlug, teamSlug, authorizationStatus);
+      setTeamTokenCookie(
+        request,
+        response,
+        clubSlug,
+        teamSlug,
+        authorizationStatus
+      );
       return response;
     } else if (authorizationStatus instanceof NextResponse) {
-      authorizationStatus.cookies.delete(teamCookieName(clubSlug, teamSlug));
+      authorizationStatus.cookies.delete(getAuthCookieName(clubSlug));
       return authorizationStatus;
     }
   }

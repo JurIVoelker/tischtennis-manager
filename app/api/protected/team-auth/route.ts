@@ -1,6 +1,14 @@
 import { handlePrismaError, prisma } from "@/lib/prisma/prisma";
 import { NextRequest } from "next/server";
 export const dynamic = "force-dynamic"; // defaults to auto
+
+type AllTokensType = string[];
+
+export interface GetTeamAuthResponseInterface {
+  token: string | null;
+  allTokens: AllTokensType;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
 
@@ -17,15 +25,10 @@ export async function GET(request: NextRequest) {
   try {
     club = await prisma.club.findFirst({
       where: {
-        AND: {
-          slug: clubSlug,
-        },
+        slug: clubSlug,
       },
       include: {
         teams: {
-          where: {
-            slug: teamSlug,
-          },
           include: {
             teamAuth: true,
           },
@@ -41,11 +44,18 @@ export async function GET(request: NextRequest) {
       status: 404,
     });
 
-  const teamAuthToken = club?.teams[0]?.teamAuth[0]?.token;
-  if (!teamAuthToken)
+  let teamAuthToken = null;
+  const allTokens: AllTokensType = [];
+  club.teams.forEach((team) => {
+    if (team.slug === teamSlug) {
+      teamAuthToken = team.teamAuth[0]?.token;
+    }
+    allTokens.push(team.teamAuth[0]?.token);
+  });
+  if (!teamAuthToken && !allTokens.length)
     return new Response("team has no token", {
       status: 404,
     });
 
-  return new Response(JSON.stringify({ token: teamAuthToken }));
+  return new Response(JSON.stringify({ token: teamAuthToken, allTokens }));
 }

@@ -54,7 +54,8 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
     } else {
       setLoading(false);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clubSlug, players, teamName, teamSlug]);
 
   const FormSchema = z.object({
     playerName: z.enum(

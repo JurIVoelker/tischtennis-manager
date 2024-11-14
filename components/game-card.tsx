@@ -5,11 +5,7 @@ import { Badge } from "./ui/badge";
 import AvailabiltyButtons from "./game-avaliabilty-buttons";
 import Typography from "./typography";
 import Lineup from "./lineup";
-import {
-  Calendar01Icon,
-  Calendar02Icon,
-  Location01Icon,
-} from "hugeicons-react";
+import { Calendar02Icon, Location01Icon } from "hugeicons-react";
 
 interface GameCardProps {
   match: Match;

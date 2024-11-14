@@ -16,7 +16,8 @@ export const getUserData = () => {
   try {
     if (!userData) throw new Error("No user data found");
     parsedData = JSON.parse(userData);
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_) {
     return {};
   }
   return parsedData;
