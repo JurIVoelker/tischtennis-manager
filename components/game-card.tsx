@@ -15,12 +15,14 @@ interface GameCardProps {
   match: Match;
   location: Location;
   isLineup: boolean;
+  teamName: string;
 }
 
 const GameCard: React.FC<GameCardProps> = async ({
   match,
   location,
   isLineup,
+  teamName,
 }) => {
   const { matchDateTime: dateTime } = match;
   const dateString = `${dateTime.getDay()}.${dateTime.getMonth()}.${dateTime.getFullYear()}`;
@@ -59,14 +61,7 @@ const GameCard: React.FC<GameCardProps> = async ({
         <Lineup matchId={match.id} />
       </div>
       {/* Footer */}
-      {!isLineup && (
-        <div className=" mt-8">
-          <Typography variant="h5" className="mb-2">
-            Hast du Zeit zu spielen?
-          </Typography>
-          <AvailabiltyButtons />
-        </div>
-      )}
+      {!isLineup && <AvailabiltyButtons teamName={teamName} />}
     </Card>
   );
 };

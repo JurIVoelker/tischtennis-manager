@@ -46,13 +46,14 @@ const ClubTeamPage = async ({
         <Navbar title={teamName} />
         <div className="px-6 pb-6 pt-16 ">
           <PlayersCard players={players} className="mb-8" />
-          {matches && (
+          {matches && teamName && (
             <div className="flex flex-col gap-8 md:grid md:grid-cols-2 xl:grid-cols-3">
               {matches.map((match, id) => {
                 const location = match.locations[0];
                 const isLineup = Boolean(match.lineups.length);
                 return (
                   <GameCard
+                    teamName={teamName}
                     match={match}
                     location={location}
                     isLineup={isLineup}
