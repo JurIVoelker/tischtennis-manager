@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
 import Typography from "./typography";
 import { getUserData } from "@/lib/localstorageUtils";
 
@@ -54,7 +53,6 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
       {!isLoading && (
         <Typography variant="h5">Hast du Zeit zu spielen?</Typography>
       )}
-      {isLoading && <Skeleton className="w-1/2 h-6" />}
       <div className="flex gap-2">
         {!isLoading &&
           selectableOptions.map((option) => (
@@ -68,10 +66,6 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
             >
               {option.name}
             </Button>
-          ))}
-        {isLoading &&
-          Array.from({ length: 3 }).map((_, index) => (
-            <Skeleton className="w-full h-10" key={index} />
           ))}
       </div>
     </div>
