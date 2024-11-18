@@ -40,11 +40,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
             <PopoverContent className="w-60 p-2">
               {PopoverOptions.map(({ name, IconComponent }, id) => (
                 <div key={id}>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start p-2"
-                    size="icon-lg"
-                  >
+                  <Button variant="ghost" className="w-full justify-start p-2">
                     <IconComponent />
                     <Typography variant="p">{name}</Typography>
                   </Button>
