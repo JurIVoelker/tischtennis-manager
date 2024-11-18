@@ -1,5 +1,5 @@
 export const dynamicParams = false;
-import GameCard from "@/components/game-card";
+import GameCard from "@/components/game-card/game-card";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
 import Typography from "@/components/typography";
