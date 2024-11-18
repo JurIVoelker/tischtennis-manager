@@ -10,19 +10,40 @@ import {
 } from "hugeicons-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { MoreHorizontal } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface GameCardHeaderProps {
   match: Match;
 }
 
-const PopoverOptions = [
-  { name: "Infotext kopieren", IconComponent: Copy01Icon },
-  { name: "Spieldaten anpassen", IconComponent: PencilEdit02Icon },
-  { name: "Aufstellungen verwalten", IconComponent: LeftToRightListNumberIcon },
-];
-
 const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
   const isLeader = true;
+  const handleCopy = () => {
+    toast({
+      title: "Infotext kopiert",
+      description: (
+        <div className="mt-2 w-[340px] flex gap-2">
+          <Typography variant="p" className="leading-1">
+            Der Infotext wurde erfolgreich in die Zwischenablage kopiert.
+          </Typography>
+        </div>
+      ),
+    });
+  };
+
+  const PopoverOptions = [
+    {
+      name: "Infotext kopieren",
+      IconComponent: Copy01Icon,
+      handler: handleCopy,
+    },
+    { name: "Spieldaten anpassen", IconComponent: PencilEdit02Icon },
+    {
+      name: "Aufstellungen verwalten",
+      IconComponent: LeftToRightListNumberIcon,
+    },
+  ];
+
   return (
     <div className="flex justify-between mb-6 gap-4 h-10 items-center">
       <Typography variant="h4">{match.enemyClubName}</Typography>
@@ -38,9 +59,13 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-60 p-2">
-              {PopoverOptions.map(({ name, IconComponent }, id) => (
+              {PopoverOptions.map(({ name, IconComponent, handler }, id) => (
                 <div key={id}>
-                  <Button variant="ghost" className="w-full justify-start p-2">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start p-2"
+                    onClick={handler}
+                  >
                     <IconComponent />
                     <Typography variant="p">{name}</Typography>
                   </Button>
