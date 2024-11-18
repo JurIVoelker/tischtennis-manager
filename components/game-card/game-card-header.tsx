@@ -11,6 +11,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { getInfoTextString } from "@/lib/stringUtils";
 
 interface GameCardHeaderProps {
   match: Match;
@@ -19,12 +20,14 @@ interface GameCardHeaderProps {
 const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
   const isLeader = true;
   const handleCopy = () => {
+    const text = getInfoTextString(match);
+    navigator.clipboard.writeText(text);
     toast({
       title: "Infotext kopiert",
       description: (
         <div className="mt-2 w-[340px] flex gap-2">
           <Typography variant="p" className="leading-1">
-            Der Infotext wurde erfolgreich in die Zwischenablage kopiert.
+            {`Der Infotext für das Spiel gegen ${match.enemyClubName} wurde erfolgreich in die Zwischenablage kopiert.`}
           </Typography>
         </div>
       ),
