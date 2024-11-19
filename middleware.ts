@@ -12,7 +12,7 @@ import { LOGIN_PAGE_REGEX } from "./constants/regex";
 
 export async function middleware(request: NextRequest) {
   // Skip ignored routes
-  const ignoredRoutes = ["ungueltiger-link"];
+  const ignoredRoutes = ["ungueltiger-link", "login"];
   const urlPath = request.url.replace(/^https?:\/\/[^/]+/, "");
 
   /*

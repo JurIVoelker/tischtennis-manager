@@ -18,12 +18,20 @@ import { Skeleton } from "./ui/skeleton";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { INVALID_LINK_PAGE_REGEX, LOGIN_PAGE_REGEX } from "@/constants/regex";
+import {
+  INVALID_LINK_PAGE_REGEX,
+  ADMIN_PAGE_REGEX,
+  LOGIN_PAGE_REGEX,
+} from "@/constants/regex";
 
 export const AppSidebar = ({}) => {
   // Hide sidebar on excludedPages
   const pathname = usePathname();
-  const excludedRoutes = [LOGIN_PAGE_REGEX, INVALID_LINK_PAGE_REGEX];
+  const excludedRoutes = [
+    ADMIN_PAGE_REGEX,
+    INVALID_LINK_PAGE_REGEX,
+    LOGIN_PAGE_REGEX,
+  ];
   if (excludedRoutes.some((regex) => regex.test(pathname))) {
     return <></>;
   }

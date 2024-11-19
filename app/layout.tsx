@@ -4,6 +4,8 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "next-auth/react";
+import { NextAuthProvider } from "@/components/next-auth-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,14 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="de" className={inter.className}>
       <body>
         <div>
-          <SidebarProvider>
-            <Toaster />
-            <AppSidebar />
-            {children}
-          </SidebarProvider>
+          <NextAuthProvider>
+            <SidebarProvider>
+              <Toaster />
+              <AppSidebar />
+              {children}
+            </SidebarProvider>
+          </NextAuthProvider>
         </div>
       </body>
     </html>
