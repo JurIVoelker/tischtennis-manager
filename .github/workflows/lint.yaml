@@ -2,29 +2,29 @@ name: Lint Code
 
 on:
   push:
-      branches:
-            - "**" # Run on all branches
-              pull_request:
+    branches:
+      - "**" # Run on all branches
+  pull_request:
 
-              jobs:
-                lint:
-                    runs-on: ubuntu-latest
+jobs:
+  lint:
+    runs-on: ubuntu-latest
 
-                        steps:
-                              # Checkout the code
-                                    - name: Checkout code
-                                            uses: actions/checkout@v3
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-                                                  # Setup Node.js
-                                                        - name: Setup Node.js
-                                                                uses: actions/setup-node@v3
-                                                                        with:
-                                                                                  node-version: 16 # Specify the Node.js version
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16 # Specify the Node.js version
 
-                                                                                        # Install dependencies
-                                                                                              - name: Install dependencies
-                                                                                                      run: npm install
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
 
-                                                                                                            # Run linting
-                                                                                                                  - name: Run lint
-                                                                                                                          run: npm run lint
+      # Run linting
+      - name: Run lint
+        run: npm run lint
