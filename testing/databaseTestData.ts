@@ -85,6 +85,7 @@ const addTeamAuth = async (teamId: string) => {
   return await prisma.teamAuth.create({
     data: {
       teamId,
+      token: "test-token",
     },
   });
 };
@@ -153,35 +154,47 @@ const executeDatabaseScripts = async () => {
   await createFullTeamSetup(clubId, teamName7, playerNames7, enemyTeamNames);
 };
 
-const setupDatabase = async () => {
-  if (process.env.NODE_ENV === "production") {
-    console.error("Cannot run this script in production mode.");
+const runScripts = async () => {
+  const models = [
+    "lineup",
+    "player",
+    "location",
+    "match",
+    "teamAuth",
+    "team",
+    "club",
+  ];
+  for (const model of models) {
+    // @ts-ignore
+    await prisma[model].deleteMany();
   }
-  rl.question(
-    "Are you sure you want to delete all database data and continue with importing the data? (y/n) ",
-    async (answer) => {
-      if (answer.toLowerCase() === "y") {
-        const models = [
-          "lineup",
-          "player",
-          "location",
-          "match",
-          "teamAuth",
-          "team",
-          "club",
-        ];
-        for (const model of models) {
-          // @ts-ignore
-          await prisma[model].deleteMany();
-        }
-        await executeDatabaseScripts();
-        rl.close();
-      } else {
-        console.log("Operation cancelled.");
-        rl.close();
-      }
-    }
-  );
+  await executeDatabaseScripts();
 };
 
-setupDatabase();
+const setupDatabase = async () => {
+  const args = process.argv.slice(2);
+  const isForce = args.includes("--force");
+  if (!isForce && process.env.NODE_ENV === "production") {
+    console.error("Cannot run this script in production mode.");
+  }
+  if (isForce) {
+    await runScripts();
+  } else {
+    rl.question(
+      "Are you sure you want to delete all database data and continue with importing the data? (y/n) ",
+      async (answer) => {
+        if (answer.toLowerCase() === "y") {
+          await runScripts();
+          rl.close();
+        } else {
+          console.log("Operation cancelled.");
+          rl.close();
+        }
+      }
+    );
+  }
+};
+
+setupDatabase().then(() => {
+  process.exit(0);
+});
