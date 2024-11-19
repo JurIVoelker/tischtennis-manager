@@ -24,6 +24,5 @@ jobs:
       - name: Install dependencies
         run: bun i
 
-      # Run build
-      - name: Run build
-        run: bun run build
+      - name: setup test deploy
+        run: bun deploy-dev:setup
