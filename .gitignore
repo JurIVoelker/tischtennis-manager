@@ -42,3 +42,5 @@ bun.lockb
 *.db
 prisma/migrations/*
 *.db-journal
+
+.env
