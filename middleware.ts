@@ -9,7 +9,6 @@ import { handleUnauthorizedUser } from "./lib/middlewareUtils";
 import { getValidToken } from "./lib/APIUtils";
 import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 import { LOGIN_PAGE_REGEX } from "./constants/regex";
-import { asyncLog } from "./lib/logUtils";
 
 export async function middleware(request: NextRequest) {
   // Skip ignored routes
@@ -22,6 +21,10 @@ export async function middleware(request: NextRequest) {
 
   if (ignoredRoutes.some((route) => urlPath.startsWith(`/${route}`))) {
     return NextResponse.next();
+  }
+
+  if (urlPath.split("/").length < 3) {
+    return NextResponse.redirect(new URL(`/ungueltiger-link`, request.url));
   }
 
   /*
