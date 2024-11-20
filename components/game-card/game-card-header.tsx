@@ -1,5 +1,4 @@
 "use client";
-import { Match } from "@prisma/client";
 import Typography from "../typography";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
