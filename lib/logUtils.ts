@@ -1,4 +1,5 @@
 import axios from "axios";
+import { NextRequest } from "next/server";
 
 export type LogLevels =
   | "info"
@@ -9,8 +10,15 @@ export type LogLevels =
   | "debug"
   | "silly";
 
-export const log = (level: LogLevels, message: string) => {
-  axios.post("/api/log", { status: level, message }).catch((error) => {
-    console.error("Failed to log message", error);
-  });
+export const log = (
+  request: NextRequest,
+  level: LogLevels,
+  message: string
+) => {
+  const basePath = request.nextUrl.href.split("/").slice(0, 3).join("/");
+  axios
+    .post(`${basePath}/api/log`, { status: level, message })
+    .catch((error) => {
+      console.error("Failed to log message", error);
+    });
 };
