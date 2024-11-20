@@ -18,7 +18,9 @@ export const getValidToken = async (
     if (error?.response?.status !== 404) {
       asyncLog(
         "error",
-        `There was an unexpected error for fetching the token serverside for ${clubSlug}/${teamSlug}`
+        `There was an unexpected error for fetching the token serverside for ${clubSlug}/${teamSlug}: ${
+          error?.response?.message || error?.message
+        }`
       );
       console.error(error);
     }
