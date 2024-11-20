@@ -15,8 +15,6 @@ export const metadata: Metadata = {
   description: "It's a simple progressive web application made with NextJS",
   generator: "Next.js",
   manifest: "/manifest.json",
-  viewport:
-    "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
   icons: [
     { rel: "apple-touch-icon", url: "icons/ttm-lg.png" },
     { rel: "icon", url: "icons/ttm-lg.png" },
