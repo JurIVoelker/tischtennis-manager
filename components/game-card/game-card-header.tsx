@@ -21,9 +21,10 @@ import { useRouter } from "next/navigation";
 
 interface GameCardHeaderProps {
   match: MatchWithLineupAndLocation;
+  teamSlug: string;
 }
 
-const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
+const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
   const { push } = useRouter();
   const isLeader = true;
   const handleCopy = () => {
@@ -57,7 +58,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
   };
 
   const handleEdit = () => {
-    push(`./spiel/anpassen/${match.id}`);
+    push(`./${teamSlug}/spiel/anpassen/${match.id}`);
   };
 
   const dropdownOptions = [

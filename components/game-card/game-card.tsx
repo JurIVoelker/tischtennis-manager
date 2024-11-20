@@ -9,16 +9,18 @@ interface GameCardProps {
   match: MatchWithLineupAndLocation;
   isLineup: boolean;
   teamName: string;
+  teamSlug: string;
 }
 
 const GameCard: React.FC<GameCardProps> = async ({
   match,
   isLineup,
   teamName,
+  teamSlug,
 }) => {
   return (
     <Card className="p-6 space-y-6">
-      <GameCardHeader match={match} />
+      <GameCardHeader match={match} teamSlug={teamSlug}/>
       <GameCardBody match={match} />
       {!isLineup && <AvailabiltyButtons teamName={teamName} />}
     </Card>

@@ -62,6 +62,7 @@ const ClubTeamPage = async ({
                 const isLineup = Boolean(match.lineups.length);
                 return (
                   <GameCard
+                    teamSlug={teamSlug}
                     teamName={teamName}
                     match={match}
                     isLineup={isLineup}
