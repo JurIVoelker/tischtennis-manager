@@ -10,6 +10,7 @@ export const getValidToken = async (
 ): Promise<GetTeamAuthResponseInterface> => {
   let tokenData;
   const basePath = request.nextUrl.href.split("/").slice(0, 3).join("/");
+  asyncLog(request, "info", `basepath = ${basePath}`);
   try {
     const res = await axios.get(
       `${basePath}/api/protected/team-auth?clubSlug=${clubSlug}&teamSlug=${teamSlug}`

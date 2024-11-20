@@ -32,6 +32,16 @@ export async function middleware(request: NextRequest) {
   const clubSlug = splitUrl[1];
   const teamSlug = splitUrl[2];
 
+  asyncLog(
+    request,
+    "info",
+    `request.url = ${
+      request.url
+    }, urlPath = ${urlPath}, splitUrl = ${JSON.stringify(
+      splitUrl
+    )}, clubSlug = ${clubSlug}, teamSlug = ${teamSlug}`
+  );
+
   /*
    * Get valid token serverside
    */
