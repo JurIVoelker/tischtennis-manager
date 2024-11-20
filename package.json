@@ -39,6 +39,8 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.19.2",
+    "winston": "3",
+    "winston-telegram": "2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
