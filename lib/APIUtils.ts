@@ -9,16 +9,14 @@ export const getValidToken = async (
   teamSlug: string
 ): Promise<GetTeamAuthResponseInterface> => {
   let tokenData;
-  const basePath = request.nextUrl.href.split("/").slice(0, 3).join("/");
-  asyncLog(request, "info", `basepath = ${basePath}`);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   try {
     const res = await axios.get(
-      `${basePath}/api/protected/team-auth?clubSlug=${clubSlug}&teamSlug=${teamSlug}`
+      `${baseUrl}/api/protected/team-auth?clubSlug=${clubSlug}&teamSlug=${teamSlug}`
     );
     tokenData = res.data;
   } catch (error) {
     asyncLog(
-      request,
       "error",
       `Getting the token serverside for ${clubSlug}/${teamSlug} failed`
     );
