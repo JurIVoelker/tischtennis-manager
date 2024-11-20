@@ -13,6 +13,7 @@ export const getValidToken = async (
       `${baseUrl}/api/protected/team-auth?clubSlug=${clubSlug}&teamSlug=${teamSlug}`
     );
     tokenData = res.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error?.response?.status !== 404) {
       asyncLog(
