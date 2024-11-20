@@ -18,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 interface PlayerTableProps {
   className?: string;
@@ -29,6 +30,12 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
   players,
   ...props
 }) => {
+  const { push } = useRouter();
+
+  const handleClickOrderPlayers = () => {
+    push("./sortieren");
+  };
+
   return (
     <Table className={className} {...props}>
       <TableHeader>
@@ -39,14 +46,11 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {players?.map((player) => (
+        {players?.map((player, i) => (
           <TableRow key={player.id}>
-            <TableCell className="font-medium">
-              {/* TODO: Player position {player?.position || 1} */}
-              {1}
-            </TableCell>
+            <TableCell className="font-medium">{i + 1}</TableCell>
             <TableCell>{player.firstName}</TableCell>
-            <TableCell className="flex justify-end">
+            <TableCell className="flex justify-end p-1.5">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="icon">
@@ -58,7 +62,10 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                     <UserMinus02Icon />
                     {`${player.firstName} entfernen`}
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="flex items-center gap-2 p-2">
+                  <DropdownMenuItem
+                    className="flex items-center gap-2 p-2"
+                    onSelect={handleClickOrderPlayers}
+                  >
                     <Move02Icon />
                     Position verschieben
                   </DropdownMenuItem>
