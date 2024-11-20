@@ -8,7 +8,7 @@ import { DatePicker } from "../ui/date-picker";
 import { TimeValue } from "react-aria-components";
 
 const EditMatchDateTime = () => {
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [timeValue, setTimeValue] = useState<TimeValue | null>(null);
 
   return (

@@ -10,9 +10,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Calendar02Icon } from "hugeicons-react";
 
 interface DatePickerProps {
-  date: Date;
+  date: Date | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setDate: (date: any) => void;
   className?: string;
@@ -34,7 +35,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             className
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <Calendar02Icon className="mr-2 h-4 w-4" />
           {date ? format(date, "dd.MM.yyyy") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
