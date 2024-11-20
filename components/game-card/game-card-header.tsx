@@ -17,9 +17,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { MatchWithLineupAndLocation } from "@/types/prismaTypes";
 
 interface GameCardHeaderProps {
-  match: Match;
+  match: MatchWithLineupAndLocation;
 }
 
 const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
