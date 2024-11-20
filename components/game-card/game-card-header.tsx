@@ -90,7 +90,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
                   disabled={!handler || !match.lineups.length}
                 >
                   <IconComponent />
-                  <Typography variant="p">{name}</Typography>
+                  {name}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>

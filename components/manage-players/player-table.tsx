@@ -56,13 +56,11 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                 <DropdownMenuContent className="p-2 w-60">
                   <DropdownMenuItem className="flex items-center gap-2 p-2">
                     <UserMinus02Icon />
-                    <Typography variant="p">
-                      {`${player.firstName} entfernen`}
-                    </Typography>
+                    {`${player.firstName} entfernen`}
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center gap-2 p-2">
                     <Move02Icon />
-                    <Typography variant="p">Position verschieben</Typography>
+                    Position verschieben
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
