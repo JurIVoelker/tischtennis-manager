@@ -21,7 +21,13 @@ export const SortablePlayerItem: React.FC<SortablePlayerItemProps> = ({
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="touch-none"
+    >
       {children}
     </div>
   );
