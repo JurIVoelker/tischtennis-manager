@@ -54,7 +54,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
     });
   };
 
-  const PopoverOptions = [
+  const dropdownOptions = [
     {
       name: "Infotext kopieren",
       IconComponent: Copy01Icon,
@@ -82,7 +82,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-60 p-2">
-              {PopoverOptions.map(({ name, IconComponent, handler }, id) => (
+              {dropdownOptions.map(({ name, IconComponent, handler }, id) => (
                 <DropdownMenuItem
                   key={id}
                   onSelect={handler}

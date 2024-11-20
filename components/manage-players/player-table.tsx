@@ -14,6 +14,12 @@ import { MoreHorizontal } from "lucide-react";
 import { Popover, PopoverContent } from "../ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Move02Icon, UserMinus02Icon } from "hugeicons-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface PlayerTableProps {
   className?: string;
@@ -43,23 +49,25 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
             </TableCell>
             <TableCell>{player.firstName}</TableCell>
             <TableCell className="flex justify-end">
-              <Popover>
-                <PopoverTrigger asChild>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="icon">
                     <MoreHorizontal />
                   </Button>
-                </PopoverTrigger>
-                <PopoverContent className="p-2 w-60">
-                  <Button className="w-full justify-start p-2" variant="ghost">
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="p-2 w-60">
+                  <DropdownMenuItem className="flex items-center gap-2 p-2">
                     <UserMinus02Icon />
-                    {`${player.firstName} entfernen`}
-                  </Button>
-                  <Button className="w-full justify-start p-2" variant="ghost">
+                    <Typography variant="p">
+                      {`${player.firstName} entfernen`}
+                    </Typography>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="flex items-center gap-2 p-2">
                     <Move02Icon />
-                    Position verschieben
-                  </Button>
-                </PopoverContent>
-              </Popover>
+                    <Typography variant="p">Position verschieben</Typography>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </TableCell>
           </TableRow>
         ))}
