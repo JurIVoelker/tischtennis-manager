@@ -1,5 +1,4 @@
 import { handlePrismaError, prisma } from "@/lib/prisma/prisma";
-import logger from "@/logs/logger";
 import { NextRequest } from "next/server";
 export const dynamic = "force-dynamic"; // defaults to auto
 
@@ -11,8 +10,6 @@ export interface GetTeamAuthResponseInterface {
 }
 
 export async function GET(request: NextRequest) {
-  
-
   const { searchParams } = request.nextUrl;
 
   const clubSlug = searchParams.get("clubSlug");
