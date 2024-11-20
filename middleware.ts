@@ -32,15 +32,6 @@ export async function middleware(request: NextRequest) {
   const clubSlug = splitUrl[1];
   const teamSlug = splitUrl[2];
 
-  asyncLog(
-    "info",
-    `request.url = ${
-      request.url
-    }, urlPath = ${urlPath}, splitUrl = ${JSON.stringify(
-      splitUrl
-    )}, clubSlug = ${clubSlug}, teamSlug = ${teamSlug}`
-  );
-
   /*
    * Get valid token serverside
    */
@@ -48,7 +39,6 @@ export async function middleware(request: NextRequest) {
   const { token, allTokens } = await getValidToken(clubSlug, teamSlug);
 
   if (token === null) {
-    asyncLog("error", "Server could not get valid token");
     return NextResponse.redirect(
       new URL(
         `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,
@@ -78,12 +68,10 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   } else if (LOGIN_PAGE_REGEX.test(urlPath) && token === pageUserToken) {
-    asyncLog("info", "Setting team token cookie");
     const response = NextResponse.next();
     setTeamTokenCookie(request, response, clubSlug, teamSlug, token);
     return response;
   } else if (!LOGIN_PAGE_REGEX.test(urlPath) && pageUserToken) {
-    asyncLog("error", "User uses invalid token");
     const response = NextResponse.redirect(
       new URL(
         `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,
@@ -105,7 +93,6 @@ export async function middleware(request: NextRequest) {
     );
 
     if (typeof authorizationStatus === "string") {
-      asyncLog("info", "user could be authorized");
       // If the user could be authorized, by checking the invite token, redirect to the login page
       const response = NextResponse.redirect(loginPageUrl);
       setTeamTokenCookie(
@@ -117,13 +104,11 @@ export async function middleware(request: NextRequest) {
       );
       return response;
     } else if (authorizationStatus instanceof NextResponse) {
-      asyncLog("error", "User used invalid invite link");
       authorizationStatus.cookies.delete(getAuthCookieName(clubSlug));
       return authorizationStatus;
     }
   }
 
-  asyncLog("error", "Nothing matched, redirecting to unauthorized page");
   return NextResponse.redirect(
     new URL(
       `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,

@@ -13,12 +13,14 @@ export const getValidToken = async (
       `${baseUrl}/api/protected/team-auth?clubSlug=${clubSlug}&teamSlug=${teamSlug}`
     );
     tokenData = res.data;
-  } catch (error) {
-    asyncLog(
-      "error",
-      `Getting the token serverside for ${clubSlug}/${teamSlug} failed`
-    );
-    console.error(error);
+  } catch (error: any) {
+    if (error?.response?.status !== 404) {
+      asyncLog(
+        "error",
+        `There was an unexpected error for fetching the token serverside for ${clubSlug}/${teamSlug}`
+      );
+      console.error(error);
+    }
     return { token: null, allTokens: [] };
   }
   return tokenData;
