@@ -11,8 +11,6 @@ import { Player } from "@prisma/client";
 import Typography from "../typography";
 import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
-import { Popover, PopoverContent } from "../ui/popover";
-import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Move02Icon, UserMinus02Icon } from "hugeicons-react";
 import {
   DropdownMenu,
