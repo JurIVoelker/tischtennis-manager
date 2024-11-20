@@ -6,11 +6,15 @@ const token = process.env.TELEGRAM_BOT_TOKEN || "";
 
 const logger = createLogger();
 
-logger.add(
-  new TelegramLogger({
-    chatId,
-    token,
-  })
-);
+if (chatId && token) {
+  logger.add(
+    new TelegramLogger({
+      chatId,
+      token,
+    })
+  );
+} else {
+  console.error("Telegram chatId or token not provided");
+}
 
 export default logger;
