@@ -28,7 +28,7 @@ export const setTeamTokenCookie = (
   allTokens[teamSlug] = token;
   response.cookies.set(getAuthCookieName(clubSlug), JSON.stringify(allTokens), {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "development" ? false : true,
+    secure: process.env.NODE_ENV === "development" ? false : false,
     path: "/",
     sameSite: "lax",
     maxAge: 90 * 24 * 60 * 60,
