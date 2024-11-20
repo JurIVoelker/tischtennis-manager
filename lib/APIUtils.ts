@@ -1,5 +1,6 @@
 import { GetTeamAuthResponseInterface } from "@/app/api/protected/team-auth/route";
 import axios from "axios";
+import { log } from "console";
 import { NextRequest } from "next/server";
 
 export const getValidToken = async (
@@ -14,8 +15,13 @@ export const getValidToken = async (
       `${basePath}/api/protected/team-auth?clubSlug=${clubSlug}&teamSlug=${teamSlug}`
     );
     tokenData = res.data;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (_) {
+  } catch (error) {
+    log(
+      request,
+      "error",
+      `Getting the token serverside for ${clubSlug}/${teamSlug} failed`
+    );
+    console.error(error);
     return { token: null, allTokens: [] };
   }
   return tokenData;
