@@ -1,19 +1,18 @@
 import { Calendar02Icon, Location01Icon } from "hugeicons-react";
 import Typography from "../typography";
 import Lineup from "../lineup";
-import { Location, Match } from "@prisma/client";
 import { getDateAndTime } from "@/lib/dateUtils";
+import { MatchWithLineupAndLocation } from "@/types/prismaTypes";
 
 interface GameCardBodyProps {
-  match: Match;
-  location: Location;
+  match: MatchWithLineupAndLocation;
 }
 
-const GameCardBody: React.FC<GameCardBodyProps> = ({ match, location }) => {
+const GameCardBody: React.FC<GameCardBodyProps> = ({ match }) => {
   const { dateString, timeString } = getDateAndTime(match.matchDateTime);
   const dateTimeString = `${dateString} um ${timeString} Uhr`;
 
-  const { hallName, streetAddress, city, postalCode } = location;
+  const { hallName, streetAddress, city, postalCode } = match.locations[0];
   const locationString = `${hallName}, ${streetAddress} ${postalCode}, ${city}`;
 
   return (

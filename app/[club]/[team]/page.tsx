@@ -9,6 +9,7 @@ import {
   generateTeamPageParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
+import { ClubWithTeams } from "@/types/prismaTypes";
 
 const ClubTeamPage = async ({
   params,
@@ -17,7 +18,7 @@ const ClubTeamPage = async ({
 }) => {
   const { clubSlug, teamSlug } = await decodeClubTeamParams(params);
 
-  const club = await prisma.club.findUnique({
+  const club: ClubWithTeams = await prisma.club.findUnique({
     where: { slug: clubSlug },
     include: {
       teams: {
@@ -26,7 +27,11 @@ const ClubTeamPage = async ({
           matches: {
             include: {
               locations: true,
-              lineups: true,
+              lineups: {
+                include: {
+                  player: true,
+                },
+              },
             },
           },
         },
@@ -54,13 +59,11 @@ const ClubTeamPage = async ({
           {matches && teamName && (
             <div className="flex flex-col gap-8 md:grid md:grid-cols-2 xl:grid-cols-3">
               {matches.map((match, id) => {
-                const location = match.locations[0];
                 const isLineup = Boolean(match.lineups.length);
                 return (
                   <GameCard
                     teamName={teamName}
                     match={match}
-                    location={location}
                     isLineup={isLineup}
                     key={id}
                   />

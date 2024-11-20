@@ -8,10 +8,15 @@ import {
   LeftToRightListNumberIcon,
   PencilEdit02Icon,
 } from "hugeicons-react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { getInfoTextString } from "@/lib/stringUtils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface GameCardHeaderProps {
   match: Match;
@@ -21,13 +26,28 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
   const isLeader = true;
   const handleCopy = () => {
     const text = getInfoTextString(match);
+    if (!text) {
+      toast({
+        title: "Fehler beim Kopieren",
+        description: (
+          <div className="mt-2 w-[340px] flex gap-2">
+            <Typography variant="p" className="leading-1">
+              Beim kopieren des Infotextes ist ein Fehler aufgetreten.
+            </Typography>
+          </div>
+        ),
+      });
+      return;
+    }
     navigator.clipboard.writeText(text);
     toast({
       title: "Infotext kopiert",
       description: (
         <div className="mt-2 w-[340px] flex gap-2">
           <Typography variant="p" className="leading-1">
-            {`Der Infotext für das Spiel gegen ${match.enemyClubName} wurde erfolgreich in die Zwischenablage kopiert.`}
+            {"Der Infotext für das Spiel gegen "}
+            <strong>{match.enemyClubName}</strong> wurde erfolgreich in die
+            Zwischenablage kopiert.
           </Typography>
         </div>
       ),
@@ -55,27 +75,26 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
           {match.isHomeGame ? "Heim" : "Auswährts"}
         </Badge>
         {isLeader && (
-          <Popover>
-            <PopoverTrigger asChild>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon-lg">
                 <MoreHorizontal />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-60 p-2">
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-60 p-2">
               {PopoverOptions.map(({ name, IconComponent, handler }, id) => (
-                <div key={id}>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start p-2"
-                    onClick={handler}
-                  >
-                    <IconComponent />
-                    <Typography variant="p">{name}</Typography>
-                  </Button>
-                </div>
+                <DropdownMenuItem
+                  key={id}
+                  onSelect={handler}
+                  className="flex items-center gap-2 p-2"
+                  disabled={!handler || !match.lineups.length}
+                >
+                  <IconComponent />
+                  <Typography variant="p">{name}</Typography>
+                </DropdownMenuItem>
               ))}
-            </PopoverContent>
-          </Popover>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
     </div>
