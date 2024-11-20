@@ -1,7 +1,7 @@
 import { GetTeamAuthResponseInterface } from "@/app/api/protected/team-auth/route";
 import axios from "axios";
-import { log } from "console";
 import { NextRequest } from "next/server";
+import { asyncLog } from "./logUtils";
 
 export const getValidToken = async (
   request: NextRequest,
@@ -16,7 +16,7 @@ export const getValidToken = async (
     );
     tokenData = res.data;
   } catch (error) {
-    log(
+    asyncLog(
       request,
       "error",
       `Getting the token serverside for ${clubSlug}/${teamSlug} failed`

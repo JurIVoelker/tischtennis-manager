@@ -10,7 +10,7 @@ export type LogLevels =
   | "debug"
   | "silly";
 
-export const log = (
+export const asyncLog = (
   request: NextRequest,
   level: LogLevels,
   message: string
