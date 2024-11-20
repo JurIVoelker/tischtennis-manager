@@ -1,10 +1,8 @@
 import { GetTeamAuthResponseInterface } from "@/app/api/protected/team-auth/route";
 import axios from "axios";
-import { NextRequest } from "next/server";
 import { asyncLog } from "./logUtils";
 
 export const getValidToken = async (
-  request: NextRequest,
   clubSlug: string,
   teamSlug: string
 ): Promise<GetTeamAuthResponseInterface> => {

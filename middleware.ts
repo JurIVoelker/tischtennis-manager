@@ -45,7 +45,7 @@ export async function middleware(request: NextRequest) {
    * Get valid token serverside
    */
 
-  const { token, allTokens } = await getValidToken(request, clubSlug, teamSlug);
+  const { token, allTokens } = await getValidToken(clubSlug, teamSlug);
 
   if (token === null) {
     asyncLog("error", "Server could not get valid token");
