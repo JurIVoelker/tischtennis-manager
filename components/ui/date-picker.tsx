@@ -16,16 +16,18 @@ interface DatePickerProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setDate: (date: any) => void;
   className?: string;
+  label?: string;
 }
 
 export const DatePicker: React.FC<DatePickerProps> = ({
   date,
   setDate,
   className,
+  label,
 }) => {
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild aria-label={label}>
         <Button
           variant={"outline"}
           className={cn(
