@@ -77,7 +77,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
         {isLeader && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon-lg">
+              <Button variant="secondary" size="icon-lg">
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
