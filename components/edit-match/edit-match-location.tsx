@@ -29,7 +29,10 @@ const EditMatchLocation = () => {
         className="flex gap-2"
       >
         {locationOptions.map((option) => (
-          <Card className="flex gap-2 h-10 w-full items-center px-3 justify-center shadow-none">
+          <Card
+            className="flex gap-2 h-10 w-full items-center px-3 justify-center shadow-none"
+            key={option}
+          >
             <RadioGroupItem value={option} id={option} />
             <Label htmlFor={option}>{option}</Label>
           </Card>
