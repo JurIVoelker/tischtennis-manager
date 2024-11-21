@@ -15,7 +15,7 @@ interface TimeInputProps {
 export const TimeInput: React.FC<TimeInputProps> = ({ label, ...props }) => {
   return (
     <TimeField className="space-y-2" {...props} aria-describedby={label}>
-      <DateInput className="relative inline-flex h-10 w-full items-center overflow-hidden whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm shadow-black/5 ring-offset-background transition-shadow data-[disabled]:opacity-50 data-[focus-within]:outline-none data-[focus-within]:ring-2 data-[focus-within]:ring-ring data-[focus-within]:ring-offset-2">
+      <DateInput className="relative inline-flex h-10 w-full items-center overflow-hidden whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm shadow-black/5 ring-offset-background data-[disabled]:opacity-50 data-[focus-within]:outline-none data-[focus-within]:ring-2 data-[focus-within]:ring-ring data-[focus-within]:ring-offset-2">
         {(segment) => (
           <DateSegment
             segment={segment}
