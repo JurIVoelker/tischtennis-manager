@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Card } from "../ui/card";
 import Typography from "../typography";
@@ -15,7 +14,7 @@ const EditMatchDateTime = () => {
     <Card className="p-4 space-y-4">
       <Typography variant="p-gray">Datum und Uhrzeit</Typography>
       <DatePicker date={date} setDate={setDate} className={"w-full"} />
-      <TimeInput value={timeValue} onChange={setTimeValue} label="est" />
+      {/* <TimeInput value={timeValue} onChange={setTimeValue} label="est" /> */}
     </Card>
   );
 };

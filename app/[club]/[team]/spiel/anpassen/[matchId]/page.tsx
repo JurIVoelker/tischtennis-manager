@@ -1,5 +1,6 @@
 export const dynamicParams = false;
 import EditMatchDateTime from "@/components/edit-match/edit-match-date-time";
+import EditMatchLocation from "@/components/edit-match/edit-match-location";
 import Navbar from "@/components/navbar";
 import Typography from "@/components/typography";
 import {
@@ -32,6 +33,7 @@ const EditMatchPage = async ({
         <div className="px-6 pb-6 pt-16 space-y-6">
           <Typography variant="h3">{match?.enemyClubName}</Typography>
           <EditMatchDateTime />
+          <EditMatchLocation />
         </div>
       </div>
     </>
