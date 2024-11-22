@@ -3,6 +3,7 @@ import GameCard from "@/components/game-card/game-card";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
 import Typography from "@/components/typography";
+import { Card } from "@/components/ui/card";
 import {
   ClubTeamParams,
   decodeClubTeamParams,
@@ -10,6 +11,8 @@ import {
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { ClubWithTeams } from "@/types/prismaTypes";
+import { Add01Icon } from "hugeicons-react";
+import Link from "next/link";
 
 const ClubTeamPage = async ({
   params,
@@ -70,9 +73,19 @@ const ClubTeamPage = async ({
                   />
                 );
               })}
-              {!matches.length && (
-                <Typography variant="p-gray">Keine Spiele gefunden</Typography>
-              )}
+              <Link href={`./${teamSlug}/spiel/neu`}>
+                <Card className="p-6 w-full aspect-square md:aspect-auto flex justify-center items-center gap-2">
+                  <Add01Icon size={20} />
+                  <Typography variant="p-gray">
+                    Neues Spiel hinzufügen
+                  </Typography>
+                </Card>
+                {!matches.length && (
+                  <Typography variant="p-gray">
+                    Keine Spiele gefunden
+                  </Typography>
+                )}
+              </Link>
             </div>
           )}
         </div>

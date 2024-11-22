@@ -32,7 +32,7 @@ export type Time = {
 };
 
 interface EditMatchFormProps {
-  match: MatchWithLocation;
+  match?: MatchWithLocation;
 }
 
 const EditMatchForm: React.FC<EditMatchFormProps> = ({ match }) => {
@@ -62,6 +62,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({ match }) => {
   const date = match?.matchDateTime
     ? new Date(match?.matchDateTime)
     : undefined;
+
   const time = {
     hour: date?.getHours() || 0,
     minute: date?.getMinutes() || 0,
