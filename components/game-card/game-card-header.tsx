@@ -17,12 +17,15 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { MatchWithLineupAndLocation } from "@/types/prismaTypes";
+import { useRouter } from "next/navigation";
 
 interface GameCardHeaderProps {
   match: MatchWithLineupAndLocation;
+  teamSlug: string;
 }
 
-const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
+const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
+  const { push } = useRouter();
   const isLeader = true;
   const handleCopy = () => {
     const text = getInfoTextString(match);
@@ -54,13 +57,21 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match }) => {
     });
   };
 
+  const handleEdit = () => {
+    push(`./${teamSlug}/spiel/anpassen/${match.id}`);
+  };
+
   const dropdownOptions = [
     {
       name: "Infotext kopieren",
       IconComponent: Copy01Icon,
       handler: handleCopy,
     },
-    { name: "Spieldaten anpassen", IconComponent: PencilEdit02Icon },
+    {
+      name: "Spieldaten anpassen",
+      IconComponent: PencilEdit02Icon,
+      handler: handleEdit,
+    },
     {
       name: "Aufstellungen verwalten",
       IconComponent: LeftToRightListNumberIcon,

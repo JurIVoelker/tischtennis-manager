@@ -6,6 +6,10 @@ export interface ClubTeamParams {
   team: string;
 }
 
+export interface EditMatchParams {
+  matchId: string;
+}
+
 export async function decodeClubTeamParams(
   paramsPromise: Promise<ClubTeamParams>
 ) {
@@ -33,4 +37,37 @@ export async function generateTeamPageParams() {
     });
   });
   return paths;
+}
+
+export async function generateEditMatchParams() {
+  const clubs = await prisma.club.findMany({
+    include: {
+      teams: {
+        include: {
+          matches: true,
+        },
+      },
+    },
+  });
+
+  const paths: EditMatchParams[] = [];
+
+  clubs.forEach((club) => {
+    club.teams.forEach((team) => {
+      team.matches.forEach((match) => {
+        paths.push({
+          matchId: match.id,
+        });
+      });
+    });
+  });
+  return paths;
+}
+
+export async function decodeEditMatchParams(
+  paramsPromise: Promise<EditMatchParams>
+) {
+  const params = await paramsPromise;
+  const matchId = decodeURIComponent(params.matchId);
+  return { matchId };
 }
