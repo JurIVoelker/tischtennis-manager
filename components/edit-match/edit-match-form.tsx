@@ -22,6 +22,7 @@ import { Button, buttonVariants } from "../ui/button";
 import { Cancel01Icon, Tick01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { MatchWithLocation } from "@/types/prismaTypes";
 
 export type Time = {
   hour: number;
@@ -30,7 +31,11 @@ export type Time = {
   millisecond: number;
 };
 
-const EditMatchForm = () => {
+interface EditMatchFormProps {
+  match: MatchWithLocation;
+}
+
+const EditMatchForm: React.FC<EditMatchFormProps> = ({ match }) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,10 +58,15 @@ const EditMatchForm = () => {
     isHomeGame: z.boolean(),
   });
 
+  const location = match?.locations[0];
+
   const locationOptions = ["Heimspiel", "Auswährts"];
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      hallName: "test",
+    },
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {

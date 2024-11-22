@@ -8,6 +8,7 @@ import {
   generateEditMatchParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
+import { MatchWithLocation } from "@/types/prismaTypes";
 import { notFound } from "next/navigation";
 
 const EditMatchPage = async ({
@@ -17,7 +18,7 @@ const EditMatchPage = async ({
 }) => {
   const { matchId } = await decodeEditMatchParams(params);
 
-  const match = await prisma.match.findUnique({
+  const match: MatchWithLocation = await prisma.match.findUnique({
     where: {
       id: matchId,
     },
@@ -36,7 +37,7 @@ const EditMatchPage = async ({
         <Navbar title={"Spiel bearbeiten"} />
         <div className="px-6 pb-6 pt-16 space-y-6">
           <Typography variant="h3">{match?.enemyClubName}</Typography>
-          <EditMatchForm />
+          <EditMatchForm match={match} />
         </div>
       </div>
     </>

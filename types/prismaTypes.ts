@@ -19,3 +19,9 @@ export type ClubWithTeams =
       teams: TeamWithPlayersAndMatches[];
     })
   | null;
+
+export type MatchWithLocation =
+  | (Match & {
+      locations: Location[];
+    })
+  | null;
