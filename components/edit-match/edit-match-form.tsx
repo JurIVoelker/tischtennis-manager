@@ -59,13 +59,27 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({ match }) => {
   });
 
   const location = match?.locations[0];
+  const date = match?.matchDateTime
+    ? new Date(match?.matchDateTime)
+    : undefined;
+  const time = {
+    hour: date?.getHours() || 0,
+    minute: date?.getMinutes() || 0,
+    second: 0,
+    millisecond: 0,
+  };
 
   const locationOptions = ["Heimspiel", "Auswährts"];
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      hallName: "test",
+      hallName: location?.hallName,
+      streetAdress: location?.streetAddress,
+      city: location?.city,
+      isHomeGame: match?.isHomeGame,
+      date,
+      time,
     },
   });
 
