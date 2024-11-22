@@ -12,16 +12,16 @@ import {
 import { Calendar02Icon } from "hugeicons-react";
 
 interface DatePickerProps {
-  date: Date | undefined;
+  value: Date | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setDate: (date: any) => void;
+  onValueChange: (date: any) => void;
   className?: string;
   label?: string;
 }
 
 export const DatePicker: React.FC<DatePickerProps> = ({
-  date,
-  setDate,
+  value,
+  onValueChange,
   className,
   label,
 }) => {
@@ -32,20 +32,20 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           variant={"outline"}
           className={cn(
             "w-[280px] justify-start text-left font-normal",
-            !date && "text-muted-foreground",
+            !value && "text-muted-foreground",
             className
           )}
         >
           <Calendar02Icon className="mr-2 h-4 w-4" />
-          {date ? format(date, "dd.MM.yyyy") : <span>Datum auswählen</span>}
+          {value ? format(value, "dd.MM.yyyy") : <span>Datum auswählen</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
           lang="de"
           mode="single"
-          selected={date}
-          onSelect={setDate}
+          selected={value}
+          onSelect={onValueChange}
           initialFocus
         />
       </PopoverContent>
