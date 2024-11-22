@@ -18,13 +18,16 @@ import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import Typography from "../typography";
 import { Card } from "../ui/card";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
+import { Cancel01Icon, Tick01Icon } from "hugeicons-react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export type Time = {
-  hours: number;
-  minutes: number;
-  seconds: number;
-  milliseconds: number;
+  hour: number;
+  minute: number;
+  second: number;
+  millisecond: number;
 };
 
 const EditMatchForm = () => {
@@ -36,12 +39,14 @@ const EditMatchForm = () => {
 
   const FormSchema = z.object({
     date: z.date(),
-    time: z.object({
-      hours: z.number(),
-      minutes: z.number(),
-      seconds: z.number(),
-      milliseconds: z.number(),
-    }),
+    time: z
+      .object({
+        hour: z.number(),
+        minute: z.number(),
+        second: z.number(),
+        millisecond: z.number(),
+      })
+      .passthrough(),
     hallName: z.string(),
     streetAdress: z.string(),
     city: z.string(),
@@ -173,7 +178,7 @@ const EditMatchForm = () => {
                         ? locationOptions[field.value ? 0 : 1]
                         : undefined
                     }
-                    className="flex gap-4"
+                    className="flex gap-2"
                   >
                     {locationOptions?.map((option, id) => (
                       <Card
@@ -203,9 +208,18 @@ const EditMatchForm = () => {
             )}
           />
         </Card>
-        <div>
-          <Button>Abbrechen</Button>
-          <Button type="submit">Speichern</Button>
+        <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent">
+          <Link
+            className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+            href={"../../"}
+          >
+            <Cancel01Icon />
+            Abbrechen
+          </Link>
+          <Button type="submit" className="w-full">
+            <Tick01Icon />
+            Speichern
+          </Button>
         </div>
       </form>
     </Form>
