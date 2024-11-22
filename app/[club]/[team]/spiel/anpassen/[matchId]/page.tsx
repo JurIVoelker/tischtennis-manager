@@ -8,6 +8,7 @@ import {
   generateEditMatchParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
+import { notFound } from "next/navigation";
 
 const EditMatchPage = async ({
   params,
@@ -24,6 +25,10 @@ const EditMatchPage = async ({
       locations: true,
     },
   });
+
+  if (!match) {
+    notFound();
+  }
 
   return (
     <>

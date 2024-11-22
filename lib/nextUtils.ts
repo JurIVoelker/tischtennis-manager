@@ -8,6 +8,8 @@ export interface ClubTeamParams {
 
 export interface EditMatchParams {
   matchId: string;
+  club: string;
+  team: string;
 }
 
 export async function decodeClubTeamParams(
@@ -57,6 +59,8 @@ export async function generateEditMatchParams() {
       team.matches.forEach((match) => {
         paths.push({
           matchId: match.id,
+          club: slugify(club.slug),
+          team: slugify(team.slug),
         });
       });
     });
