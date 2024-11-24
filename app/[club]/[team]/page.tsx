@@ -73,18 +73,16 @@ const ClubTeamPage = async ({
                   />
                 );
               })}
+              {!matches.length && (
+                <Typography variant="p-gray">Keine Spiele gefunden</Typography>
+              )}
               <Link href={`./${teamSlug}/spiel/neu`}>
-                <Card className="p-6 w-full aspect-square md:aspect-auto flex justify-center items-center gap-2">
-                  <Add01Icon size={20} />
+                <Card className="p-6 w-full flex justify-center items-center gap-2 min-h-48">
+                  <Add01Icon size={20} className="flex-shrink-0" />
                   <Typography variant="p-gray">
                     Neues Spiel hinzufügen
                   </Typography>
                 </Card>
-                {!matches.length && (
-                  <Typography variant="p-gray">
-                    Keine Spiele gefunden
-                  </Typography>
-                )}
               </Link>
             </div>
           )}
