@@ -32,10 +32,14 @@ export type Time = {
 };
 
 interface EditMatchFormProps {
-  match: MatchWithLocation;
+  match?: MatchWithLocation;
+  isCreate?: boolean;
 }
 
-const EditMatchForm: React.FC<EditMatchFormProps> = ({ match }) => {
+const EditMatchForm: React.FC<EditMatchFormProps> = ({
+  match,
+  isCreate = false,
+}) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -62,6 +66,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({ match }) => {
   const date = match?.matchDateTime
     ? new Date(match?.matchDateTime)
     : undefined;
+
   const time = {
     hour: date?.getHours() || 0,
     minute: date?.getMinutes() || 0,
@@ -235,7 +240,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({ match }) => {
         <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent">
           <Link
             className={cn(buttonVariants({ variant: "outline" }), "w-full")}
-            href={"../../"}
+            href={isCreate ? "../" : "../../"}
           >
             <Cancel01Icon />
             Abbrechen
