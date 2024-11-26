@@ -9,27 +9,18 @@ import { handleUnauthorizedUser } from "./lib/middlewareUtils";
 import { getValidToken } from "./lib/APIUtils";
 import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 import { LOGIN_PAGE_REGEX } from "./constants/regex";
-import { getToken } from "next-auth/jwt";
+import { isIgnoredMiddlewarePath } from "./lib/routeUtils";
 
 export async function middleware(request: NextRequest) {
-  // Skip ignored routes
-  const ignoredRoutes = ["ungueltiger-link", "login"];
   const urlPath = request.url.replace(/^https?:\/\/[^/]+/, "");
+  if (isIgnoredMiddlewarePath(urlPath)) return NextResponse.next();
 
-  const t = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+  // const t = await getToken({
+  //   req: request,
+  //   secret: process.env.NEXTAUTH_SECRET,
+  // });
 
-  console.log(t);
-
-  /*
-   * Skip ignored routes
-   */
-
-  if (ignoredRoutes.some((route) => urlPath.startsWith(`/${route}`))) {
-    return NextResponse.next();
-  }
+  // console.log(t);
 
   if (urlPath.split("/").length < 3) {
     return NextResponse.redirect(new URL(`/ungueltiger-link`, request.url));

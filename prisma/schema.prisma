@@ -27,14 +27,15 @@ model Owner {
 }
 
 model Team {
-  id       String    @id @default(cuid())
-  slug     String    @unique
-  clubId   String
-  name     String
-  club     Club      @relation(fields: [clubId], references: [id])
-  players  Player[]
-  matches  Match[]
-  teamAuth TeamAuth?
+  id         String       @id @default(cuid())
+  slug       String       @unique
+  clubId     String
+  name       String
+  club       Club         @relation(fields: [clubId], references: [id])
+  players    Player[]
+  matches    Match[]
+  teamAuth   TeamAuth?
+  teamLeader TeamLeader[]
 }
 
 model TeamAuth {
@@ -43,6 +44,13 @@ model TeamAuth {
   teamId    String   @unique
   token     String   @default(cuid())
   team      Team     @relation(fields: [teamId], references: [id])
+}
+
+model TeamLeader {
+  id     String @id @default(cuid())
+  teamId String
+  email  String
+  team   Team   @relation(fields: [teamId], references: [id])
 }
 
 model Player {

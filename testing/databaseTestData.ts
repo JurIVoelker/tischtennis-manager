@@ -29,6 +29,15 @@ const createTeam = async (clubId: string, teamName: string) => {
   });
 };
 
+const addTeamLeader = async (teamId: string) => {
+  return await prisma.teamLeader.create({
+    data: {
+      teamId,
+      email: "jurivoelker03@gmail.com",
+    },
+  });
+};
+
 const createPlayer = async (teamId: string, playerName: string) => {
   return await prisma.player.create({
     data: {
@@ -86,10 +95,13 @@ const createFullTeamSetup = async (
   clubId: string,
   teamName: string,
   playerNames: string[],
-  enemyTeamNames: string[]
+  enemyTeamNames: string[],
+  isAddTeamLeader: boolean = false
 ) => {
   const team = await createTeam(clubId, teamName);
   const teamId = team.id;
+
+  if (isAddTeamLeader) addTeamLeader(teamId);
 
   const teamAuth = await addTeamAuth(teamId);
   console.log(teamAuth);
@@ -123,13 +135,25 @@ const executeDatabaseScripts = async () => {
 
   const teamName = "Herren I";
   const playerNames = ["Max", "Moritz", "Erika", "Hans", "Klaus"];
-  await createFullTeamSetup(clubId, teamName, playerNames, enemyTeamNames);
+  await createFullTeamSetup(
+    clubId,
+    teamName,
+    playerNames,
+    enemyTeamNames,
+    true
+  );
 
   const teamName2 = "Herren II";
   await createFullTeamSetup(clubId, teamName2, playerNames, enemyTeamNames);
 
   const teamName3 = "Herren III";
-  await createFullTeamSetup(clubId, teamName3, playerNames, enemyTeamNames);
+  await createFullTeamSetup(
+    clubId,
+    teamName3,
+    playerNames,
+    enemyTeamNames,
+    true
+  );
 
   const teamName4 = "Herren IV";
   const playerNames4 = ["Anna", "Berta", "Clara", "Dora", "Eva"];
@@ -145,7 +169,13 @@ const executeDatabaseScripts = async () => {
 
   const teamName7 = "Herren VII";
   const playerNames7 = ["Paula", "Quentin", "Rita", "Siegfried", "Tina"];
-  await createFullTeamSetup(clubId, teamName7, playerNames7, enemyTeamNames);
+  await createFullTeamSetup(
+    clubId,
+    teamName7,
+    playerNames7,
+    enemyTeamNames,
+    true
+  );
 };
 
 const runScripts = async () => {
@@ -154,8 +184,9 @@ const runScripts = async () => {
     "player",
     "location",
     "match",
-    "team",
+    "teamLeader",
     "teamAuth",
+    "team",
     "owner",
     "club",
   ];
