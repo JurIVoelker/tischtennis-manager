@@ -29,7 +29,7 @@ const ClubTeamPage = async ({
           players: true,
           matches: {
             include: {
-              locations: true,
+              location: true,
               lineups: {
                 include: {
                   player: true,

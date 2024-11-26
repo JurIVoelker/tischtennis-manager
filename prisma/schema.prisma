@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["relationJoins"]
 }
 
@@ -12,67 +12,73 @@ datasource db {
 }
 
 model Club {
-  id   String    @id @default(cuid())
-  slug String    @unique 
-  name String    @unique
-  teams Team[]
+  id     String  @id @default(cuid())
+  slug   String  @unique
+  name   String  @unique
+  teams  Team[]
+  owners Owner[]
+}
+
+model Owner {
+  id     String @id @default(cuid())
+  email  String @unique
+  clubId String
+  club   Club   @relation(fields: [clubId], references: [id])
 }
 
 model Team {
-  id       String      @id @default(cuid())
-  slug     String      @unique 
+  id       String     @id @default(cuid())
+  slug     String     @unique
   clubId   String
   name     String
-  club     Club        @relation(fields: [clubId], references: [id])
+  club     Club       @relation(fields: [clubId], references: [id])
   players  Player[]
   matches  Match[]
-  teamAuth  TeamAuth[]
+  teamAuth TeamAuth[]
 }
 
 model TeamAuth {
   createdAt DateTime @default(now())
-  id      String @id @default(cuid())
-  teamId  String @unique 
-  token   String @default(cuid())
-  team    Team   @relation(fields: [teamId], references: [id])
+  id        String   @id @default(cuid())
+  teamId    String   @unique
+  token     String   @default(cuid())
+  team      Team     @relation(fields: [teamId], references: [id])
 }
 
 model Player {
-  id       String      @id @default(cuid())
-  teamId   String
+  id        String   @id @default(cuid())
+  teamId    String
   firstName String
   lastName  String
-  team     Team  @relation(fields: [teamId], references: [id])
-  lineups  Lineup[]
+  team      Team     @relation(fields: [teamId], references: [id])
+  lineups   Lineup[]
 }
 
 model Match {
-  id           String      @id @default(cuid())
-  teamId       String
+  id            String    @id @default(cuid())
+  teamId        String
   matchDateTime DateTime
-  team         Team      @relation(fields: [teamId], references: [id])
+  team          Team      @relation(fields: [teamId], references: [id])
   enemyClubName String
-  isHomeGame Boolean
-  locations    Location[]
-  lineups      Lineup[]
+  isHomeGame    Boolean
+  location      Location?
+  lineups       Lineup[]
 }
 
 model Location {
-  id          String      @id @default(cuid())
-  matchId     String
-  hallName    String
+  id            String @id @default(cuid())
+  matchId       String @unique
+  hallName      String
   streetAddress String
-  postalCode  String
-  city        String
-  match       Match  @relation(fields: [matchId], references: [id])
+  city          String
+  match         Match  @relation(fields: [matchId], references: [id])
 }
 
 model Lineup {
-  id        String      @id @default(cuid())
-  matchId   String
-  playerId  String
-  position  Int
-  match     Match  @relation(fields: [matchId], references: [id])
-  player    Player @relation(fields: [playerId], references: [id])
+  id       String @id @default(cuid())
+  matchId  String
+  playerId String
+  position Int
+  match    Match  @relation(fields: [matchId], references: [id])
+  player   Player @relation(fields: [playerId], references: [id])
 }
-
