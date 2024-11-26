@@ -4,26 +4,12 @@ import { Button } from "./ui/button";
 import { GoogleIcon } from "hugeicons-react";
 import { usePathname } from "next/navigation";
 import Typography from "./typography";
-import { asyncLog } from "@/lib/logUtils";
-import { useEffect } from "react";
 
 const GoogleLoginButton = () => {
   const { data: session } = useSession();
   const pathName = usePathname();
   const clubSlug = pathName.split("/")[1];
   const teamSlug = pathName.split("/")[2];
-
-  useEffect(() => {
-    asyncLog(
-      "info",
-      JSON.stringify({
-        protocol: window.location.protocol,
-        host: window.location.host,
-        clubSlug,
-        whole: `${window.location.protocol}//${window.location.host}/${clubSlug}/${teamSlug}/mannschaftsfuehrer/login/validieren`,
-      })
-    );
-  }, [clubSlug, teamSlug]);
 
   return (
     <>
