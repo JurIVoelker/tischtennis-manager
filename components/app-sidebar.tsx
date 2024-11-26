@@ -50,9 +50,6 @@ export const AppSidebar = ({}) => {
     LOGIN_PAGE_REGEX,
     LEADER_LOGIN_PAGES_REGEX,
   ];
-  if (excludedRoutes.some((regex) => regex.test(pathname))) {
-    return <></>;
-  }
 
   // Get club teams of user
   const userClub = "Test-Club";
@@ -71,6 +68,10 @@ export const AppSidebar = ({}) => {
     push(`/${userClub}/${teamSlug}`);
     if (isMobile) toggleSidebar();
   };
+
+  if (excludedRoutes.some((regex) => regex.test(pathname))) {
+    return <></>;
+  }
 
   return (
     <Sidebar>
