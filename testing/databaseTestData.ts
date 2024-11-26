@@ -154,8 +154,9 @@ const runScripts = async () => {
     "player",
     "location",
     "match",
-    "teamAuth",
     "team",
+    "teamAuth",
+    "owner",
     "club",
   ];
   for (const model of models) {

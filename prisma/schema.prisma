@@ -27,14 +27,14 @@ model Owner {
 }
 
 model Team {
-  id       String     @id @default(cuid())
-  slug     String     @unique
+  id       String    @id @default(cuid())
+  slug     String    @unique
   clubId   String
   name     String
-  club     Club       @relation(fields: [clubId], references: [id])
+  club     Club      @relation(fields: [clubId], references: [id])
   players  Player[]
   matches  Match[]
-  teamAuth TeamAuth[]
+  teamAuth TeamAuth?
 }
 
 model TeamAuth {
