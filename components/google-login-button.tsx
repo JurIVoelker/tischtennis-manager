@@ -18,7 +18,7 @@ const GoogleLoginButton = () => {
       "info",
       `${window.location.protocol}//${window.location.host}/${clubSlug}/${teamSlug}/mannschaftsfuehrer/login/validieren`
     );
-  }, []);
+  }, [clubSlug, teamSlug]);
 
   return (
     <>
