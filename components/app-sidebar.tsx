@@ -152,7 +152,12 @@ export const AppSidebar = ({}) => {
               <SidebarMenuButton asChild>
                 <Button
                   className="bg-transparent text-primary hover:bg-sidebar-accent justify-start p-2 h-10"
-                  onClick={() => signIn("google")}
+                  onClick={() =>
+                    signIn("google", {
+                      callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/${currentTeamSlug}/mannschaftsfuehrer/login/validieren`,
+                      redirect: true,
+                    })
+                  }
                 >
                   <Login01Icon size={20} />
                   Mannschaftsführer Login
