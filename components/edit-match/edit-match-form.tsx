@@ -62,7 +62,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
     isHomeGame: z.boolean(),
   });
 
-  const location = match?.locations[0];
+  const location = match?.location;
   const date = match?.matchDateTime
     ? new Date(match?.matchDateTime)
     : undefined;

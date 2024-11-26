@@ -23,7 +23,7 @@ const EditMatchPage = async ({
       id: matchId,
     },
     include: {
-      locations: true,
+      location: true,
     },
   });
 

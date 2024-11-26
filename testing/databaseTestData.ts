@@ -1,11 +1,5 @@
 import { prisma } from "@/lib/prisma/prisma";
-import readline from "node:readline";
 import slugify from "slugify";
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
 
 const createClub = async (clubName: string) => {
   return await prisma.club.create({
@@ -16,12 +10,30 @@ const createClub = async (clubName: string) => {
   });
 };
 
+const createClubAuth = async (clubId: string) => {
+  return await prisma.owner.create({
+    data: {
+      clubId,
+      email: "jurivoelker03@gmail.com",
+    },
+  });
+};
+
 const createTeam = async (clubId: string, teamName: string) => {
   return await prisma.team.create({
     data: {
       name: teamName,
       slug: slugify(teamName),
       clubId,
+    },
+  });
+};
+
+const addTeamLeader = async (teamId: string) => {
+  return await prisma.teamLeader.create({
+    data: {
+      teamId,
+      email: "jurivoelker03@gmail.com",
     },
   });
 };
@@ -59,23 +71,12 @@ const createLineup = async (matchId: string, playerIds: string[]) => {
   }
 };
 
-const createLocations = async (matchId: string) => {
+const createLocation = async (matchId: string) => {
   await prisma.location.create({
     data: {
       hallName: "Location Hall",
       streetAddress: "Test Street",
-      postalCode: "12345",
       city: "City 2",
-      matchId,
-    },
-  });
-
-  await prisma.location.create({
-    data: {
-      hallName: "Test Location",
-      streetAddress: "Test Street",
-      postalCode: "12345",
-      city: "Test City",
       matchId,
     },
   });
@@ -94,10 +95,13 @@ const createFullTeamSetup = async (
   clubId: string,
   teamName: string,
   playerNames: string[],
-  enemyTeamNames: string[]
+  enemyTeamNames: string[],
+  isAddTeamLeader: boolean = false
 ) => {
   const team = await createTeam(clubId, teamName);
   const teamId = team.id;
+
+  if (isAddTeamLeader) addTeamLeader(teamId);
 
   const teamAuth = await addTeamAuth(teamId);
   console.log(teamAuth);
@@ -115,7 +119,7 @@ const createFullTeamSetup = async (
     if (Math.random() > 0.25) {
       await createLineup(matchId, playerIds);
     }
-    await createLocations(matchId);
+    await createLocation(matchId);
   }
 
   return teamId;
@@ -127,15 +131,29 @@ const executeDatabaseScripts = async () => {
   const clubId = club.id;
   const enemyTeamNames = ["EnemyClub I", "Other Enemy II"];
 
+  await createClubAuth(clubId);
+
   const teamName = "Herren I";
   const playerNames = ["Max", "Moritz", "Erika", "Hans", "Klaus"];
-  await createFullTeamSetup(clubId, teamName, playerNames, enemyTeamNames);
+  await createFullTeamSetup(
+    clubId,
+    teamName,
+    playerNames,
+    enemyTeamNames,
+    true
+  );
 
   const teamName2 = "Herren II";
   await createFullTeamSetup(clubId, teamName2, playerNames, enemyTeamNames);
 
   const teamName3 = "Herren III";
-  await createFullTeamSetup(clubId, teamName3, playerNames, enemyTeamNames);
+  await createFullTeamSetup(
+    clubId,
+    teamName3,
+    playerNames,
+    enemyTeamNames,
+    true
+  );
 
   const teamName4 = "Herren IV";
   const playerNames4 = ["Anna", "Berta", "Clara", "Dora", "Eva"];
@@ -151,7 +169,13 @@ const executeDatabaseScripts = async () => {
 
   const teamName7 = "Herren VII";
   const playerNames7 = ["Paula", "Quentin", "Rita", "Siegfried", "Tina"];
-  await createFullTeamSetup(clubId, teamName7, playerNames7, enemyTeamNames);
+  await createFullTeamSetup(
+    clubId,
+    teamName7,
+    playerNames7,
+    enemyTeamNames,
+    true
+  );
 };
 
 const runScripts = async () => {
@@ -160,8 +184,10 @@ const runScripts = async () => {
     "player",
     "location",
     "match",
+    "teamLeader",
     "teamAuth",
     "team",
+    "owner",
     "club",
   ];
   for (const model of models) {
@@ -171,30 +197,6 @@ const runScripts = async () => {
   await executeDatabaseScripts();
 };
 
-const setupDatabase = async () => {
-  const args = process.argv.slice(2);
-  const isForce = args.includes("--force");
-  if (!isForce && process.env.NODE_ENV === "production") {
-    console.error("Cannot run this script in production mode.");
-  }
-  if (isForce) {
-    await runScripts();
-  } else {
-    rl.question(
-      "Are you sure you want to delete all database data and continue with importing the data? (y/n) ",
-      async (answer) => {
-        if (answer.toLowerCase() === "y") {
-          await runScripts();
-          rl.close();
-        } else {
-          console.log("Operation cancelled.");
-          rl.close();
-        }
-      }
-    );
-  }
-};
-
-setupDatabase().then(() => {
+runScripts().then(() => {
   process.exit(0);
 });

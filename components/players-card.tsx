@@ -1,3 +1,4 @@
+"use client";
 import { Player } from "@prisma/client";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -6,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { PencilEdit02Icon } from "hugeicons-react";
 import Link from "next/link";
+import { useIsPermitted } from "@/hooks/use-has-permission";
 
 interface PlayersCardProps {
   players: Player[] | undefined;
@@ -20,12 +22,12 @@ const PlayersCard = ({
   clubSlug,
   teamSlug,
 }: PlayersCardProps) => {
-  const isLeader = true;
+  const isOptionsVisible = useIsPermitted("view:players-card-options");
   return (
     <Card className={cn("p-6", className)}>
       <div className="flex justify-between mb-4 items-center h-10">
         <Typography variant="h4">Spieler</Typography>
-        {isLeader && (
+        {isOptionsVisible && (
           <Button variant="secondary" size="icon-lg" asChild>
             <Link href={`/${clubSlug}/${teamSlug}/spieler/verwalten`}>
               <PencilEdit02Icon />
