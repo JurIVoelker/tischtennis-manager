@@ -47,10 +47,10 @@ export async function GET(request: NextRequest) {
   let teamAuthToken = null;
   const allTokens: AllTokensType = [];
   club.teams.forEach((team) => {
-    if (team.slug === teamSlug) {
-      teamAuthToken = team.teamAuth[0]?.token;
+    if (team.slug === teamSlug && team.teamAuth) {
+      teamAuthToken = team.teamAuth?.token;
+      allTokens.push(team.teamAuth?.token);
     }
-    allTokens.push(team.teamAuth[0]?.token);
   });
   if (!teamAuthToken && !allTokens.length)
     return new Response("team has no token", {

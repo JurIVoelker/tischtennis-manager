@@ -5,7 +5,9 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
+  SidebarMenu,
   SidebarMenuButton,
+  SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button, buttonVariants } from "./ui/button";
@@ -18,20 +20,42 @@ import { Skeleton } from "./ui/skeleton";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { INVALID_LINK_PAGE_REGEX, LOGIN_PAGE_REGEX } from "@/constants/regex";
+import {
+  INVALID_LINK_PAGE_REGEX,
+  ADMIN_PAGE_REGEX,
+  LOGIN_PAGE_REGEX,
+  LEADER_LOGIN_PAGES_REGEX,
+} from "@/constants/regex";
+import { useSession } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { ArrowUp01Icon, UserIcon } from "hugeicons-react";
 
 export const AppSidebar = ({}) => {
+  const { data: session } = useSession();
+  const { toggleSidebar } = useSidebar();
+  const [teams, setTeams] = useState<Team[] | null>(null);
+  const { push } = useRouter();
+  const isMobile = useIsMobile();
+
   // Hide sidebar on excludedPages
   const pathname = usePathname();
-  const excludedRoutes = [LOGIN_PAGE_REGEX, INVALID_LINK_PAGE_REGEX];
+  const excludedRoutes = [
+    ADMIN_PAGE_REGEX,
+    INVALID_LINK_PAGE_REGEX,
+    LOGIN_PAGE_REGEX,
+    LEADER_LOGIN_PAGES_REGEX,
+  ];
   if (excludedRoutes.some((regex) => regex.test(pathname))) {
     return <></>;
   }
 
   // Get club teams of user
   const userClub = "Test-Club";
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [teams, setTeams] = useState<Team[] | null>(null);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
@@ -41,13 +65,8 @@ export const AppSidebar = ({}) => {
   }, []);
 
   // Handle click on team
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { toggleSidebar } = useSidebar();
   const currentTeamSlug = pathname.split("/")[2];
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { push } = useRouter();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const isMobile = useIsMobile();
+
   const handleClickLink = (teamSlug: string) => {
     push(`/${userClub}/${teamSlug}`);
     if (isMobile) toggleSidebar();
@@ -97,7 +116,30 @@ export const AppSidebar = ({}) => {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        {session && (
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <UserIcon size={20} /> {session?.user?.name}
+                    <ArrowUp01Icon size={20} className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  <DropdownMenuItem>
+                    <span>Account</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        )}
+      </SidebarFooter>
     </Sidebar>
   );
 };

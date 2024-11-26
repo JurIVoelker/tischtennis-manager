@@ -5,7 +5,7 @@ export type LineupWithPlayers = Lineup & {
 };
 
 export type MatchWithLineupAndLocation = Match & {
-  locations: Location[];
+  location: Location | null;
   lineups: LineupWithPlayers[];
 };
 
@@ -22,6 +22,6 @@ export type ClubWithTeams =
 
 export type MatchWithLocation =
   | (Match & {
-      locations: Location[];
+      location: Location | null;
     })
   | null;

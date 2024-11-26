@@ -42,9 +42,7 @@ bun.lockb
 *.db
 prisma/migrations/*
 *.db-journal
-
 .env
-
 **/public/sw.js
 **/public/sw.js.map
 **/public/workbox-*.js

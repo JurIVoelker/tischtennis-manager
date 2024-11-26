@@ -18,6 +18,7 @@ import {
 } from "../ui/dropdown-menu";
 import { MatchWithLineupAndLocation } from "@/types/prismaTypes";
 import { useRouter } from "next/navigation";
+import { useIsPermitted } from "@/hooks/use-has-permission";
 
 interface GameCardHeaderProps {
   match: MatchWithLineupAndLocation;
@@ -25,8 +26,8 @@ interface GameCardHeaderProps {
 }
 
 const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
+  const isGameCardOptionsVisible = useIsPermitted("view:game-card-options");
   const { push } = useRouter();
-  const isLeader = true;
   const handleCopy = () => {
     const text = getInfoTextString(match);
     if (!text) {
@@ -85,7 +86,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
         <Badge variant="secondary" className="h-fit">
           {match.isHomeGame ? "Heim" : "Auswährts"}
         </Badge>
-        {isLeader && (
+        {isGameCardOptionsVisible && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon-lg">

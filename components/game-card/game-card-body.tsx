@@ -12,8 +12,8 @@ const GameCardBody: React.FC<GameCardBodyProps> = ({ match }) => {
   const { dateString, timeString } = getDateAndTime(match.matchDateTime);
   const dateTimeString = `${dateString} um ${timeString} Uhr`;
 
-  const { hallName, streetAddress, city, postalCode } = match.locations[0];
-  const locationString = `${hallName}, ${streetAddress} ${postalCode}, ${city}`;
+  const { hallName, streetAddress, city } = match?.location || {};
+  const locationString = `${hallName}, ${streetAddress}, ${city}`;
 
   return (
     <div>

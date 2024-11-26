@@ -32,7 +32,6 @@ interface UserLoginFormProps {
 
 const UserLoginForm: React.FC<UserLoginFormProps> = ({
   players,
-  teamName,
   clubSlug,
   teamSlug,
 }) => {
@@ -42,20 +41,20 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
 
   useEffect(() => {
     const userData = getUserData();
-    const teamData = userData[teamName];
+    const teamData = userData[teamSlug];
     if (teamData) {
       const { name } = teamData;
       if (name && players?.some((player) => player.firstName === name)) {
         push(`/${clubSlug}/${teamSlug}`);
       } else {
-        setUserData({ [teamName]: {} });
+        setUserData({ [teamSlug]: {} });
         setLoading(false);
       }
     } else {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clubSlug, players, teamName, teamSlug]);
+  }, [clubSlug, players, teamSlug]);
 
   const FormSchema = z.object({
     playerName: z.enum(
@@ -77,7 +76,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
     const { playerName } = data;
-    setUserData({ [teamName]: { name: playerName } });
+    setUserData({ [teamSlug]: { name: playerName } });
     toast({
       title: "Login erfolgreich",
       description: (
