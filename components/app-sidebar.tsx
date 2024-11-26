@@ -34,7 +34,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ArrowUp01Icon, Login01Icon, UserIcon } from "hugeicons-react";
+import { ArrowUp01Icon, Login01Icon, Logout01Icon } from "hugeicons-react";
 
 export const AppSidebar = ({}) => {
   const { data: session } = useSession();
@@ -68,6 +68,11 @@ export const AppSidebar = ({}) => {
   const handleClickLink = (teamSlug: string) => {
     push(`/${userClub}/${teamSlug}`);
     if (isMobile) toggleSidebar();
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    localStorage.removeItem("leaderAt");
   };
 
   if (excludedRoutes.some((regex) => regex.test(pathname))) {
@@ -127,7 +132,7 @@ export const AppSidebar = ({}) => {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <SidebarMenuButton className="h-10">
-                      <UserIcon size={20} /> {session?.user?.name}
+                      {session?.user?.name}
                       <ArrowUp01Icon size={20} className="ml-auto" />
                     </SidebarMenuButton>
                   </DropdownMenuTrigger>
@@ -135,12 +140,11 @@ export const AppSidebar = ({}) => {
                     side="top"
                     className="w-[--radix-popper-anchor-width]"
                   >
-                    <DropdownMenuItem
-                      onClick={() => {
-                        signOut();
-                      }}
-                    >
-                      <span>Logout</span>
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <span className="inline-flex items-center gap-2">
+                        <Logout01Icon size={16} />
+                        Logout
+                      </span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
