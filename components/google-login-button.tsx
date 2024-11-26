@@ -8,8 +8,8 @@ import { asyncLog } from "@/lib/logUtils";
 
 const GoogleLoginButton = () => {
   const { data: session } = useSession();
-  asyncLog("info", pathName);
   const pathName = usePathname();
+  asyncLog("info", pathName);
   const clubSlug = pathName.split("/")[1];
   const teamSlug = pathName.split("/")[2];
 
