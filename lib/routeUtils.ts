@@ -3,7 +3,7 @@ export const isIgnoredMiddlewarePath = (urlPath: string): boolean => {
   if (ignoredPaths.some((route) => urlPath.startsWith(`/${route}`)))
     return true;
 
-  const additionalRegexPaths = [/^\/.*\/.*\/mannschaftsfuehrer\/login\/.*/];
+  const additionalRegexPaths = [/^\/.*\/.*\/mannschaftsfuehrer\/login(\/.*)?$/];
   if (additionalRegexPaths.some((regex) => regex.test(urlPath))) return true;
   return false;
 };
