@@ -4,9 +4,11 @@ import { Button } from "./ui/button";
 import { GoogleIcon } from "hugeicons-react";
 import { usePathname } from "next/navigation";
 import Typography from "./typography";
+import { asyncLog } from "@/lib/logUtils";
 
 const GoogleLoginButton = () => {
   const { data: session } = useSession();
+  asyncLog("info", pathName);
   const pathName = usePathname();
   const clubSlug = pathName.split("/")[1];
   const teamSlug = pathName.split("/")[2];
