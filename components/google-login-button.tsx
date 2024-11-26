@@ -16,7 +16,12 @@ const GoogleLoginButton = () => {
   useEffect(() => {
     asyncLog(
       "info",
-      `${window.location.protocol}//${window.location.host}/${clubSlug}/${teamSlug}/mannschaftsfuehrer/login/validieren`
+      JSON.stringify({
+        protocol: window.location.protocol,
+        host: window.location.host,
+        clubSlug,
+        whole: `${window.location.protocol}//${window.location.host}/${clubSlug}/${teamSlug}/mannschaftsfuehrer/login/validieren`,
+      })
     );
   }, [clubSlug, teamSlug]);
 
