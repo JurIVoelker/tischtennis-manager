@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button, buttonVariants } from "./ui/button";
@@ -26,14 +27,14 @@ import {
   LOGIN_PAGE_REGEX,
   LEADER_LOGIN_PAGES_REGEX,
 } from "@/constants/regex";
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ArrowUp01Icon, UserIcon } from "hugeicons-react";
+import { ArrowUp01Icon, Login01Icon, UserIcon } from "hugeicons-react";
 
 export const AppSidebar = ({}) => {
   const { data: session } = useSession();
@@ -118,28 +119,48 @@ export const AppSidebar = ({}) => {
         <SidebarGroup />
       </SidebarContent>
       <SidebarFooter>
-        {session && (
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton>
-                    <UserIcon size={20} /> {session?.user?.name}
-                    <ArrowUp01Icon size={20} className="ml-auto" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  side="top"
-                  className="w-[--radix-popper-anchor-width]"
+        <div className="pb-4 space-y-4">
+          <SidebarSeparator />
+          {session && (
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuButton className="h-10">
+                      <UserIcon size={20} /> {session?.user?.name}
+                      <ArrowUp01Icon size={20} className="ml-auto" />
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    side="top"
+                    className="w-[--radix-popper-anchor-width]"
+                  >
+                    <DropdownMenuItem
+                      onClick={() => {
+                        signOut();
+                      }}
+                    >
+                      <span>Logout</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          )}
+          {!session && (
+            <>
+              <SidebarMenuButton asChild>
+                <Button
+                  className="bg-transparent text-primary hover:bg-sidebar-accent justify-start p-2 h-10"
+                  onClick={() => signIn("google")}
                 >
-                  <DropdownMenuItem>
-                    <span>Account</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        )}
+                  <Login01Icon size={20} />
+                  Mannschaftsführer Login
+                </Button>
+              </SidebarMenuButton>
+            </>
+          )}
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
