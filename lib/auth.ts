@@ -31,7 +31,7 @@ export const getRole = (): role[] => {
   const clubSlug = window.location.pathname.split("/")[1];
   const teamSlug = window.location.pathname.split("/")[2];
 
-  const leaderAt = JSON.parse(localStorage.getItem("leaderAt") || "{}");
+  const leaderAt = JSON.parse(localStorage.getItem("leaderAt") || "[]");
   const isLeader = leaderAt.some(
     (leaderData: { clubName: string; teamName: string }) =>
       leaderData.clubName === clubSlug && leaderData.teamName === teamSlug
