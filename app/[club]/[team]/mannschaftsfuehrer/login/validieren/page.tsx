@@ -14,7 +14,7 @@ const ValidateLeaderLoggedInPage = () => {
       localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
       push("../../");
     } catch (error) {
-      console.error("Error verifying token:", error.response);
+      console.error("Error verifying token:", error);
     }
   };
 

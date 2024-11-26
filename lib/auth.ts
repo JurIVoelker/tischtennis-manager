@@ -33,7 +33,7 @@ export const getRole = (): role[] => {
 
   const leaderAt = JSON.parse(localStorage.getItem("leaderAt") || "{}");
   const isLeader = leaderAt.some(
-    (leaderData) =>
+    (leaderData: { clubName: string; teamName: string }) =>
       leaderData.clubName === clubSlug && leaderData.teamName === teamSlug
   );
   if (isLeader) roles.push("leader");
