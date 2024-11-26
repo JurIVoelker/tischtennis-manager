@@ -5,7 +5,9 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
+  SidebarMenu,
   SidebarMenuButton,
+  SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button, buttonVariants } from "./ui/button";
@@ -23,8 +25,17 @@ import {
   ADMIN_PAGE_REGEX,
   LOGIN_PAGE_REGEX,
 } from "@/constants/regex";
+import { useSession } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { ArrowUp01Icon, UserIcon } from "hugeicons-react";
 
 export const AppSidebar = ({}) => {
+  const { data: session } = useSession();
   // Hide sidebar on excludedPages
   const pathname = usePathname();
   const excludedRoutes = [
@@ -105,7 +116,30 @@ export const AppSidebar = ({}) => {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        {session && (
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <UserIcon size={20} /> {session?.user?.name}
+                    <ArrowUp01Icon size={20} className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  <DropdownMenuItem>
+                    <span>Account</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        )}
+      </SidebarFooter>
     </Sidebar>
   );
 };

@@ -9,11 +9,19 @@ import { handleUnauthorizedUser } from "./lib/middlewareUtils";
 import { getValidToken } from "./lib/APIUtils";
 import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 import { LOGIN_PAGE_REGEX } from "./constants/regex";
+import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
   // Skip ignored routes
   const ignoredRoutes = ["ungueltiger-link", "login"];
   const urlPath = request.url.replace(/^https?:\/\/[^/]+/, "");
+
+  const t = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  console.log(t);
 
   /*
    * Skip ignored routes
