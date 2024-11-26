@@ -1,9 +1,9 @@
 export const dynamicParams = false;
 import GameCard from "@/components/game-card/game-card";
+import NewGame from "@/components/game-card/new-game";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
 import Typography from "@/components/typography";
-import { Card } from "@/components/ui/card";
 import {
   ClubTeamParams,
   decodeClubTeamParams,
@@ -11,8 +11,6 @@ import {
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { ClubWithTeams } from "@/types/prismaTypes";
-import { Add01Icon } from "hugeicons-react";
-import Link from "next/link";
 
 const ClubTeamPage = async ({
   params,
@@ -76,14 +74,7 @@ const ClubTeamPage = async ({
               {!matches.length && (
                 <Typography variant="p-gray">Keine Spiele gefunden</Typography>
               )}
-              <Link href={`./${teamSlug}/spiel/neu`}>
-                <Card className="p-6 w-full flex justify-center items-center gap-2 min-h-48">
-                  <Add01Icon size={20} className="flex-shrink-0" />
-                  <Typography variant="p-gray">
-                    Neues Spiel hinzufügen
-                  </Typography>
-                </Card>
-              </Link>
+              <NewGame teamSlug={teamSlug} />
             </div>
           )}
         </div>

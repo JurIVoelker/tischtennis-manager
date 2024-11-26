@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import Typography from "./typography";
-import { getUserData } from "@/lib/localstorageUtils";
+import { useIsPermitted } from "@/hooks/use-has-permission";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -18,23 +18,12 @@ interface selectableOptionsType {
 
 const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
   defaultSelectedValue,
-  teamName,
 }) => {
   const [selectedAvailabilty, setSelectedAvailabilty] = useState(
     defaultSelectedValue || null
   );
 
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const userData = getUserData();
-    const userName = userData[teamName]?.name;
-    if (!userName) {
-      setButtonDisabled(true);
-    }
-    setLoading(false);
-  }, [teamName]);
+  const isButtonsVisible = useIsPermitted("view:game-availability-buttons");
 
   const selectableOptions: selectableOptionsType[] = [
     { name: "Ja", variant: "positive" },
@@ -46,27 +35,24 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     setSelectedAvailabilty(option);
   };
 
-  if (buttonDisabled) return <></>;
+  if (!isButtonsVisible) return <></>;
 
   return (
     <div className=" mt-8 space-y-2">
-      {!isLoading && (
-        <Typography variant="h5">Hast du Zeit zu spielen?</Typography>
-      )}
+      <Typography variant="h5">Hast du Zeit zu spielen?</Typography>
       <div className="flex gap-2">
-        {!isLoading &&
-          selectableOptions.map((option) => (
-            <Button
-              key={option.name}
-              className="w-full"
-              variant={
-                selectedAvailabilty === option.name ? option.variant : "outline"
-              }
-              onClick={() => handleSelctOption(option.name)}
-            >
-              {option.name}
-            </Button>
-          ))}
+        {selectableOptions.map((option) => (
+          <Button
+            key={option.name}
+            className="w-full"
+            variant={
+              selectedAvailabilty === option.name ? option.variant : "outline"
+            }
+            onClick={() => handleSelctOption(option.name)}
+          >
+            {option.name}
+          </Button>
+        ))}
       </div>
     </div>
   );

@@ -43,10 +43,10 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    if (club?.name && team?.name)
+    if (club?.slug && team?.slug)
       data.leaderAt.push({
-        clubName: club.name,
-        teamName: team.name,
+        clubName: club.slug,
+        teamName: team.slug,
       });
   }
 
