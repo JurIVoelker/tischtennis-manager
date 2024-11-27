@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import Typography from "./typography";
 import { Loader2 } from "lucide-react";
+import { getPlayerName } from "@/lib/stringUtils";
 
 interface UserLoginFormProps {
   players: Player[] | undefined;
@@ -115,7 +116,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
                           <RadioGroupItem value={player.id} />
                         </FormControl>
                         <FormLabel className="font-normal inline">
-                          {player.firstName}
+                          {getPlayerName(player, players)}
                         </FormLabel>
                       </FormItem>
                     ))}

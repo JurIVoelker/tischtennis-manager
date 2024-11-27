@@ -19,6 +19,16 @@ export const getInfoTextString = (match: MatchWithLineupAndLocation) => {
     .join("\n")}`;
 };
 
-export const getPlayerName = (player: Player) => {
-  return `${player.firstName} ${player.lastName}`;
+export const getPlayerName = (player: Player, allPlayersList?: Player[]) => {
+  if (allPlayersList) {
+    const isDuplicateName = allPlayersList.some(
+      (playerFromList) =>
+        playerFromList.firstName === player.firstName &&
+        playerFromList.id !== player.id
+    );
+    if (isDuplicateName) {
+      return `${player.firstName} ${player.lastName}`;
+    }
+  }
+  return `${player.firstName}`;
 };

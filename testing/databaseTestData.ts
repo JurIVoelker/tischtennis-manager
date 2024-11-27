@@ -38,11 +38,15 @@ const addTeamLeader = async (teamId: string) => {
   });
 };
 
-const createPlayer = async (teamId: string, playerName: string) => {
+const createPlayer = async (
+  teamId: string,
+  firstName: string,
+  lastName: string
+) => {
   return await prisma.player.create({
     data: {
-      firstName: playerName,
-      lastName: "Mustermann",
+      firstName,
+      lastName,
       teamId,
     },
   });
@@ -94,7 +98,7 @@ const addTeamAuth = async (teamId: string) => {
 const createFullTeamSetup = async (
   clubId: string,
   teamName: string,
-  playerNames: string[],
+  players: { firstName: string; lastName: string }[],
   enemyTeamNames: string[],
   isAddTeamLeader: boolean = false
 ) => {
@@ -107,9 +111,13 @@ const createFullTeamSetup = async (
   console.log(teamAuth);
 
   const playerIds = [];
-  for (const name of playerNames) {
-    const player = await createPlayer(teamId, name);
-    playerIds.push(player.id);
+  for (const player of players) {
+    const createdPlayer = await createPlayer(
+      teamId,
+      player.firstName,
+      player.lastName
+    );
+    playerIds.push(createdPlayer.id);
   }
 
   for (const enemyTeamName of enemyTeamNames) {
@@ -134,48 +142,60 @@ const executeDatabaseScripts = async () => {
   await createClubAuth(clubId);
 
   const teamName = "Herren I";
-  const playerNames = ["Max", "Moritz", "Erika", "Hans", "Klaus"];
-  await createFullTeamSetup(
-    clubId,
-    teamName,
-    playerNames,
-    enemyTeamNames,
-    true
-  );
+  const players = [
+    { firstName: "Max", lastName: "Mustermann" },
+    { firstName: "Max", lastName: "Master" },
+    { firstName: "Erika", lastName: "Mustermann" },
+    { firstName: "Hans", lastName: "Mustermann" },
+    { firstName: "Klaus", lastName: "Mustermann" },
+  ];
+  await createFullTeamSetup(clubId, teamName, players, enemyTeamNames, true);
 
   const teamName2 = "Herren II";
-  await createFullTeamSetup(clubId, teamName2, playerNames, enemyTeamNames);
+  await createFullTeamSetup(clubId, teamName2, players, enemyTeamNames);
 
   const teamName3 = "Herren III";
-  await createFullTeamSetup(
-    clubId,
-    teamName3,
-    playerNames,
-    enemyTeamNames,
-    true
-  );
+  await createFullTeamSetup(clubId, teamName3, players, enemyTeamNames, true);
 
   const teamName4 = "Herren IV";
-  const playerNames4 = ["Anna", "Berta", "Clara", "Dora", "Eva"];
-  await createFullTeamSetup(clubId, teamName4, playerNames4, enemyTeamNames);
+  const players4 = [
+    { firstName: "Anna", lastName: "Mustermann" },
+    { firstName: "Berta", lastName: "Mustermann" },
+    { firstName: "Clara", lastName: "Mustermann" },
+    { firstName: "Dora", lastName: "Mustermann" },
+    { firstName: "Eva", lastName: "Mustermann" },
+  ];
+  await createFullTeamSetup(clubId, teamName4, players4, enemyTeamNames);
 
   const teamName5 = "Herren V";
-  const playerNames5 = ["Fritz", "Gustav", "Heinz", "Inge", "Jürgen"];
-  await createFullTeamSetup(clubId, teamName5, playerNames5, enemyTeamNames);
+  const players5 = [
+    { firstName: "Fritz", lastName: "Mustermann" },
+    { firstName: "Gustav", lastName: "Mustermann" },
+    { firstName: "Heinz", lastName: "Mustermann" },
+    { firstName: "Inge", lastName: "Mustermann" },
+    { firstName: "Jürgen", lastName: "Mustermann" },
+  ];
+  await createFullTeamSetup(clubId, teamName5, players5, enemyTeamNames);
 
   const teamName6 = "Herren VI";
-  const playerNames6 = ["Karl", "Ludwig", "Marta", "Nina", "Otto"];
-  await createFullTeamSetup(clubId, teamName6, playerNames6, enemyTeamNames);
+  const players6 = [
+    { firstName: "Karl", lastName: "Mustermann" },
+    { firstName: "Ludwig", lastName: "Mustermann" },
+    { firstName: "Marta", lastName: "Mustermann" },
+    { firstName: "Nina", lastName: "Mustermann" },
+    { firstName: "Otto", lastName: "Mustermann" },
+  ];
+  await createFullTeamSetup(clubId, teamName6, players6, enemyTeamNames);
 
   const teamName7 = "Herren VII";
-  const playerNames7 = ["Paula", "Quentin", "Rita", "Siegfried", "Tina"];
-  await createFullTeamSetup(
-    clubId,
-    teamName7,
-    playerNames7,
-    enemyTeamNames,
-    true
-  );
+  const players7 = [
+    { firstName: "Paula", lastName: "Mustermann" },
+    { firstName: "Quentin", lastName: "Mustermann" },
+    { firstName: "Rita", lastName: "Mustermann" },
+    { firstName: "Siegfried", lastName: "Mustermann" },
+    { firstName: "Tina", lastName: "Mustermann" },
+  ];
+  await createFullTeamSetup(clubId, teamName7, players7, enemyTeamNames, true);
 };
 
 const runScripts = async () => {

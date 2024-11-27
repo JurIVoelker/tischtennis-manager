@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { getPlayerName } from "@/lib/stringUtils";
 
 interface PlayerTableProps {
   className?: string;
@@ -49,7 +50,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
         {players?.map((player, i) => (
           <TableRow key={player.id}>
             <TableCell className="font-medium">{i + 1}</TableCell>
-            <TableCell>{player.firstName}</TableCell>
+            <TableCell>{getPlayerName(player, players)}</TableCell>
             <TableCell className="flex justify-end p-1.5">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -60,7 +61,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                 <DropdownMenuContent className="p-2 w-60">
                   <DropdownMenuItem className="flex items-center gap-2 p-2">
                     <UserMinus02Icon />
-                    {`${player.firstName} entfernen`}
+                    {`${getPlayerName(player, players)} entfernen`}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="flex items-center gap-2 p-2"

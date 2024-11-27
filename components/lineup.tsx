@@ -9,12 +9,12 @@ interface LineupProps {
 }
 
 const Lineup: React.FC<LineupProps> = async ({ matchId }) => {
-  const lineup = await prisma.lineup.findMany({
+  const lineups = await prisma.lineup.findMany({
     where: { matchId },
     include: { player: true },
   });
 
-  if (!lineup || !lineup.length)
+  if (!lineups || !lineups.length)
     return (
       <Typography variant="p-gray" className="leading-0 mt-1">
         Der Mannschaftsführer hat noch keine Aufstellung ausgewählt.
@@ -22,9 +22,12 @@ const Lineup: React.FC<LineupProps> = async ({ matchId }) => {
     );
   return (
     <div className="flex gap-2 flex-col mt-2">
-      {lineup.map((lineup) => (
+      {lineups.map((lineup) => (
         <PositonIndicator position={lineup.position} key={lineup.id}>
-          {getPlayerName(lineup.player)}
+          {getPlayerName(
+            lineup.player,
+            lineups.map((l) => l.player)
+          )}
         </PositonIndicator>
       ))}
     </div>
