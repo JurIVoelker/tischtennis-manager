@@ -20,7 +20,7 @@ const ClubTeamPage = async ({
 }) => {
   const { clubSlug, teamSlug } = await decodeClubTeamParams(params);
 
-  const club: ClubWithTeams = await prisma.club.findUnique({
+  const club = await prisma.club.findUnique({
     where: { slug: clubSlug },
     include: {
       teams: {
@@ -36,10 +36,24 @@ const ClubTeamPage = async ({
               },
             },
           },
+          teamPosition: true,
         },
       },
     },
   });
+
+  const orderedPlayers = club?.teams?.map((team) =>
+    team.players.sort((a, b) => {
+      const aPosition =
+        team.teamPosition.find((pos) => pos.playerId === a.id)?.position || 0;
+      const bPosition =
+        team.teamPosition.find((pos) => pos.playerId === b.id)?.position || 0;
+      if (!aPosition || !bPosition) return 0;
+      return aPosition - bPosition;
+    })
+  );
+
+  console.log(orderedPlayers);
 
   const {
     players,

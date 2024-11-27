@@ -27,15 +27,25 @@ model Owner {
 }
 
 model Team {
-  id         String       @id @default(cuid())
-  slug       String       @unique
-  clubId     String
-  name       String
-  club       Club         @relation(fields: [clubId], references: [id])
-  players    Player[]
-  matches    Match[]
-  teamAuth   TeamAuth?
-  teamLeader TeamLeader[]
+  id           String         @id @default(cuid())
+  slug         String         @unique
+  clubId       String
+  name         String
+  club         Club           @relation(fields: [clubId], references: [id])
+  players      Player[]
+  matches      Match[]
+  teamAuth     TeamAuth?
+  teamLeader   TeamLeader[]
+  teamPosition TeamPosition[]
+}
+
+model TeamPosition {
+  id       String @id @unique @default(cuid())
+  teamId   String
+  position Int
+  playerId String
+  team     Team   @relation(fields: [teamId], references: [id])
+  Player   Player @relation(fields: [playerId], references: [id])
 }
 
 model TeamAuth {
@@ -54,12 +64,13 @@ model TeamLeader {
 }
 
 model Player {
-  id        String   @id @default(cuid())
-  teamId    String
-  firstName String
-  lastName  String
-  team      Team     @relation(fields: [teamId], references: [id])
-  lineups   Lineup[]
+  id           String         @id @default(cuid())
+  teamId       String
+  firstName    String
+  lastName     String
+  team         Team           @relation(fields: [teamId], references: [id])
+  lineups      Lineup[]
+  teamPosition TeamPosition[]
 }
 
 model Match {

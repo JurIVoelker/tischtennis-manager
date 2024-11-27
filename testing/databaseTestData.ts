@@ -19,6 +19,20 @@ const createClubAuth = async (clubId: string) => {
   });
 };
 
+const addTeamPosition = async (
+  teamId: string,
+  playerId: string,
+  position: number
+) => {
+  return await prisma.teamPosition.create({
+    data: {
+      teamId,
+      position,
+      playerId,
+    },
+  });
+};
+
 const createTeam = async (clubId: string, teamName: string) => {
   return await prisma.team.create({
     data: {
@@ -112,6 +126,11 @@ const createFullTeamSetup = async (
     playerIds.push(player.id);
   }
 
+  for (let i = 0; i < playerIds.length; i++) {
+    const playerId = playerIds[i];
+    addTeamPosition(teamId, playerId, i + 1);
+  }
+
   for (const enemyTeamName of enemyTeamNames) {
     const match = await createMatch(teamId, enemyTeamName);
     const matchId = match.id;
@@ -181,11 +200,12 @@ const executeDatabaseScripts = async () => {
 const runScripts = async () => {
   const models = [
     "lineup",
-    "player",
     "location",
     "match",
     "teamLeader",
     "teamAuth",
+    "teamPosition",
+    "player",
     "team",
     "owner",
     "club",
