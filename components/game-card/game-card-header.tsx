@@ -66,6 +66,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
     {
       name: "Infotext kopieren",
       IconComponent: Copy01Icon,
+      isDisabled: !match.lineups.length,
       handler: handleCopy,
     },
     {
@@ -94,17 +95,19 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-60 p-2">
-              {dropdownOptions.map(({ name, IconComponent, handler }, id) => (
-                <DropdownMenuItem
-                  key={id}
-                  onSelect={handler}
-                  className="flex items-center gap-2 p-2"
-                  disabled={!handler || !match.lineups.length}
-                >
-                  <IconComponent />
-                  {name}
-                </DropdownMenuItem>
-              ))}
+              {dropdownOptions.map(
+                ({ name, IconComponent, handler, isDisabled }, id) => (
+                  <DropdownMenuItem
+                    key={id}
+                    onSelect={handler}
+                    className="flex items-center gap-2 p-2"
+                    disabled={isDisabled}
+                  >
+                    <IconComponent />
+                    {name}
+                  </DropdownMenuItem>
+                )
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         )}
