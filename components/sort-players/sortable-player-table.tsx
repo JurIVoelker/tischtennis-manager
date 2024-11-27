@@ -28,6 +28,7 @@ import { SortablePlayerItem } from "./sortable-player-item";
 import { Card } from "../ui/card";
 import { DragDropVerticalIcon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
+import { getPlayerName } from "@/lib/stringUtils";
 
 interface PlayerTableProps {
   className?: string;
@@ -86,7 +87,10 @@ export const SortablePlayerTable: React.FC<PlayerTableProps> = ({
                     <SortablePlayerItem id={playerList.id}>
                       <Card className="py-1.5 px-2 flex gap-2 items-center rounded-sm">
                         <DragDropVerticalIcon />
-                        {playerList.player.firstName}
+                        {getPlayerName(
+                          playerList.player,
+                          listItems.map((p) => p.player)
+                        )}
                       </Card>
                     </SortablePlayerItem>
                   </div>

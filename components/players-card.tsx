@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useIsPermitted } from "@/hooks/use-has-permission";
 import { useEffect, useState } from "react";
 import { getUserData } from "@/lib/localstorageUtils";
+import { getPlayerName } from "@/lib/stringUtils";
 
 interface PlayersCardProps {
   players: Player[] | undefined;
@@ -25,11 +26,11 @@ const PlayersCard = ({
   teamSlug,
 }: PlayersCardProps) => {
   const isOptionsVisible = useIsPermitted("view:players-card-options");
-  const [userName, setUserName] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
-    const teamUserName = getUserData()[teamSlug];
-    if (teamUserName) setUserName(teamUserName.name);
+    const teamUserId = getUserData()[teamSlug]?.id;
+    if (teamUserId) setUserId(teamUserId);
   }, [teamSlug]);
 
   return (
@@ -51,10 +52,10 @@ const PlayersCard = ({
         {players &&
           players.map((player) => (
             <Badge
-              variant={userName === player.firstName ? "default" : "secondary"}
+              variant={userId === player.id ? "default" : "secondary"}
               key={player.id}
             >{`${
-              userName === player.firstName ? "Du" : player.firstName
+              userId === player.id ? "Du" : getPlayerName(player, players)
             }`}</Badge>
           ))}
       </div>

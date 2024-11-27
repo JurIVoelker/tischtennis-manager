@@ -37,7 +37,7 @@ export const getRole = (): role[] => {
   );
   if (isLeader) roles.push("leader");
   const userData = getUserData();
-  if (userData[teamSlug]?.name) roles.push("member");
+  if (userData[teamSlug]?.id) roles.push("member");
   return roles;
 };
 
