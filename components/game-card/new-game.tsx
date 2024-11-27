@@ -14,8 +14,11 @@ const NewGame: React.FC<NewGameProps> = ({ teamSlug }) => {
 
   if (!isVisible) return <></>;
   return (
-    <Link href={`./${teamSlug}/spiel/neu`}>
-      <Card className="p-6 w-full flex justify-center items-center gap-2 min-h-48">
+    <Link
+      href={`./${teamSlug}/spiel/neu`}
+      className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+    >
+      <Card className="p-6 w-full flex justify-center items-center gap-2 min-h-48 h-full">
         <Add01Icon size={20} className="flex-shrink-0" />
         <Typography variant="p-gray">Neues Spiel hinzufügen</Typography>
       </Card>
