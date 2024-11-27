@@ -20,8 +20,8 @@ const GameCard: React.FC<GameCardProps> = async ({
 }) => {
   return (
     <Card className="p-6 space-y-6">
-      <GameCardHeader match={match} teamSlug={teamSlug}/>
-      <GameCardBody match={match} />
+      <GameCardHeader match={match} teamSlug={teamSlug} />
+      <GameCardBody match={match} teamSlug={teamSlug} />
       {!isLineup && <AvailabiltyButtons teamName={teamName} />}
     </Card>
   );

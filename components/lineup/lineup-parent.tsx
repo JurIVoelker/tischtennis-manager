@@ -1,14 +1,14 @@
 import React from "react";
-import Typography from "./typography";
+import Typography from "../typography";
 import { prisma } from "@/lib/prisma/prisma";
-import PositonIndicator from "./position-indicator";
-import { getPlayerName } from "@/lib/stringUtils";
+import LineupChild from "./lineup-child";
 
 interface LineupProps {
   matchId: string;
+  teamSlug: string;
 }
 
-const Lineup: React.FC<LineupProps> = async ({ matchId }) => {
+const Lineup: React.FC<LineupProps> = async ({ matchId, teamSlug }) => {
   const lineups = await prisma.lineup.findMany({
     where: { matchId },
     include: { player: true },
@@ -22,14 +22,7 @@ const Lineup: React.FC<LineupProps> = async ({ matchId }) => {
     );
   return (
     <div className="flex gap-2 flex-col mt-2">
-      {lineups.map((lineup) => (
-        <PositonIndicator position={lineup.position} key={lineup.id}>
-          {getPlayerName(
-            lineup.player,
-            lineups.map((l) => l.player)
-          )}
-        </PositonIndicator>
-      ))}
+      <LineupChild lineups={lineups} teamSlug={teamSlug} />
     </div>
   );
 };
