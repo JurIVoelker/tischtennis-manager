@@ -26,22 +26,19 @@ const ValidateLeaderLoggedInPage = () => {
   }, []);
 
   return (
-    <div className="w-full">
-      <div className="px-6 pb-6 pt-16 ">
-        <Typography variant="h3">Login Validieren</Typography>
-        <div className="flex items-center gap-2 mt-4">
-          {!error && (
-            <>
-              <Typography variant="p" className="leading-10">
-                Dein Login wird validiert. Bitte warte einen Moment.
-              </Typography>
-              <div>
-                <Loader2 className="animate-spin" size={20} />
-              </div>
-            </>
-          )}
-          {error}
-        </div>
+    <div className="w-full h-full">
+      <div className="flex items-center justify-center flex-col h-svh  ">
+        {!error && (
+          <>
+            <div>
+              <Loader2 className="animate-spin" size={32} />
+            </div>
+            <Typography variant="p-gray" className="leading-10 mt-2">
+              Dein Konto wird validiert. Bitte warte einen Moment.
+            </Typography>
+          </>
+        )}
+        {error}
       </div>
     </div>
   );
