@@ -34,7 +34,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ArrowUp01Icon, Login01Icon, Logout01Icon } from "hugeicons-react";
+import { ArrowUp01Icon } from "hugeicons-react";
+import { getUserData, setUserData } from "@/lib/localstorageUtils";
+import { User2Icon } from "lucide-react";
 
 export const AppSidebar = ({}) => {
   const { data: session } = useSession();
@@ -42,6 +44,7 @@ export const AppSidebar = ({}) => {
   const [teams, setTeams] = useState<Team[] | null>(null);
   const { push } = useRouter();
   const isMobile = useIsMobile();
+  const [usersTeams, setUsersTeams] = useState<string[]>([]);
 
   // Hide sidebar on excludedPages
   const pathname = usePathname();
@@ -60,6 +63,8 @@ export const AppSidebar = ({}) => {
     getTeams(userClub).then((fetchedTeams: Team[]) => {
       setTeams(fetchedTeams);
     });
+    const usersTeamsData = getUserData();
+    setUsersTeams(Object.keys(usersTeamsData));
   }, []);
 
   // Handle click on team
@@ -68,6 +73,11 @@ export const AppSidebar = ({}) => {
   const handleClickLink = (teamSlug: string) => {
     push(`/${userClub}/${teamSlug}`);
     if (isMobile) toggleSidebar();
+  };
+
+  const handleLeaveTeam = (teamName: string) => {
+    setUserData({ [teamName]: undefined });
+    window.location.reload();
   };
 
   const handleSignOut = () => {
@@ -126,49 +136,66 @@ export const AppSidebar = ({}) => {
       <SidebarFooter>
         <div className="pb-4 space-y-4">
           <SidebarSeparator />
-          {session && (
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <SidebarMenuButton className="h-10">
-                      {session?.user?.name}
-                      <ArrowUp01Icon size={20} className="ml-auto" />
-                    </SidebarMenuButton>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    side="top"
-                    className="w-[--radix-popper-anchor-width]"
-                  >
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton className="h-10">
+                    {session?.user?.name ? (
+                      <>
+                        <span className="flex justify-center items-center rounded-full bg-gray-200 h-6 w-6">
+                          <User2Icon size={16} />
+                        </span>{" "}
+                        {session?.user.name}
+                      </>
+                    ) : (
+                      "Meine Mannschaften"
+                    )}
+                    <ArrowUp01Icon size={20} className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  {usersTeams.map((teamName) => (
+                    <DropdownMenuItem
+                      key={teamName}
+                      onClick={() => handleLeaveTeam(teamName)}
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        {`${teamName.replace("-", " ")} verlassen`}
+                      </span>
+                    </DropdownMenuItem>
+                  ))}
+                  {Boolean(usersTeams.length) && (
+                    <SidebarSeparator className="my-1" />
+                  )}
+                  {session && (
                     <DropdownMenuItem onClick={handleSignOut}>
                       <span className="inline-flex items-center gap-2">
-                        <Logout01Icon size={16} />
                         Logout
                       </span>
                     </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          )}
-          {!session && (
-            <>
-              <SidebarMenuButton asChild>
-                <Button
-                  className="bg-transparent text-primary hover:bg-sidebar-accent justify-start p-2 h-10"
-                  onClick={() =>
-                    signIn("google", {
-                      callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/${currentTeamSlug}/mannschaftsfuehrer/login/validieren`,
-                      redirect: true,
-                    })
-                  }
-                >
-                  <Login01Icon size={20} />
-                  Mannschaftsführer Login
-                </Button>
-              </SidebarMenuButton>
-            </>
-          )}
+                  )}
+                  {!session && (
+                    <>
+                      <SidebarMenuButton
+                        onClick={() =>
+                          signIn("google", {
+                            callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/${currentTeamSlug}/mannschaftsfuehrer/login/validieren`,
+                            redirect: true,
+                          })
+                        }
+                      >
+                        Mannschaftsführer Login
+                      </SidebarMenuButton>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </div>
       </SidebarFooter>
     </Sidebar>
