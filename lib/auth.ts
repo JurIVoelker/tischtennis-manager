@@ -21,7 +21,6 @@ export const ROLES: RoleProps = {
     "view:add-new-game",
     "view:game-card-options",
     "view:players-card-options",
-    "view:game-availability-buttons",
   ],
   admin: [],
 } as const;

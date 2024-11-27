@@ -10,17 +10,12 @@ import { getValidToken } from "./lib/APIUtils";
 import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 import { LOGIN_PAGE_REGEX } from "./constants/regex";
 import { isIgnoredMiddlewarePath } from "./lib/routeUtils";
+import { getToken } from "next-auth/jwt";
+import axios from "axios";
 
 export async function middleware(request: NextRequest) {
   const urlPath = request.url.replace(/^https?:\/\/[^/]+/, "");
   if (isIgnoredMiddlewarePath(urlPath)) return NextResponse.next();
-
-  // const t = await getToken({
-  //   req: request,
-  //   secret: process.env.NEXTAUTH_SECRET,
-  // });
-
-  // console.log(t);
 
   if (urlPath.split("/").length < 3) {
     return NextResponse.redirect(new URL(`/ungueltiger-link`, request.url));
@@ -47,6 +42,29 @@ export async function middleware(request: NextRequest) {
         request.url
       )
     );
+  }
+
+  /*
+   * Check if user is team leader in any team of clubslug.
+   */
+
+  const loggedinUserData = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  const { email } = loggedinUserData || {};
+  if (email) {
+    const { isSomeLeader } = (
+      await axios.get(
+        `${
+          process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+        }/api/protected/is-team-leader?clubSlug=${clubSlug}&teamSlug=${teamSlug}&email=${email}`
+      )
+    ).data;
+    if (isSomeLeader) {
+      return NextResponse.next();
+    }
   }
 
   /*
