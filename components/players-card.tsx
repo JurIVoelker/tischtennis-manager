@@ -8,6 +8,8 @@ import { Button } from "./ui/button";
 import { PencilEdit02Icon } from "hugeicons-react";
 import Link from "next/link";
 import { useIsPermitted } from "@/hooks/use-has-permission";
+import { useEffect, useState } from "react";
+import { getUserData } from "@/lib/localstorageUtils";
 
 interface PlayersCardProps {
   players: Player[] | undefined;
@@ -23,6 +25,13 @@ const PlayersCard = ({
   teamSlug,
 }: PlayersCardProps) => {
   const isOptionsVisible = useIsPermitted("view:players-card-options");
+  const [userName, setUserName] = useState<string>("");
+
+  useEffect(() => {
+    const teamUserName = getUserData()[teamSlug];
+    if (teamUserName) setUserName(teamUserName.name);
+  }, [teamSlug]);
+
   return (
     <Card className={cn("p-6", className)}>
       <div className="flex justify-between mb-4 items-center h-10">
@@ -42,7 +51,7 @@ const PlayersCard = ({
         {players &&
           players.map((player) => (
             <Badge
-              variant="secondary"
+              variant={userName === player.firstName ? "default" : "secondary"}
               key={player.id}
             >{`${player.firstName}`}</Badge>
           ))}
