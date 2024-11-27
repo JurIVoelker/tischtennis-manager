@@ -1,6 +1,7 @@
 export const dynamicParams = false;
 import GameCard from "@/components/game-card/game-card";
 import NewGame from "@/components/game-card/new-game";
+import TeamLeaderJoinSuggestion from "@/components/leader-no-member-promt";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
 import Typography from "@/components/typography";
@@ -57,6 +58,7 @@ const ClubTeamPage = async ({
             clubSlug={clubSlug}
             teamSlug={teamSlug}
           />
+          <TeamLeaderJoinSuggestion clubSlug={clubSlug} teamSlug={teamSlug} />
           {matches && teamName && (
             <div className="flex flex-col gap-8 md:grid md:grid-cols-2 xl:grid-cols-3">
               {matches.map((match, id) => {
