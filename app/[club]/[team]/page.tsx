@@ -1,6 +1,6 @@
 export const dynamicParams = false;
 import GameCard from "@/components/game-card/game-card";
-import NewGame from "@/components/game-card/new-game";
+import NewGame from "@/components/game-card/new-game-card";
 import TeamLeaderJoinSuggestion from "@/components/leader-no-member-promt";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";

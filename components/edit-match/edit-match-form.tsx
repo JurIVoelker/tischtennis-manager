@@ -60,6 +60,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
     streetAdress: z.string(),
     city: z.string(),
     isHomeGame: z.boolean(),
+    enemyTeamName: isCreate ? z.string().optional() : z.undefined(),
   });
 
   const location = match?.location;
@@ -95,6 +96,29 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
   return (
     <Form {...form}>
       <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+        {isCreate && (
+          <Card className="p-4 space-y-4">
+            <Typography variant="p-gray">Name des Gegnerteams</Typography>
+            <FormField
+              name="enemyTeamName"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Gegner..."
+                      value={field.value}
+                      onChange={(event) => {
+                        field.onChange(event.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Card>
+        )}
         <Card className="p-4 space-y-4">
           <Typography variant="p-gray">Spielort</Typography>
           <FormField
