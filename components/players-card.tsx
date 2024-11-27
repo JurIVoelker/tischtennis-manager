@@ -53,7 +53,9 @@ const PlayersCard = ({
             <Badge
               variant={userName === player.firstName ? "default" : "secondary"}
               key={player.id}
-            >{`${player.firstName}`}</Badge>
+            >{`${
+              userName === player.firstName ? "Du" : player.firstName
+            }`}</Badge>
           ))}
       </div>
     </Card>
