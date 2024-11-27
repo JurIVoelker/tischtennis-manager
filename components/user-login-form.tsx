@@ -35,7 +35,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   clubSlug,
   teamSlug,
 }) => {
-  const playersSchema = players?.map((player) => player.firstName) || [""];
+  const playersSchema = players?.map((player) => player.id) || [""];
 
   const [isLoading, setLoading] = useState(true);
 
@@ -43,8 +43,8 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
     const userData = getUserData();
     const teamData = userData[teamSlug];
     if (teamData) {
-      const { name } = teamData;
-      if (name && players?.some((player) => player.firstName === name)) {
+      const { id } = teamData;
+      if (id && players?.some((player) => player.id === id)) {
         push(`/${clubSlug}/${teamSlug}`);
       } else {
         setUserData({ [teamSlug]: {} });
@@ -57,7 +57,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   }, [clubSlug, players, teamSlug]);
 
   const FormSchema = z.object({
-    playerName: z.enum(
+    playerId: z.enum(
       playersSchema.length > 0
         ? (playersSchema as [string, ...string[]])
         : ["default"],
@@ -75,14 +75,14 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
-    const { playerName } = data;
-    setUserData({ [teamSlug]: { name: playerName } });
+    const { playerId } = data;
+    setUserData({ [teamSlug]: { id: playerId } });
     toast({
       title: "Login erfolgreich",
       description: (
         <div className="mt-2 w-[340px]">
           <Typography variant="p-gray" className="leading-1">
-            Wilkommen {playerName}! Du wurdest erfolgreich eingeloggt.
+            Wilkommen! Du wurdest erfolgreich eingeloggt.
           </Typography>
         </div>
       ),
@@ -96,7 +96,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
           <FormField
             control={form.control}
-            name="playerName"
+            name="playerId"
             render={({ field }) => (
               <FormItem className="w-full mb-8 space-y-4">
                 <FormLabel>Wähle deinen Namen aus...</FormLabel>
@@ -112,7 +112,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
                         className="flex items-center space-x-2 space-y-0"
                       >
                         <FormControl>
-                          <RadioGroupItem value={player.firstName} />
+                          <RadioGroupItem value={player.id} />
                         </FormControl>
                         <FormLabel className="font-normal inline">
                           {player.firstName}
