@@ -97,29 +97,31 @@ export const AppSidebar = ({}) => {
           <Typography variant="muted">Alle Mannschaften</Typography>
           <div className="flex flex-col gap-2 pt-4">
             {teams &&
-              teams.map((team) => {
-                const isCurrentTeam = team.slug === currentTeamSlug;
-                const buttonStyles = buttonVariants({
-                  variant: isCurrentTeam ? "default" : "ghost",
-                });
-                const customButtonStyles = isCurrentTeam
-                  ? "hover:text-primary-foreground"
-                  : "bg-transparent text-primary hover:bg-sidebar-accent";
-                return (
-                  <SidebarMenuButton asChild key={team.id}>
-                    <Button
-                      className={cn(
-                        buttonStyles,
-                        customButtonStyles,
-                        "justify-start"
-                      )}
-                      onClick={() => handleClickLink(team.slug)}
-                    >
-                      {team.name}
-                    </Button>
-                  </SidebarMenuButton>
-                );
-              })}
+              teams
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((team) => {
+                  const isCurrentTeam = team.slug === currentTeamSlug;
+                  const buttonStyles = buttonVariants({
+                    variant: isCurrentTeam ? "default" : "ghost",
+                  });
+                  const customButtonStyles = isCurrentTeam
+                    ? "hover:text-primary-foreground"
+                    : "bg-transparent text-primary hover:bg-sidebar-accent";
+                  return (
+                    <SidebarMenuButton asChild key={team.id}>
+                      <Button
+                        className={cn(
+                          buttonStyles,
+                          customButtonStyles,
+                          "justify-start"
+                        )}
+                        onClick={() => handleClickLink(team.slug)}
+                      >
+                        {team.name}
+                      </Button>
+                    </SidebarMenuButton>
+                  );
+                })}
             {teams === null &&
               Array.from({ length: 5 }).map((_, i) => (
                 <Skeleton key={i} className="w-full h-10" />
@@ -146,7 +148,7 @@ export const AppSidebar = ({}) => {
                         <span className="flex justify-center items-center rounded-full bg-gray-200 h-6 w-6">
                           <User2Icon size={16} />
                         </span>{" "}
-                        {session?.user.name}
+                        {session.user.name}
                       </>
                     ) : (
                       "Meine Mannschaften"
@@ -158,16 +160,18 @@ export const AppSidebar = ({}) => {
                   side="top"
                   className="w-[--radix-popper-anchor-width]"
                 >
-                  {usersTeams.map((teamName) => (
-                    <DropdownMenuItem
-                      key={teamName}
-                      onClick={() => handleLeaveTeam(teamName)}
-                    >
-                      <span className="inline-flex items-center gap-2">
-                        {`${teamName.replace("-", " ")} verlassen`}
-                      </span>
-                    </DropdownMenuItem>
-                  ))}
+                  {usersTeams
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((teamName) => (
+                      <DropdownMenuItem
+                        key={teamName}
+                        onClick={() => handleLeaveTeam(teamName)}
+                      >
+                        <span className="inline-flex items-center gap-2">
+                          {`${teamName.replace("-", " ")} verlassen`}
+                        </span>
+                      </DropdownMenuItem>
+                    ))}
                   {Boolean(usersTeams.length) && (
                     <SidebarSeparator className="my-1" />
                   )}
