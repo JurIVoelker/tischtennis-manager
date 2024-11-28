@@ -10,9 +10,10 @@ export const getWeekdayName = (date: Date) => {
 
 export const getInfoTextString = (match: MatchWithLineupAndLocation) => {
   if (
-    !match.matchDateTime ||
-    !match.enemyClubName ||
-    !Array.isArray(match.lineups)
+    !match?.matchDateTime ||
+    !match?.enemyClubName ||
+    typeof match?.isHomeGame !== "boolean" ||
+    !Array.isArray(match?.lineups)
   ) {
     return null;
   }
@@ -43,7 +44,9 @@ export const getInfoTextString = (match: MatchWithLineupAndLocation) => {
     lineups: match.lineups.sort((a, b) => a.position - b.position),
   };
 
-  return `${textBeginning} Uhr findet das Spiel gegen ${
+  return `${textBeginning} Uhr findet das ${
+    match.isHomeGame ? "Heimspiel" : "Auswährtsspiel"
+  } gegen ${
     match.enemyClubName
   } statt. Wir spielen mit folgender Aufstellung: \n${sortedMatch?.lineups
     .map((lineup, index) => `  ${index + 1}. ${lineup?.player.firstName}`)

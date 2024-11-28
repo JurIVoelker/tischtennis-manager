@@ -20,7 +20,7 @@ const defaultDummyMatch: MatchWithLineupAndLocation = {
   enemyClubName: "Enemy Club Name",
   id: "ID",
   lineups: [defaultDummyLineup],
-  isHomeGame: false,
+  isHomeGame: true,
   location: {
     city: "City",
     id: "ID",
@@ -105,6 +105,22 @@ describe("test date and name", () => {
   });
 });
 
+describe("game location", () => {
+  test("home game", () => {
+    const dummyMatch = defaultDummyMatch;
+    const infoText = getInfoTextString(dummyMatch);
+    assert(infoText);
+    assert(infoText.includes("Heimspiel"));
+  });
+  test("test game at enemies", () => {
+    const dummyMatch = defaultDummyMatch;
+    dummyMatch.isHomeGame = false;
+    const infoText = getInfoTextString(dummyMatch);
+    assert(infoText);
+    assert(infoText.includes("Auswährtsspiel"));
+  });
+});
+
 describe("test lineup", () => {
   test("lineup sorted and correctly formatted", () => {
     const dummyMatch: MatchWithLineupAndLocation = defaultDummyMatch;
@@ -126,5 +142,37 @@ describe("test lineup", () => {
     const infoText = getInfoTextString(dummyMatch);
     assert(infoText);
     assert(infoText.includes(expectedText));
+  });
+});
+
+describe("false args", () => {
+  test("null as match", () => {
+    // @ts-expect-error: Testing null input for getInfoTextString
+    const infoText = getInfoTextString(null);
+    assert(infoText === null);
+  });
+
+  test("without lineup", () => {
+    const dummyMatch = JSON.parse(JSON.stringify(defaultDummyMatch));
+    delete dummyMatch.lineups;
+
+    const infoText = getInfoTextString(dummyMatch);
+    assert(infoText === null);
+  });
+
+  test("without datetime", () => {
+    const dummyMatch = JSON.parse(JSON.stringify(defaultDummyMatch));
+    delete dummyMatch.matchDateTime;
+
+    const infoText = getInfoTextString(dummyMatch);
+    assert(infoText === null);
+  });
+
+  test("without enemy team name", () => {
+    const dummyMatch = JSON.parse(JSON.stringify(defaultDummyMatch));
+    delete dummyMatch.enemyClubName;
+
+    const infoText = getInfoTextString(dummyMatch);
+    assert(infoText === null);
   });
 });
