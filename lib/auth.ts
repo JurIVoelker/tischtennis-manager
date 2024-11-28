@@ -5,6 +5,7 @@ export type permission =
   | "view:game-card-options"
   | "view:players-card-options"
   | "view:add-new-game"
+  | "view:add-lineup-in-game-card-body"
   | "view:game-availability-buttons";
 
 interface RoleProps {
@@ -20,6 +21,7 @@ export const ROLES: RoleProps = {
   leader: [
     "view:add-new-game",
     "view:game-card-options",
+    "view:add-lineup-in-game-card-body",
     "view:players-card-options",
   ],
   admin: [],

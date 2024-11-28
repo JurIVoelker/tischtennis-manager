@@ -1,5 +1,4 @@
 import React from "react";
-import Typography from "../typography";
 import { prisma } from "@/lib/prisma/prisma";
 import LineupChild from "./lineup-child";
 
@@ -14,12 +13,6 @@ const Lineup: React.FC<LineupProps> = async ({ matchId, teamSlug }) => {
     include: { player: true },
   });
 
-  if (!lineups || !lineups.length)
-    return (
-      <Typography variant="p-gray" className="leading-0 mt-1">
-        Der Mannschaftsführer hat noch keine Aufstellung ausgewählt.
-      </Typography>
-    );
   return (
     <div className="flex gap-2 flex-col mt-2">
       <LineupChild lineups={lineups} teamSlug={teamSlug} />
