@@ -47,6 +47,10 @@ const ClubTeamPage = async ({
     name: teamName,
   } = club?.teams?.find((team) => team.slug === teamSlug) || {};
 
+  const upcomingMatches = matches?.filter(
+    (match) => new Date(match.matchDateTime) >= new Date()
+  );
+
   return (
     <>
       <div className="w-full">
@@ -59,9 +63,9 @@ const ClubTeamPage = async ({
             teamSlug={teamSlug}
           />
           <TeamLeaderJoinSuggestion clubSlug={clubSlug} teamSlug={teamSlug} />
-          {matches && teamName && (
+          {upcomingMatches && teamName && (
             <div className="flex flex-col gap-8 md:grid md:grid-cols-2 xl:grid-cols-3">
-              {matches.map((match, id) => {
+              {upcomingMatches.map((match, id) => {
                 const isLineup = Boolean(match.lineups.length);
                 return (
                   <GameCard
@@ -73,7 +77,7 @@ const ClubTeamPage = async ({
                   />
                 );
               })}
-              {!matches.length && (
+              {!upcomingMatches.length && (
                 <Typography variant="p-gray">Keine Spiele gefunden</Typography>
               )}
               <NewGame teamSlug={teamSlug} />

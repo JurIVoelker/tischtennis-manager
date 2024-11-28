@@ -53,10 +53,12 @@ const createPlayer = async (
 };
 
 const createMatch = async (teamId: string, enemyTeamName: string) => {
+  const matchDate = new Date();
+  matchDate.setMonth(matchDate.getMonth() + 1);
   return await prisma.match.create({
     data: {
       teamId,
-      matchDateTime: new Date().toISOString(),
+      matchDateTime: matchDate.toISOString(),
       enemyClubName: enemyTeamName,
       isHomeGame: true,
     },
