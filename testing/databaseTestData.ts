@@ -24,7 +24,7 @@ const addTeamPosition = async (
   playerId: string,
   position: number
 ) => {
-  return await prisma.teamPosition.create({
+  return await prisma.playerTeamPosition.create({
     data: {
       teamId,
       position,
@@ -204,7 +204,7 @@ const runScripts = async () => {
     "match",
     "teamLeader",
     "teamAuth",
-    "teamPosition",
+    "playerTeamPosition",
     "player",
     "team",
     "owner",
