@@ -1,6 +1,6 @@
 import { GetTeamAuthResponseInterface } from "@/app/api/protected/team-auth/route";
-import axios from "axios";
 import { asyncLog } from "./logUtils";
+import qs from "qs";
 
 export const getValidToken = async (
   clubSlug: string,
@@ -9,10 +9,11 @@ export const getValidToken = async (
   let tokenData;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   try {
-    const res = await axios.get(
-      `${baseUrl}/api/protected/team-auth?clubSlug=${clubSlug}&teamSlug=${teamSlug}`
-    );
-    tokenData = res.data;
+    const res = await fetchAPI(`${baseUrl}/api/protected/team-auth`, {
+      clubSlug,
+      teamSlug,
+    });
+    tokenData = res;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error?.response?.status !== 404) {
@@ -27,4 +28,20 @@ export const getValidToken = async (
     return { token: null, allTokens: [] };
   }
   return tokenData;
+};
+
+export const fetchAPI = async (url: string, options?: object) => {
+  const isLogging = process.env.NODE_ENV === "development";
+  const queryString = options ? qs.stringify(options) : "";
+
+  const requestUrl = url + (queryString ? `?${queryString}` : "");
+
+  if (isLogging) console.info(`[GET] -> ${requestUrl}`);
+  const response = await fetch(requestUrl);
+  if (!response.ok) {
+    if (isLogging) console.info(`[ERROR-${response.status}] -> ${requestUrl}`);
+    return null;
+  }
+  const data = await response.json();
+  return data;
 };
