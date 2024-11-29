@@ -1,6 +1,6 @@
-import axios from "axios";
+import { fetchAPI } from "@/lib/APIUtils";
 
 export async function getTeams(clubSlug: string) {
-  const response = await axios.get(`/api/teams/${clubSlug}`);
+  const response = await fetchAPI(`/api/teams/${clubSlug}`);
   return response.data.data;
 }

@@ -39,7 +39,7 @@ const ManagePlayersPage = async ({
     <div className="w-full">
       <Navbar title="Spieler verwalten" />
       <div className="px-6 pb-6 pt-16 ">
-        <ManagePlayersHeader />
+        <ManagePlayersHeader clubSlug={clubSlug} teamSlug={teamSlug} />
         <PlayerTable className="mt-16" players={players} />
         <Button className="w-full mt-6" variant="outline">
           <PlusSignIcon />
