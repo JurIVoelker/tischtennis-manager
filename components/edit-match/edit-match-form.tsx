@@ -56,9 +56,9 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
         millisecond: z.number(),
       })
       .passthrough(),
-    hallName: z.string(),
-    streetAdress: z.string(),
-    city: z.string(),
+    hallName: z.string().min(1),
+    streetAdress: z.string().min(1),
+    city: z.string().min(1),
     isHomeGame: z.boolean(),
     enemyTeamName: isCreate ? z.string().optional() : z.undefined(),
   });
