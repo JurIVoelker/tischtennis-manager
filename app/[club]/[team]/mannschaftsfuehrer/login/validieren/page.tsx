@@ -11,7 +11,7 @@ const ValidateLeaderLoggedInPage = () => {
   const verifyToken = async () => {
     try {
       const response = await fetchAPI("/api/verify-auth");
-      const { leaderAt } = response.data.data || {};
+      const { leaderAt } = response.data || {};
       localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
       push("../../");
     } catch (error) {
