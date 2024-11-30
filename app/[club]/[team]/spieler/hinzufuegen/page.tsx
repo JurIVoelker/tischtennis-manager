@@ -38,7 +38,6 @@ const AddPlayersPage = async ({
       <Navbar title="Spieler hinzufügen" />
       <div className="px-6 pb-6 pt-16 ">
         <AddExistingPlayerDrawer teams={teamsWithoutOwn} />
-        {/* {teamsWithoutOwn.map((team) => JSON.stringify(team.players))} */}
       </div>
     </div>
   );

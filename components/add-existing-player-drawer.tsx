@@ -14,7 +14,8 @@ import {
 import { Card } from "./ui/card";
 import Typography from "./typography";
 import { getPlayerName } from "@/lib/stringUtils";
-import { PlusSignIcon } from "hugeicons-react";
+import { PlusSignIcon, Tick01Icon } from "hugeicons-react";
+import { useState } from "react";
 
 interface AddExistingPlayerDrawerProps {
   teams: TeamWithPlayers[];
@@ -23,6 +24,22 @@ interface AddExistingPlayerDrawerProps {
 const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
   teams,
 }) => {
+  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
+
+  const handleSelectPlayer = (playerId: string) => {
+    teams.forEach((team) => {
+      team.players.forEach((player) => {
+        if (player.id === playerId) {
+          setSelectedPlayers((prev) =>
+            prev.includes(playerId)
+              ? prev.filter((id) => id !== playerId)
+              : [...prev, playerId]
+          );
+        }
+      });
+    });
+  };
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -47,8 +64,10 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
                     key={player.id}
                     variant={"outline"}
                     className="w-full justify-start"
+                    onClick={() => handleSelectPlayer(player.id)}
                   >
-                    <PlusSignIcon />
+                    {!selectedPlayers.includes(player.id) && <PlusSignIcon />}
+                    {selectedPlayers.includes(player.id) && <Tick01Icon />}
                     {getPlayerName(player, team.players)}
                   </Button>
                 ))}
