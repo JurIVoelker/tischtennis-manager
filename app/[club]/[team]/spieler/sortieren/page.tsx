@@ -7,6 +7,7 @@ import {
   generateTeamPageParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
+import { getOrderedPlayers } from "@/lib/prismaUtils";
 
 const SortPlayersPage = async ({
   params,
@@ -21,9 +22,6 @@ const SortPlayersPage = async ({
     },
     include: {
       teams: {
-        include: {
-          players: true,
-        },
         where: {
           slug: teamSlug,
         },
@@ -31,7 +29,8 @@ const SortPlayersPage = async ({
     },
   });
 
-  const players = club?.teams[0].players;
+  const { id: teamId } = club?.teams[0] || {};
+  const players = await getOrderedPlayers(teamId);
 
   return (
     <div className="w-full">

@@ -2,7 +2,11 @@ import { Player } from "@prisma/client";
 import { prisma } from "./prisma/prisma";
 import { asyncLog } from "./logUtils";
 
-export const getOrderedPlayers = async (teamId: string): Promise<Player[]> => {
+export const getOrderedPlayers = async (
+  teamId: string | null | undefined
+): Promise<Player[]> => {
+  if (!teamId) return [];
+
   const playerTeamPositions = await prisma.playerTeamPosition.findMany({
     where: {
       teamId,
