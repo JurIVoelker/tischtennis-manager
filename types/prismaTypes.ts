@@ -14,6 +14,10 @@ export type TeamWithPlayersAndMatches = Team & {
   matches: MatchWithLineupAndLocation[];
 };
 
+export type TeamWithPlayers = Team & {
+  players: Player[];
+};
+
 export type TeamWithMatches = Team & {
   matches: MatchWithLineupAndLocation[];
 };
