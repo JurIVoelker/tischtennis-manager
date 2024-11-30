@@ -7,6 +7,7 @@ import {
   generateTeamPageParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
+import { getOrderedPlayers } from "@/lib/prismaUtils";
 
 const ClubUserLoginPage = async ({
   params,
@@ -20,14 +21,12 @@ const ClubUserLoginPage = async ({
     include: {
       teams: {
         where: { slug: teamSlug },
-        include: {
-          players: true,
-        },
       },
     },
   });
+  const teamId = club?.teams[0]?.id;
+  const players = await getOrderedPlayers(teamId);
 
-  const players = club?.teams[0]?.players;
   const teamName = club?.teams[0]?.name;
 
   return (

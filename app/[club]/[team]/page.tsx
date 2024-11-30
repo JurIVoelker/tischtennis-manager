@@ -5,13 +5,15 @@ import TeamLeaderJoinSuggestion from "@/components/leader-no-member-promt";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
 import Typography from "@/components/typography";
+import { asyncLog } from "@/lib/logUtils";
 import {
   ClubTeamParams,
   decodeClubTeamParams,
   generateTeamPageParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
-import { ClubWithTeams } from "@/types/prismaTypes";
+import { getOrderedPlayers } from "@/lib/prismaUtils";
+import { ClubWithTeamsWithoutMatches } from "@/types/prismaTypes";
 
 const ClubTeamPage = async ({
   params,
@@ -20,12 +22,11 @@ const ClubTeamPage = async ({
 }) => {
   const { clubSlug, teamSlug } = await decodeClubTeamParams(params);
 
-  const club: ClubWithTeams = await prisma.club.findUnique({
+  const club: ClubWithTeamsWithoutMatches = await prisma.club.findUnique({
     where: { slug: clubSlug },
     include: {
       teams: {
         include: {
-          players: true,
           matches: {
             include: {
               location: true,
@@ -37,15 +38,21 @@ const ClubTeamPage = async ({
             },
           },
         },
+        where: {
+          slug: teamSlug,
+        },
       },
     },
   });
 
-  const {
-    players,
-    matches,
-    name: teamName,
-  } = club?.teams?.find((team) => team.slug === teamSlug) || {};
+  if (club?.teams && club?.teams?.length >= 2) {
+    asyncLog("error", `${clubSlug} has more than one team with the same name`);
+  }
+
+  const players = await getOrderedPlayers(club?.teams[0].id || "");
+
+  const { matches, name: teamName } =
+    club?.teams?.find((team) => team.slug === teamSlug) || {};
 
   const upcomingMatches = matches?.filter(
     (match) => new Date(match.matchDateTime) >= new Date()
