@@ -45,7 +45,7 @@ model PlayerTeamPosition {
   position Int
   playerId String
   team     Team   @relation(fields: [teamId], references: [id])
-  Player   Player @relation(fields: [playerId], references: [id])
+  player   Player @relation(fields: [playerId], references: [id])
 }
 
 model TeamAuth {
