@@ -1,3 +1,4 @@
+import ConfigureLineupWrapper from "@/components/configure-lineup-wrapper";
 import Navbar from "@/components/navbar";
 import {
   decodeMatchPageParams,
@@ -25,11 +26,29 @@ const ManageLineup = async ({
           position: "asc",
         },
       },
-      team: true,
+      team: {
+        include: {
+          club: true,
+        },
+      },
+    },
+  });
+
+  const club = await prisma.club.findUnique({
+    where: {
+      id: match?.team.club.id || "",
+    },
+    include: {
+      teams: {
+        include: {
+          players: true,
+        },
+      },
     },
   });
 
   const orderedPlayers = await getOrderedPlayers(match?.team.id || "");
+  const disabledPlayerIds = orderedPlayers.map((player) => player.id);
 
   if (!match) {
     notFound();
@@ -38,7 +57,14 @@ const ManageLineup = async ({
   return (
     <div className="w-full">
       <Navbar title="Aufstellung anpassen" />
-      <div className="px-6 pb-6 pt-16 space-y-6"></div>
+      <div className="px-6 pb-6 pt-16 space-y-6">
+        <ConfigureLineupWrapper
+          allTeams={club?.teams || []}
+          teamName={match?.team.name || ""}
+          mainPlayers={orderedPlayers}
+          disabledPlayerIds={disabledPlayerIds}
+        />
+      </div>
     </div>
   );
 };

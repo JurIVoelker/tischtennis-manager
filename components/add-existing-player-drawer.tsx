@@ -21,12 +21,14 @@ interface AddExistingPlayerDrawerProps {
   teams: TeamWithPlayers[];
   onChange: (selectedPlayers: string[]) => void;
   value: string[];
+  isExchangePlayers?: boolean;
 }
 
 const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
   teams,
   onChange,
   value,
+  isExchangePlayers = false,
 }) => {
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
 
@@ -47,16 +49,22 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
     <Drawer>
       <DrawerTrigger asChild>
         <Button className="w-full" variant="outline">
-          Bestehenden Spieler hinzufügen
+          {isExchangePlayers
+            ? "Ersatzspieler hinzufügen"
+            : "Bestehenden Spieler hinzufügen"}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle className="text-left">
-            Bestehenden Spieler hinzufügen
+            {isExchangePlayers
+              ? "Ersatzspieler hinzufügen"
+              : "Bestehenden Spieler hinzufügen"}
           </DrawerTitle>
           <DrawerDescription className="text-left">
-            Füge bestehende Spieler aus anderen Mannschaften hinzu.
+            {isExchangePlayers
+              ? "Wähle Ersatzspieler aus. Bitte beachte dabei, dass du keine Spieler aus höheren Mannschaften, als deiner eigenen auswählen kannst."
+              : "Füge bestehende Spieler aus anderen Mannschaften hinzu."}
           </DrawerDescription>
         </DrawerHeader>
         <div className="max-h-[60vh] overflow-y-scroll px-4 space-y-4 relative">
