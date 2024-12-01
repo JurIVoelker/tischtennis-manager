@@ -62,6 +62,10 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
     push(`./${teamSlug}/spiel/anpassen/${match.id}`);
   };
 
+  const handleConfigureLineup = () => {
+    push(`./${teamSlug}/spiel/aufstellung/verwalten/${match.id}`);
+  };
+
   const dropdownOptions = [
     {
       name: "Infotext kopieren",
@@ -77,6 +81,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
     {
       name: "Aufstellungen verwalten",
       IconComponent: LeftToRightListNumberIcon,
+      handler: handleConfigureLineup,
     },
   ];
 

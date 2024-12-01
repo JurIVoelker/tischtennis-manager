@@ -3,8 +3,8 @@ import EditMatchForm from "@/components/edit-match/edit-match-form";
 import Navbar from "@/components/navbar";
 import Typography from "@/components/typography";
 import {
-  decodeEditMatchParams,
-  EditMatchParams,
+  decodeMatchPageParams,
+  MatchPageParams,
   generateEditMatchParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
@@ -14,9 +14,9 @@ import { notFound } from "next/navigation";
 const EditMatchPage = async ({
   params,
 }: {
-  params: Promise<EditMatchParams>;
+  params: Promise<MatchPageParams>;
 }) => {
-  const { matchId } = await decodeEditMatchParams(params);
+  const { matchId } = await decodeMatchPageParams(params);
 
   const match: MatchWithLocation = await prisma.match.findUnique({
     where: {
