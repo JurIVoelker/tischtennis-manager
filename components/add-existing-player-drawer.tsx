@@ -54,29 +54,34 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
             Füge bestehende Spieler aus anderen Mannschaften hinzu.
           </DrawerDescription>
         </DrawerHeader>
-        <div className="max-h-[60vh] overflow-y-scroll px-4 space-y-4">
+        <div className="max-h-[60vh] overflow-y-scroll px-4 space-y-4 relative">
           {teams.map((team) => (
             <Card key={team.id} className="p-4">
               <Typography variant="p-gray">{team.name}</Typography>
               <div className="flex flex-wrap space-y-2 pt-3">
-                {team.players.map((player) => (
-                  <Button
-                    key={player.id}
-                    variant={"outline"}
-                    className="w-full justify-start"
-                    onClick={() => handleSelectPlayer(player.id)}
-                  >
-                    {!selectedPlayers.includes(player.id) && <PlusSignIcon />}
-                    {selectedPlayers.includes(player.id) && <Tick01Icon />}
-                    {getPlayerName(player, team.players)}
-                  </Button>
-                ))}
+                {team.players.map((player) => {
+                  const isPlayerSelected = selectedPlayers.includes(player.id);
+                  return (
+                    <Button
+                      key={player.id}
+                      variant={isPlayerSelected ? "default" : "outline"}
+                      className="w-full justify-start"
+                      onClick={() => handleSelectPlayer(player.id)}
+                    >
+                      {!isPlayerSelected && <PlusSignIcon />}
+                      {isPlayerSelected && <Tick01Icon />}
+                      {getPlayerName(player, team.players)}
+                    </Button>
+                  );
+                })}
               </div>
             </Card>
           ))}
         </div>
         <DrawerFooter>
-          <Button>Speichern</Button>
+          <Button disabled={selectedPlayers?.length ? false : true}>
+            Hinzufügen
+          </Button>
           <DrawerClose>
             <Button variant="outline" className="w-full">
               Abbrechen
