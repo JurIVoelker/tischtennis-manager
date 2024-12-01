@@ -49,6 +49,13 @@ export type MatchWithLocation =
     })
   | null;
 
+export const matchAvailablilites = [
+  "available",
+  "maybe",
+  "unavailable",
+  "unknown",
+];
+
 export type MatchAvailablilites =
   | "available"
   | "maybe"

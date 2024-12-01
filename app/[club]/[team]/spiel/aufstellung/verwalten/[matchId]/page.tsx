@@ -47,6 +47,12 @@ const ManageLineup = async ({
     },
   });
 
+  const matchAvailablilityVotes = await prisma.matchAvailabilityVote.findMany({
+    where: {
+      matchId: matchId,
+    },
+  });
+
   const orderedPlayers = await getOrderedPlayers(match?.team.id || "");
   const disabledPlayerIds = orderedPlayers.map((player) => player.id);
 
@@ -59,6 +65,7 @@ const ManageLineup = async ({
       <Navbar title="Aufstellung anpassen" />
       <div className="px-6 pb-6 pt-16 space-y-6">
         <ConfigureLineupWrapper
+          matchAvailablilityVotes={matchAvailablilityVotes}
           allTeams={club?.teams || []}
           teamName={match?.team.name || ""}
           mainPlayers={orderedPlayers}

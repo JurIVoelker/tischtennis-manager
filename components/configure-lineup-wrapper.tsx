@@ -1,23 +1,34 @@
 "use client";
-import { Player } from "@prisma/client";
+import { MatchAvailabilityVote, Player } from "@prisma/client";
 import { SortablePlayerTable } from "./sort-players/sortable-player-table";
 import { useMemo, useState } from "react";
 import { Button, buttonVariants } from "./ui/button";
 import { getPlayerName } from "@/lib/stringUtils";
 import AddExistingPlayerDrawer from "./add-existing-player-drawer";
-import { TeamWithPlayers } from "@/types/prismaTypes";
+import {
+  matchAvailablilites,
+  MatchAvailablilites,
+  TeamWithPlayers,
+} from "@/types/prismaTypes";
 import { arrayMove } from "@dnd-kit/sortable";
 import Typography from "./typography";
 import { Card } from "./ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Cancel01Icon, Tick01Icon } from "hugeicons-react";
+import {
+  Cancel01Icon,
+  HelpCircleIcon,
+  QuestionIcon,
+  Tick01Icon,
+} from "hugeicons-react";
+import { HelpCircle } from "lucide-react";
 
 interface ConfigureLineupWrapperProps {
   mainPlayers: Player[];
   disabledPlayerIds: string[];
   allTeams: TeamWithPlayers[];
   teamName: string;
+  matchAvailablilityVotes: MatchAvailabilityVote[];
 }
 
 const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
@@ -25,6 +36,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
   disabledPlayerIds,
   teamName,
   allTeams,
+  matchAvailablilityVotes,
 }) => {
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
   const remainingMainPlayers = useMemo(
@@ -98,16 +110,43 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
       {remainingMainPlayers.length > 0 && (
         <Card className="space-y-2 p-4">
           <Typography variant="p-gray">Stammspieler</Typography>
-          {remainingMainPlayers.map((player) => (
-            <Button
-              key={player.id}
-              onClick={() => handleSelectPlayer(player.id)}
-              className="w-full"
-              variant={"secondary"}
-            >
-              {getPlayerName(player, remainingMainPlayers)}
-            </Button>
-          ))}
+          {remainingMainPlayers.map((player) => {
+            const _availability =
+              matchAvailablilityVotes.find(
+                (vote) => vote.playerId === player.id
+              )?.availability || "";
+
+            let availability: MatchAvailablilites;
+            if (!matchAvailablilites.includes(_availability)) {
+              availability = "unknown";
+            } else {
+              // @ts-expect-error _availability is of type MatchAvailablilites
+              availability = _availability;
+            }
+
+            return (
+              <Button
+                key={player.id}
+                onClick={() => handleSelectPlayer(player.id)}
+                className="w-full flex justify-between items-center"
+                variant={
+                  availability === "available"
+                    ? "positive"
+                    : availability === "unavailable"
+                    ? "negative"
+                    : availability === "maybe"
+                    ? "neutral"
+                    : "secondary"
+                }
+              >
+                {getPlayerName(player, remainingMainPlayers)}
+                {availability === "unknown" && <></>}
+                {availability === "maybe" && <HelpCircleIcon />}
+                {availability === "unavailable" && <Cancel01Icon />}
+                {availability === "available" && <Tick01Icon />}
+              </Button>
+            );
+          })}
         </Card>
       )}
       <AddExistingPlayerDrawer
