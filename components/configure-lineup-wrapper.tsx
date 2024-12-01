@@ -22,6 +22,7 @@ import {
   Tick01Icon,
 } from "hugeicons-react";
 import { HelpCircle } from "lucide-react";
+import AvailabilityColorsLegend from "./availibility-colors-legend";
 
 interface ConfigureLineupWrapperProps {
   mainPlayers: Player[];
@@ -140,13 +141,13 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
                 }
               >
                 {getPlayerName(player, remainingMainPlayers)}
-                {availability === "unknown" && <></>}
                 {availability === "maybe" && <HelpCircleIcon />}
                 {availability === "unavailable" && <Cancel01Icon />}
                 {availability === "available" && <Tick01Icon />}
               </Button>
             );
           })}
+          <AvailabilityColorsLegend />
         </Card>
       )}
       <AddExistingPlayerDrawer
@@ -155,6 +156,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
         onChange={handleSelectExistingPlayer}
         isExchangePlayers
       />
+      <div className="h-20" />
       <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent">
         <Link
           className={cn(buttonVariants({ variant: "outline" }), "w-full")}
