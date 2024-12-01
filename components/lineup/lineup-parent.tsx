@@ -15,7 +15,7 @@ const Lineup: React.FC<LineupProps> = async ({ matchId, teamSlug }) => {
 
   return (
     <div className="flex gap-2 flex-col mt-2">
-      <LineupChild lineups={lineups} teamSlug={teamSlug} />
+      <LineupChild lineups={lineups} teamSlug={teamSlug} matchId={matchId} />
     </div>
   );
 };

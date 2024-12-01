@@ -2,13 +2,16 @@
 import { Player } from "@prisma/client";
 import { SortablePlayerTable } from "./sort-players/sortable-player-table";
 import { useMemo, useState } from "react";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { getPlayerName } from "@/lib/stringUtils";
 import AddExistingPlayerDrawer from "./add-existing-player-drawer";
 import { TeamWithPlayers } from "@/types/prismaTypes";
 import { arrayMove } from "@dnd-kit/sortable";
 import Typography from "./typography";
 import { Card } from "./ui/card";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Cancel01Icon, Tick01Icon } from "hugeicons-react";
 
 interface ConfigureLineupWrapperProps {
   mainPlayers: Player[];
@@ -100,6 +103,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
               key={player.id}
               onClick={() => handleSelectPlayer(player.id)}
               className="w-full"
+              variant={"secondary"}
             >
               {getPlayerName(player, remainingMainPlayers)}
             </Button>
@@ -112,6 +116,23 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
         onChange={handleSelectExistingPlayer}
         isExchangePlayers
       />
+      <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent">
+        <Link
+          className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+          href={"../../../"}
+        >
+          <Cancel01Icon />
+          Abbrechen
+        </Link>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={selectedPlayers.length <= 0}
+        >
+          <Tick01Icon />
+          Speichern
+        </Button>
+      </div>
     </>
   );
 };
