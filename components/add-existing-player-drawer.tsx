@@ -19,25 +19,28 @@ import { useState } from "react";
 
 interface AddExistingPlayerDrawerProps {
   teams: TeamWithPlayers[];
+  onChange: (selectedPlayers: string[]) => void;
+  value: string[];
 }
 
 const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
   teams,
+  onChange,
+  value,
 }) => {
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
 
+  const handleAddPlayers = () => {
+    onChange(selectedPlayers);
+    setSelectedPlayers([]);
+  };
+
   const handleSelectPlayer = (playerId: string) => {
-    teams.forEach((team) => {
-      team.players.forEach((player) => {
-        if (player.id === playerId) {
-          setSelectedPlayers((prev) =>
-            prev.includes(playerId)
-              ? prev.filter((id) => id !== playerId)
-              : [...prev, playerId]
-          );
-        }
-      });
-    });
+    if (selectedPlayers.includes(playerId)) {
+      setSelectedPlayers((prev) => prev.filter((id) => id !== playerId));
+    } else {
+      setSelectedPlayers((prev) => [...prev, playerId]);
+    }
   };
 
   return (
@@ -61,15 +64,23 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
               <div className="flex flex-wrap space-y-2 pt-3">
                 {team.players.map((player) => {
                   const isPlayerSelected = selectedPlayers.includes(player.id);
+                  const isPlayerDisabled = value.includes(player.id);
                   return (
                     <Button
                       key={player.id}
-                      variant={isPlayerSelected ? "default" : "outline"}
+                      variant={
+                        isPlayerSelected || isPlayerDisabled
+                          ? "default"
+                          : "outline"
+                      }
                       className="w-full justify-start"
                       onClick={() => handleSelectPlayer(player.id)}
+                      disabled={isPlayerDisabled}
                     >
-                      {!isPlayerSelected && <PlusSignIcon />}
-                      {isPlayerSelected && <Tick01Icon />}
+                      {!isPlayerSelected && !isPlayerDisabled && (
+                        <PlusSignIcon />
+                      )}
+                      {(isPlayerSelected || isPlayerDisabled) && <Tick01Icon />}
                       {getPlayerName(player, team.players)}
                     </Button>
                   );
@@ -79,9 +90,17 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
           ))}
         </div>
         <DrawerFooter>
-          <Button disabled={selectedPlayers?.length ? false : true}>
-            Hinzufügen
-          </Button>
+          <DrawerClose
+            disabled={selectedPlayers?.length ? false : true}
+            onClick={handleAddPlayers}
+          >
+            <Button
+              disabled={selectedPlayers?.length ? false : true}
+              className="w-full"
+            >
+              Hinzufügen
+            </Button>
+          </DrawerClose>
           <DrawerClose>
             <Button variant="outline" className="w-full">
               Abbrechen

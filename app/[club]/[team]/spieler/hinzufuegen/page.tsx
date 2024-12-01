@@ -1,4 +1,4 @@
-import AddExistingPlayerDrawer from "@/components/add-existing-player-drawer";
+import AddPlayersWrapper from "@/components/add-players-wrapper";
 import Navbar from "@/components/navbar";
 import {
   ClubTeamParams,
@@ -37,7 +37,7 @@ const AddPlayersPage = async ({
     <div className="w-full">
       <Navbar title="Spieler hinzufügen" />
       <div className="px-6 pb-6 pt-16 ">
-        <AddExistingPlayerDrawer teams={teamsWithoutOwn} />
+        <AddPlayersWrapper teams={teamsWithoutOwn} />
       </div>
     </div>
   );
