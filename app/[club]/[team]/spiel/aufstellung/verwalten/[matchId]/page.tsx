@@ -5,8 +5,7 @@ import {
   generateEditMatchParams as generateParamsWithMatchId,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
-import { getOrderedPlayers, sortLineupsOfMatch } from "@/lib/prismaUtils";
-import { MatchWithLineupAndTeam } from "@/types/prismaTypes";
+import { getOrderedPlayers } from "@/lib/prismaUtils";
 import { notFound } from "next/navigation";
 
 const ManageLineup = async ({
@@ -21,21 +20,20 @@ const ManageLineup = async ({
       id: matchId,
     },
     include: {
-      lineups: true,
+      lineups: {
+        orderBy: {
+          position: "asc",
+        },
+      },
       team: true,
     },
   });
 
-  const players = await getOrderedPlayers(match?.team.id || "");
+  const orderedPlayers = await getOrderedPlayers(match?.team.id || "");
 
   if (!match) {
     notFound();
   }
-
-  const matchWithSortedLineups = sortLineupsOfMatch(
-    match as MatchWithLineupAndTeam,
-    players
-  );
 
   return (
     <div className="w-full">

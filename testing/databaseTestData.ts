@@ -84,6 +84,7 @@ const createLineup = async (matchId: string, playerIds: string[]) => {
     await prisma.lineup.create({
       data: {
         matchId,
+        position: i + 1,
         playerId: playerIds[i],
       },
     });
