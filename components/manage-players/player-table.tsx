@@ -27,14 +27,14 @@ interface PlayerTableProps {
   customPlayers?: { firstName: string; lastName: string }[];
   isAddPlayers?: boolean;
   handleRemovePlayer?: (id: string) => void;
-  handleRemoveCustomPlayer: (index: number) => void;
+  handleRemoveCustomPlayer?: (index: number) => void;
 }
 
 export const PlayerTable: React.FC<PlayerTableProps> = ({
   className = "",
   players,
   isAddPlayers = false,
-  handleRemoveCustomPlayer,
+  handleRemoveCustomPlayer = () => {},
   customPlayers,
   handleRemovePlayer = () => {},
   ...props
