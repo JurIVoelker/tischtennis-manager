@@ -24,14 +24,18 @@ import { getPlayerName } from "@/lib/stringUtils";
 interface PlayerTableProps {
   className?: string;
   players?: Player[];
+  customPlayers?: { firstName: string; lastName: string }[];
   isAddPlayers?: boolean;
   handleRemovePlayer?: (id: string) => void;
+  handleRemoveCustomPlayer: (index: number) => void;
 }
 
 export const PlayerTable: React.FC<PlayerTableProps> = ({
   className = "",
   players,
   isAddPlayers = false,
+  handleRemoveCustomPlayer,
+  customPlayers,
   handleRemovePlayer = () => {},
   ...props
 }) => {
@@ -93,6 +97,22 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
             </TableCell>
           </TableRow>
         ))}
+        {customPlayers &&
+          customPlayers.map((player, i) => (
+            <TableRow key={i}>
+              <TableCell>{`${player.firstName} ${player.lastName}`}</TableCell>
+              <TableCell className="flex justify-end p-1.5">
+                <Button
+                  variant={"destructive"}
+                  size={"icon"}
+                  className="h-8 w-8 mt-1"
+                  onClick={() => handleRemoveCustomPlayer(i)}
+                >
+                  <Cancel01Icon />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
         {!players && (
           <Typography variant="p-gray">
             Diese Mannschaft hat keine Spieler

@@ -46,7 +46,9 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button>Öffnen</Button>
+        <Button className="w-full" variant="outline">
+          Bestehenden Spieler hinzufügen
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
