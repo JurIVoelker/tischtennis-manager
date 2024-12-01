@@ -48,3 +48,9 @@ export type MatchWithLocation =
       location: Location | null;
     })
   | null;
+
+export type MatchAvailablilites =
+  | "available"
+  | "maybe"
+  | "unavailable"
+  | "unknown";

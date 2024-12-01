@@ -11,6 +11,7 @@ datasource db {
   url      = "file:./database.db"
 }
 
+
 model Club {
   id     String  @id @default(cuid())
   slug   String  @unique
@@ -71,6 +72,7 @@ model Player {
   team         Team                 @relation(fields: [teamId], references: [id])
   lineups      Lineup[]
   teamPosition PlayerTeamPosition[]
+  matchAvailabilityVotes MatchAvailabilityVote[]
 }
 
 model Match {
@@ -82,6 +84,16 @@ model Match {
   isHomeGame    Boolean
   location      Location?
   lineups       Lineup[]
+  matchAvailabilityVotes MatchAvailabilityVote[]
+}
+
+model MatchAvailabilityVote {
+  id       String @id @default(cuid())
+  matchId  String
+  playerId String
+  availability String @default("unknown") 
+  match    Match  @relation(fields: [matchId], references: [id])
+  player   Player @relation(fields: [playerId], references: [id])
 }
 
 model Location {
