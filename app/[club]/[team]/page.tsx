@@ -12,7 +12,7 @@ import {
   generateTeamPageParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
-import { getOrderedPlayers } from "@/lib/prismaUtils";
+import { getOrderedPlayers, sortLineupsOfMatches } from "@/lib/prismaUtils";
 import { ClubWithTeamsWithoutMatches } from "@/types/prismaTypes";
 
 const ClubTeamPage = async ({
@@ -58,6 +58,11 @@ const ClubTeamPage = async ({
     (match) => new Date(match.matchDateTime) >= new Date()
   );
 
+  const matchesWithSortedLineups = sortLineupsOfMatches(
+    upcomingMatches || [],
+    players
+  );
+
   return (
     <>
       <div className="w-full">
@@ -70,9 +75,9 @@ const ClubTeamPage = async ({
             teamSlug={teamSlug}
           />
           <TeamLeaderJoinSuggestion clubSlug={clubSlug} teamSlug={teamSlug} />
-          {upcomingMatches && teamName && (
+          {matchesWithSortedLineups && teamName && (
             <div className="flex flex-col gap-8 md:grid md:grid-cols-2 xl:grid-cols-3">
-              {upcomingMatches.map((match, id) => {
+              {matchesWithSortedLineups.map((match, id) => {
                 const isLineup = Boolean(match.lineups.length);
                 return (
                   <GameCard
@@ -84,7 +89,7 @@ const ClubTeamPage = async ({
                   />
                 );
               })}
-              {!upcomingMatches.length && (
+              {!matchesWithSortedLineups.length && (
                 <Typography variant="p-gray">Keine Spiele gefunden</Typography>
               )}
               <NewGame teamSlug={teamSlug} />

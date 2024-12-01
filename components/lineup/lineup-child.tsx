@@ -47,9 +47,9 @@ const LineupChild: React.FC<LineupChildProps> = ({ lineups, teamSlug }) => {
 
   return (
     <>
-      {lineups.map((lineup) => (
+      {lineups.map((lineup, i) => (
         <PositonIndicator
-          position={lineup.position}
+          position={i + 1}
           key={lineup.id}
           variant={userId === lineup.player.id ? "black" : "light"}
         >

@@ -85,7 +85,6 @@ const createLineup = async (matchId: string, playerIds: string[]) => {
       data: {
         matchId,
         playerId: playerIds[i],
-        position: i + 1,
       },
     });
   }
