@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma/prisma";
+import { MatchAvailablilites } from "@/types/prismaTypes";
 import slugify from "slugify";
 
 const createClub = async (clubName: string) => {
@@ -84,11 +85,25 @@ const createLineup = async (matchId: string, playerIds: string[]) => {
     await prisma.lineup.create({
       data: {
         matchId,
-        playerId: playerIds[i],
         position: i + 1,
+        playerId: playerIds[i],
       },
     });
   }
+};
+
+const createMatchAvailabilityVote = async (
+  matchId: string,
+  playerId: string,
+  availability: MatchAvailablilites
+) => {
+  return await prisma.matchAvailabilityVote.create({
+    data: {
+      matchId,
+      playerId,
+      availability,
+    },
+  });
 };
 
 const createLocation = async (matchId: string) => {
@@ -148,6 +163,17 @@ const createFullTeamSetup = async (
     if (Math.random() > 0.25) {
       await createLineup(matchId, playerIds);
     }
+
+    for (const playerId of playerIds) {
+      if (Math.random() > 0.66) {
+        await createMatchAvailabilityVote(matchId, playerId, "available");
+      } else if (Math.random() > 0.66) {
+        await createMatchAvailabilityVote(matchId, playerId, "unavailable");
+      } else if (Math.random() > 0.66) {
+        await createMatchAvailabilityVote(matchId, playerId, "maybe");
+      }
+    }
+
     await createLocation(matchId);
   }
 
@@ -233,7 +259,7 @@ const runScripts = async () => {
     "club",
   ];
   for (const model of models) {
-    // @ts-ignore
+    // @ts-expect-error: Model deletion might not be typed correctly
     await prisma[model].deleteMany();
   }
   await executeDatabaseScripts();

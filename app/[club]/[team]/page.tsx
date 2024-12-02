@@ -34,6 +34,9 @@ const ClubTeamPage = async ({
                 include: {
                   player: true,
                 },
+                orderBy: {
+                  position: "asc",
+                },
               },
             },
           },

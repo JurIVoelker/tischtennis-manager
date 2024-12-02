@@ -1,6 +1,7 @@
 import { Player } from "@prisma/client";
 import { prisma } from "./prisma/prisma";
 import { asyncLog } from "./logUtils";
+import { LineupWithPlayers, MatchWithLineup } from "@/types/prismaTypes";
 
 export const getOrderedPlayers = async (
   teamId: string | null | undefined
@@ -50,4 +51,27 @@ export const getOrderedPlayers = async (
 
   players.push(...(playersWithoutTeamPosition?.players || []));
   return players;
+};
+
+export const sortLineupsOfMatch = (
+  match: MatchWithLineup,
+  players: Player[]
+): MatchWithLineup => {
+  const sortedLineup: LineupWithPlayers[] = [];
+
+  players.forEach((player) => {
+    const lineup = match.lineups.find(
+      (lineup) => player.id === lineup.playerId
+    );
+    if (lineup) sortedLineup.push(lineup);
+  });
+
+  return { ...match, lineups: sortedLineup };
+};
+
+export const sortLineupsOfMatches = (
+  matches: MatchWithLineup[],
+  players: Player[]
+): MatchWithLineup[] => {
+  return matches.map((match) => sortLineupsOfMatch(match, players));
 };

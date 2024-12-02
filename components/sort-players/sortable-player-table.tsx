@@ -19,33 +19,42 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
-import { useState } from "react";
 import { SortablePlayerItem } from "./sortable-player-item";
 import { Card } from "../ui/card";
-import { DragDropVerticalIcon } from "hugeicons-react";
+import { Cancel01Icon, DragDropVerticalIcon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
 import { getPlayerName } from "@/lib/stringUtils";
+import { Button } from "../ui/button";
 
 interface PlayerTableProps {
   className?: string;
-  players?: Player[];
+  players?: ListItem[];
+  disabledPlayerIds?: string[];
+  isRemovable?: boolean;
+  handleRemovePlayer?: (id: string) => void;
+  handleOnChange?: (activeId: string, overId: string) => void;
 }
+
+type ListItem = { player: Player; id: string };
 
 export const SortablePlayerTable: React.FC<PlayerTableProps> = ({
   className = "",
   players,
+  disabledPlayerIds,
+  isRemovable = false,
+  handleOnChange = () => {},
+  handleRemovePlayer = () => {},
   ...props
 }) => {
-  const [listItems, setListItems] = useState(
-    players?.map((player, id) => ({ player: player, id: id + 1 })) || []
-  );
-
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 0.1,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -55,11 +64,7 @@ export const SortablePlayerTable: React.FC<PlayerTableProps> = ({
     const { active, over } = event;
 
     if (active.id !== over?.id) {
-      setListItems((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over?.id);
-        return arrayMove(items, oldIndex, newIndex);
-      });
+      handleOnChange(String(active?.id), String(over?.id));
     }
   }
 
@@ -70,7 +75,7 @@ export const SortablePlayerTable: React.FC<PlayerTableProps> = ({
       onDragEnd={handleDragEnd}
       autoScroll={false}
     >
-      <SortableContext items={listItems}>
+      <SortableContext items={players || []}>
         <Table className={cn(className, "overflow-hidden")} {...props}>
           <TableHeader>
             <TableRow>
@@ -79,28 +84,59 @@ export const SortablePlayerTable: React.FC<PlayerTableProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {listItems?.map((playerList, i) => (
-              <TableRow key={playerList.id}>
-                <TableCell className="font-medium">{i + 1}</TableCell>
-                <TableCell className="py-0 pr-2">
-                  <div className="bg-secondary rounded-sm">
-                    <SortablePlayerItem id={playerList.id}>
-                      <Card className="py-1.5 px-2 flex gap-2 items-center rounded-sm">
-                        <DragDropVerticalIcon />
-                        {getPlayerName(
-                          playerList.player,
-                          listItems.map((p) => p.player)
-                        )}
-                      </Card>
-                    </SortablePlayerItem>
-                  </div>
+            {players?.map((playerList, i) => {
+              const isDisabled = disabledPlayerIds?.includes(
+                playerList.player.id
+              );
+
+              return (
+                <TableRow key={playerList.id}>
+                  <TableCell className="font-medium">{i + 1}</TableCell>
+                  <TableCell className="py-0 pr-2">
+                    <div className="bg-secondary rounded-sm">
+                      <SortablePlayerItem
+                        id={playerList.id}
+                        isDisabled={isDisabled}
+                      >
+                        <Card className="py-1.5 px-2  rounded-sm flex justify-between">
+                          <div className="flex gap-2 items-center">
+                            <DragDropVerticalIcon
+                              className={isDisabled ? "opacity-15" : ""}
+                            />
+                            <Typography variant="p">
+                              {getPlayerName(
+                                playerList.player,
+                                players.map((p) => p?.player)
+                              )}
+                            </Typography>
+                          </div>
+                          {isRemovable && (
+                            <Button
+                              variant="destructive"
+                              className="h-7 w-7 z-50"
+                              size="icon"
+                              onClick={() => {
+                                handleRemovePlayer(playerList.id);
+                              }}
+                            >
+                              <Cancel01Icon />
+                            </Button>
+                          )}
+                        </Card>
+                      </SortablePlayerItem>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+            {!Boolean(players?.length) && (
+              <TableRow>
+                <TableCell colSpan={2}>
+                  <Typography variant="p-gray">
+                    Keine Spieler vorhanden
+                  </Typography>
                 </TableCell>
               </TableRow>
-            ))}
-            {!players && (
-              <Typography variant="p-gray">
-                Diese Mannschaft hat keine Spieler
-              </Typography>
             )}
           </TableBody>
         </Table>

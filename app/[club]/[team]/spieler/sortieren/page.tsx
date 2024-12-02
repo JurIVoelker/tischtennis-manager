@@ -1,6 +1,6 @@
 import Navbar from "@/components/navbar";
+import SortPlayersTableWrapper from "@/components/sort-players-table-wrapper";
 import SortPlayersHeader from "@/components/sort-players/sort-players-header";
-import { SortablePlayerTable } from "@/components/sort-players/sortable-player-table";
 import {
   ClubTeamParams,
   decodeClubTeamParams,
@@ -37,7 +37,7 @@ const SortPlayersPage = async ({
       <Navbar title="Spieler sortieren" />
       <div className="px-6 pb-6 pt-16 ">
         <SortPlayersHeader />
-        <SortablePlayerTable className="mt-16" players={players} />
+        <SortPlayersTableWrapper defaultPlayers={players} />
       </div>
     </div>
   );

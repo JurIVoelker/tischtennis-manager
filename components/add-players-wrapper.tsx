@@ -7,11 +7,11 @@ import { useMemo } from "react";
 import { Player } from "@prisma/client";
 import { PlayerTable } from "./manage-players/player-table";
 import AddCustomPlayerForm from "./add-custom-player-form";
-import { Separator } from "./ui/separator";
 import Link from "next/link";
 import { Cancel01Icon, Tick01Icon } from "hugeicons-react";
 import { Button, buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { Card } from "./ui/card";
 
 interface AddPlayersWrapperProps {
   teams: TeamWithPlayers[];
@@ -62,19 +62,16 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({ teams }) => {
 
   return (
     <>
-      <AddCustomPlayerForm
-        className="mb-3"
-        handleAddCustomPlayer={handleAddCustomPlayer}
-      />
+      <Card className="p-4 mb-6">
+        <AddCustomPlayerForm handleAddCustomPlayer={handleAddCustomPlayer} />
+      </Card>
       <AddExistingPlayerDrawer
         teams={teams}
         onChange={handleSelectPlayerId}
         value={selectedPlayerIds}
       />
-      {(selectedPlayers.length > 0 || customPlayers.length > 0) && (
-        <Separator className="my-8" />
-      )}
-      <div className="space-y-2 mt-6 pb-16">
+
+      <Card className="space-y-2 mt-6 p-4 mb-20">
         {(selectedPlayers.length > 0 || customPlayers.length > 0) && (
           <PlayerTable
             players={selectedPlayers}
@@ -84,7 +81,7 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({ teams }) => {
             customPlayers={customPlayers}
           />
         )}
-      </div>
+      </Card>
       <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent">
         <Link
           className={cn(buttonVariants({ variant: "outline" }), "w-full")}

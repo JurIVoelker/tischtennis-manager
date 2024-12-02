@@ -6,7 +6,7 @@ export interface ClubTeamParams {
   team: string;
 }
 
-export interface EditMatchParams {
+export interface MatchPageParams {
   matchId: string;
   club: string;
   team: string;
@@ -52,7 +52,7 @@ export async function generateEditMatchParams() {
     },
   });
 
-  const paths: EditMatchParams[] = [];
+  const paths: MatchPageParams[] = [];
 
   clubs.forEach((club) => {
     club.teams.forEach((team) => {
@@ -68,8 +68,8 @@ export async function generateEditMatchParams() {
   return paths;
 }
 
-export async function decodeEditMatchParams(
-  paramsPromise: Promise<EditMatchParams>
+export async function decodeMatchPageParams(
+  paramsPromise: Promise<MatchPageParams>
 ) {
   const params = await paramsPromise;
   const matchId = decodeURIComponent(params.matchId);

@@ -48,7 +48,7 @@ export const getInfoTextString = (match: MatchWithLineupAndLocation) => {
     match.isHomeGame ? "Heimspiel" : "Auswährtsspiel"
   } gegen ${
     match.enemyClubName
-  } statt. Wir spielen mit folgender Aufstellung: \n${sortedMatch?.lineups
+  } statt. Wir spielen mit folgender Aufstellung: \n${sortedMatch.lineups
     .map((lineup, index) => `  ${index + 1}. ${lineup?.player.firstName}`)
     .join("\n")}`;
 };

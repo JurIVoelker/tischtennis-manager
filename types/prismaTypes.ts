@@ -9,6 +9,15 @@ export type MatchWithLineupAndLocation = Match & {
   lineups: LineupWithPlayers[];
 };
 
+export type MatchWithLineup = Match & {
+  lineups: LineupWithPlayers[];
+};
+
+export type MatchWithLineupAndTeam = Match & {
+  lineups: LineupWithPlayers[];
+  team: Team;
+};
+
 export type TeamWithPlayersAndMatches = Team & {
   players: Player[];
   matches: MatchWithLineupAndLocation[];
@@ -39,3 +48,16 @@ export type MatchWithLocation =
       location: Location | null;
     })
   | null;
+
+export const matchAvailablilites = [
+  "available",
+  "maybe",
+  "unavailable",
+  "unknown",
+];
+
+export type MatchAvailablilites =
+  | "available"
+  | "maybe"
+  | "unavailable"
+  | "unknown";

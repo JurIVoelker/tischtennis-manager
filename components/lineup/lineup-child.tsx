@@ -11,9 +11,14 @@ import Link from "next/link";
 interface LineupChildProps {
   lineups: LineupWithPlayers[];
   teamSlug: string;
+  matchId: string;
 }
 
-const LineupChild: React.FC<LineupChildProps> = ({ lineups, teamSlug }) => {
+const LineupChild: React.FC<LineupChildProps> = ({
+  lineups,
+  teamSlug,
+  matchId,
+}) => {
   const [userId, setUserId] = useState<string>("");
   const isAddLineupLinkVisible = useIsPermitted(
     "view:add-lineup-in-game-card-body"
@@ -36,7 +41,10 @@ const LineupChild: React.FC<LineupChildProps> = ({ lineups, teamSlug }) => {
           <>
             <Typography variant="p-gray" className="leading-0 mt-1">
               {"Du hast noch keine Aufstellung ausgewählt. "}
-              <Link href={`./${teamSlug}/`} className="underline ">
+              <Link
+                href={`./${teamSlug}/spiel/aufstellung/verwalten/${matchId}`}
+                className="underline "
+              >
                 Hier klicken um eine Aufstellung zu wählen.
               </Link>
             </Typography>
@@ -47,9 +55,9 @@ const LineupChild: React.FC<LineupChildProps> = ({ lineups, teamSlug }) => {
 
   return (
     <>
-      {lineups.map((lineup) => (
+      {lineups.map((lineup, i) => (
         <PositonIndicator
-          position={lineup.position}
+          position={i + 1}
           key={lineup.id}
           variant={userId === lineup.player.id ? "black" : "light"}
         >
