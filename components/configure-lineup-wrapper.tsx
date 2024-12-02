@@ -6,6 +6,7 @@ import { Button, buttonVariants } from "./ui/button";
 import { getPlayerName } from "@/lib/stringUtils";
 import AddExistingPlayerDrawer from "./add-existing-player-drawer";
 import {
+  LineupWithPlayers,
   matchAvailablilites,
   MatchAvailablilites,
   TeamWithPlayers,
@@ -15,13 +16,7 @@ import Typography from "./typography";
 import { Card } from "./ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import {
-  Cancel01Icon,
-  HelpCircleIcon,
-  QuestionIcon,
-  Tick01Icon,
-} from "hugeicons-react";
-import { HelpCircle } from "lucide-react";
+import { Cancel01Icon, HelpCircleIcon, Tick01Icon } from "hugeicons-react";
 import AvailabilityColorsLegend from "./availibility-colors-legend";
 
 interface ConfigureLineupWrapperProps {
@@ -30,6 +25,7 @@ interface ConfigureLineupWrapperProps {
   allTeams: TeamWithPlayers[];
   teamName: string;
   matchAvailablilityVotes: MatchAvailabilityVote[];
+  defaultLineup: LineupWithPlayers[];
 }
 
 const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
@@ -38,8 +34,11 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
   teamName,
   allTeams,
   matchAvailablilityVotes,
+  defaultLineup = [],
 }) => {
-  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>(
+    defaultLineup.map((lineup) => lineup.player)
+  );
   const remainingMainPlayers = useMemo(
     () =>
       mainPlayers.filter(

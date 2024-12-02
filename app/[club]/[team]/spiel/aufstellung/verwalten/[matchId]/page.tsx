@@ -25,6 +25,9 @@ const ManageLineup = async ({
         orderBy: {
           position: "asc",
         },
+        include: {
+          player: true,
+        },
       },
       team: {
         include: {
@@ -47,6 +50,8 @@ const ManageLineup = async ({
     },
   });
 
+  const lineups = match?.lineups || [];
+
   const matchAvailablilityVotes = await prisma.matchAvailabilityVote.findMany({
     where: {
       matchId: matchId,
@@ -65,6 +70,7 @@ const ManageLineup = async ({
       <Navbar title="Aufstellung anpassen" />
       <div className="px-6 pb-6 pt-16 space-y-6">
         <ConfigureLineupWrapper
+          defaultLineup={lineups}
           matchAvailablilityVotes={matchAvailablilityVotes}
           allTeams={club?.teams || []}
           teamName={match?.team.name || ""}
