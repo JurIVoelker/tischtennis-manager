@@ -164,11 +164,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
           <Cancel01Icon />
           Abbrechen
         </Link>
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={selectedPlayers.length <= 0}
-        >
+        <Button type="submit" className="w-full">
           <Tick01Icon />
           Speichern
         </Button>
