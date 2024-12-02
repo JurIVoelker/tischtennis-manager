@@ -1,14 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Typography from "./typography";
 import { useIsPermitted } from "@/hooks/use-has-permission";
+import { getUserData } from "@/lib/localstorageUtils";
+import {
+  AvailabilityVoteWithPlayer,
+  MatchAvailablilites,
+} from "@/types/prismaTypes";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
 interface AvailabiltyButtonsProps {
   defaultSelectedValue?: optionsType | undefined;
-  teamName: string;
+  matchAvailabilityVotes: AvailabilityVoteWithPlayer[];
+  teamSlug: string;
 }
 
 interface selectableOptionsType {
@@ -18,10 +24,35 @@ interface selectableOptionsType {
 
 const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
   defaultSelectedValue,
+  matchAvailabilityVotes,
+  teamSlug,
 }) => {
   const [selectedAvailabilty, setSelectedAvailabilty] = useState(
     defaultSelectedValue || null
   );
+
+  useEffect(() => {
+    const userId = getUserData()[teamSlug]?.id;
+    if (userId) {
+      // @ts-expect-error this is the expected type
+      const availabilityAnswer: MatchAvailablilites | undefined =
+        matchAvailabilityVotes.find(
+          (availabilityVote) => availabilityVote.playerId === userId
+        )?.availability;
+
+      if (availabilityAnswer) {
+        if (availabilityAnswer === "available") {
+          setSelectedAvailabilty("Ja");
+        } else if (availabilityAnswer === "maybe") {
+          setSelectedAvailabilty("Vielleicht");
+        } else if (availabilityAnswer === "unavailable") {
+          setSelectedAvailabilty("Nein");
+        }
+      }
+    }
+  }, [matchAvailabilityVotes, teamSlug]);
+
+  // const lineupAnswer = lineups.find((lineup) => lineup.playerId === playerId);
 
   const isButtonsVisible = useIsPermitted("view:game-availability-buttons");
 
