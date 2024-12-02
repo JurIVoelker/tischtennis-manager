@@ -71,8 +71,8 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({ teams }) => {
         value={selectedPlayerIds}
       />
 
-      <Card className="space-y-2 mt-6 p-4 mb-20">
-        {(selectedPlayers.length > 0 || customPlayers.length > 0) && (
+      {(selectedPlayers.length > 0 || customPlayers.length > 0) && (
+        <Card className="space-y-2 mt-6 p-4 mb-20">
           <PlayerTable
             players={selectedPlayers}
             isAddPlayers
@@ -80,8 +80,8 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({ teams }) => {
             handleRemoveCustomPlayer={handleRemoveCustomPlayer}
             customPlayers={customPlayers}
           />
-        )}
-      </Card>
+        </Card>
+      )}
       <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent">
         <Link
           className={cn(buttonVariants({ variant: "outline" }), "w-full")}
