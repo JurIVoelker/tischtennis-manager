@@ -160,7 +160,7 @@ const createFullTeamSetup = async (
     const match = await createMatch(teamId, enemyTeamName);
     const matchId = match.id;
 
-    if (Math.random() > 0.25) {
+    if (Math.random() > 0.66) {
       await createLineup(matchId, playerIds);
     }
 
