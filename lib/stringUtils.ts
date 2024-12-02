@@ -39,11 +39,16 @@ export const getInfoTextString = (match: MatchWithLineupAndLocation) => {
     textBeginning = `Heute um ${timeString}`;
   }
 
+  const sortedMatch = {
+    ...match,
+    lineups: match.lineups.sort((a, b) => a.position - b.position),
+  };
+
   return `${textBeginning} Uhr findet das ${
     match.isHomeGame ? "Heimspiel" : "Auswährtsspiel"
   } gegen ${
     match.enemyClubName
-  } statt. Wir spielen mit folgender Aufstellung: \n${match?.lineups
+  } statt. Wir spielen mit folgender Aufstellung: \n${sortedMatch.lineups
     .map((lineup, index) => `  ${index + 1}. ${lineup?.player.firstName}`)
     .join("\n")}`;
 };

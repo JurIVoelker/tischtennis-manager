@@ -11,6 +11,7 @@ const defaultDummyLineup = {
     lastName: "Last Name",
     teamId: "Team ID",
   },
+  position: 1,
   matchId: "Match ID",
   playerId: "Player ID",
 };
@@ -131,6 +132,7 @@ describe("test lineup", () => {
           ...defaultDummyLineup.player,
           firstName: `Name ${i}`,
         },
+        position: i + 1,
       });
     }
     const expectedText = Array.from({ length: 10 })
