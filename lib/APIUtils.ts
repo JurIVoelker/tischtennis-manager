@@ -62,7 +62,7 @@ export const postAPI = async (url: string, body: object, options?: object) => {
   });
   if (!response.ok) {
     if (isLogging) console.info(`[ERROR-${response.status}] -> ${requestUrl}`);
-    return null;
+    return response;
   }
   const data = await response.json();
   return data;

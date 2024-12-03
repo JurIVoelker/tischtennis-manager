@@ -10,6 +10,7 @@ import {
 } from "@/types/prismaTypes";
 import { postAPI } from "@/lib/APIUtils";
 import { toast } from "@/hooks/use-toast";
+import { asyncLog } from "@/lib/logUtils";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -68,26 +69,36 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
 
   const handleSelctOption = async (option: optionsType) => {
     setSelectedAvailabilty(option);
-    try {
-      const vote =
-        option === "Ja"
-          ? "available"
-          : option === "Nein"
-          ? "unavailable"
-          : "maybe";
-      await postAPI("/api/vote", {
-        vote,
-        clubSlug,
-        teamSlug,
-        matchId,
-        playerId: getUserData()[teamSlug]?.id || "",
-      });
-    } catch (error) {
+    const vote =
+      option === "Ja"
+        ? "available"
+        : option === "Nein"
+        ? "unavailable"
+        : "maybe";
+    const res = await postAPI("/api/vote", {
+      vote,
+      clubSlug,
+      teamSlug,
+      matchId,
+      playerId: getUserData()[teamSlug]?.id || "",
+    });
+
+    if (!res.data && !res.ok) {
+      console.error(res);
+      asyncLog(
+        "error",
+        "Error while sending availability vote: " + JSON.stringify(res)
+      );
       toast({
-        title: "Fehler beim Speichern der Antwort",
-        description: "Bitte versuche es erneut",
+        title: "Übermitteln der Anfrage fehlgeschlagen",
+        description: (
+          <div className="mt-2 w-[340px] flex gap-2">
+            <Typography variant="p" className="leading-1">
+              Bitte versuche es erneut.
+            </Typography>
+          </div>
+        ),
       });
-      console.error(error);
     }
   };
 
