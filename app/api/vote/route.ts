@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
   console.log(JSON.stringify(club2));
 
   if (typeof response === "string") {
-    revalidatePath(`/${clubSlug}/${teamSlug}`);
+    revalidatePath("/[clubSlug]/[teamSlug]", "page");
     return new Response(JSON.stringify({ data: response }), { status: 200 });
   } else {
     return response;
