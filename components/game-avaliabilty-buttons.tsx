@@ -9,6 +9,7 @@ import {
   MatchAvailablilites,
 } from "@/types/prismaTypes";
 import { postAPI } from "@/lib/APIUtils";
+import { toast } from "@/hooks/use-toast";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -82,6 +83,10 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
         playerId: getUserData()[teamSlug]?.id || "",
       });
     } catch (error) {
+      toast({
+        title: "Fehler beim Speichern der Antwort",
+        description: "Bitte versuche es erneut",
+      });
       console.error(error);
     }
   };
