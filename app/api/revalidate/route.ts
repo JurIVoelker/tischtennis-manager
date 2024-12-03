@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const path = searchParams.get("path");
   if (!path) return new Response(ERRORS.INVALID_VALUE, { status: 400 });
 
-  asyncLog("info", `Revalidating path: ${path}`);
-  revalidatePath(path);
+  asyncLog("info", `Revalidating`);
+  revalidatePath("/[clubSlug]/[teamSlug]", "page");
   return new Response("Revalidation started", { status: 200 });
 }
