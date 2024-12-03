@@ -107,5 +107,6 @@ const ClubTeamPage = async ({
 export default ClubTeamPage;
 
 export async function generateStaticParams() {
+  asyncLog("info", "Generating static params for club team page");
   return await generateTeamPageParams();
 }
