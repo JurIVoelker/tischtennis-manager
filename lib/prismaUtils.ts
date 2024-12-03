@@ -1,6 +1,5 @@
 import { Player } from "@prisma/client";
 import { prisma } from "./prisma/prisma";
-import { asyncLog } from "./logUtils";
 import { LineupWithPlayers, MatchWithLineup } from "@/types/prismaTypes";
 
 export const getOrderedPlayers = async (
@@ -43,10 +42,10 @@ export const getOrderedPlayers = async (
     playersWithoutTeamPosition?.players &&
     playersWithoutTeamPosition?.players.length > 0
   ) {
-    asyncLog(
-      "error",
-      `Team with id ${teamId} from has players without positions`
-    );
+    // asyncLog(
+    //   "error",
+    //   `Team with id ${teamId} from has players without positions`
+    // );
   }
 
   players.push(...(playersWithoutTeamPosition?.players || []));

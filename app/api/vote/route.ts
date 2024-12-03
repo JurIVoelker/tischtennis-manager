@@ -112,6 +112,33 @@ export async function POST(request: NextRequest) {
       return new Response("Error while saving vote", { status: 500 });
     });
 
+  const club2 = await prisma.club.findUnique({
+    where: {
+      slug: clubSlug,
+    },
+    include: {
+      teams: {
+        include: {
+          matches: {
+            include: {
+              location: true,
+              matchAvailabilityVotes: {
+                include: {
+                  player: true,
+                },
+              },
+            },
+          },
+        },
+        where: {
+          slug: teamSlug,
+        },
+      },
+    },
+  });
+
+  console.log(JSON.stringify(club2));
+
   if (typeof response === "string") {
     revalidatePath(`/${clubSlug}/${teamSlug}`);
     return new Response(JSON.stringify({ data: response }), { status: 200 });
