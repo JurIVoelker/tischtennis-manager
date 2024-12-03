@@ -1,5 +1,6 @@
 import { getValidToken } from "@/lib/APIUtils";
 import { getAuthCookies } from "@/lib/cookieUtils";
+import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidateAfterVote } from "@/lib/revalidateUtils";
 import { matchAvailablilites } from "@/types/prismaTypes";
@@ -44,6 +45,8 @@ export async function POST(request: NextRequest) {
       }
     );
   }
+
+  asyncLog("debug", `Vote received: ${JSON.stringify({ data: body })}`);
 
   const { token: userToken } = getAuthCookies(request, clubSlug, teamSlug);
   const { token } = await getValidToken(clubSlug, teamSlug);
