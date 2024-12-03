@@ -1,6 +1,5 @@
 import slugify from "slugify";
 import { prisma } from "./prisma/prisma";
-import { asyncLog } from "./logUtils";
 
 export interface ClubTeamParams {
   club: string;
@@ -39,12 +38,6 @@ export async function generateTeamPageParams() {
       });
     });
   });
-  asyncLog(
-    "info",
-    `Generated ${paths.length} team page paths: ${JSON.stringify({
-      paths: paths,
-    })}`
-  );
   return paths;
 }
 

@@ -1,4 +1,3 @@
-export const dynamicParams = false;
 import GameCard from "@/components/game-card/game-card";
 import NewGame from "@/components/game-card/new-game-card";
 import TeamLeaderJoinSuggestion from "@/components/leader-no-member-promt";
@@ -13,6 +12,7 @@ import {
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { getOrderedPlayers } from "@/lib/prismaUtils";
+import { notFound } from "next/navigation";
 
 const ClubTeamPage = async ({
   params,
@@ -51,6 +51,8 @@ const ClubTeamPage = async ({
       },
     },
   });
+
+  if (!club?.teams) return notFound();
 
   if (club?.teams && club?.teams?.length >= 2) {
     asyncLog("error", `${clubSlug} has more than one team with the same name`);
@@ -106,7 +108,12 @@ const ClubTeamPage = async ({
 
 export default ClubTeamPage;
 
+/*
+ * Nextjs settings
+ */
+
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  asyncLog("info", "Generating static params for club team page");
   return await generateTeamPageParams();
 }
