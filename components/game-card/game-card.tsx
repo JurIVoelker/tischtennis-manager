@@ -13,6 +13,7 @@ interface GameCardProps {
   isLineup: boolean;
   matchAvailabilityVotes: AvailabilityVoteWithPlayer[];
   teamSlug: string;
+  clubSlug: string;
 }
 
 const GameCard: React.FC<GameCardProps> = async ({
@@ -20,6 +21,7 @@ const GameCard: React.FC<GameCardProps> = async ({
   isLineup,
   matchAvailabilityVotes,
   teamSlug,
+  clubSlug,
 }) => {
   return (
     <Card className="p-6 space-y-6">
@@ -27,8 +29,10 @@ const GameCard: React.FC<GameCardProps> = async ({
       <GameCardBody match={match} teamSlug={teamSlug} />
       {!isLineup && (
         <AvailabiltyButtons
+          matchId={match.id}
           matchAvailabilityVotes={matchAvailabilityVotes}
           teamSlug={teamSlug}
+          clubSlug={clubSlug}
         />
       )}
     </Card>

@@ -84,6 +84,7 @@ const ClubTeamPage = async ({
                 return (
                   <GameCard
                     teamSlug={teamSlug}
+                    clubSlug={clubSlug}
                     matchAvailabilityVotes={match.matchAvailabilityVotes}
                     match={match}
                     isLineup={isLineup}

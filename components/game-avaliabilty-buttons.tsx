@@ -8,6 +8,7 @@ import {
   AvailabilityVoteWithPlayer,
   MatchAvailablilites,
 } from "@/types/prismaTypes";
+import { postAPI } from "@/lib/APIUtils";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -15,6 +16,8 @@ interface AvailabiltyButtonsProps {
   defaultSelectedValue?: optionsType | undefined;
   matchAvailabilityVotes: AvailabilityVoteWithPlayer[];
   teamSlug: string;
+  clubSlug: string;
+  matchId: string;
 }
 
 interface selectableOptionsType {
@@ -26,6 +29,8 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
   defaultSelectedValue,
   matchAvailabilityVotes,
   teamSlug,
+  clubSlug,
+  matchId,
 }) => {
   const [selectedAvailabilty, setSelectedAvailabilty] = useState(
     defaultSelectedValue || null
@@ -52,8 +57,6 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     }
   }, [matchAvailabilityVotes, teamSlug]);
 
-  // const lineupAnswer = lineups.find((lineup) => lineup.playerId === playerId);
-
   const isButtonsVisible = useIsPermitted("view:game-availability-buttons");
 
   const selectableOptions: selectableOptionsType[] = [
@@ -62,8 +65,25 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     { name: "Nein", variant: "negative" },
   ];
 
-  const handleSelctOption = (option: optionsType) => {
+  const handleSelctOption = async (option: optionsType) => {
     setSelectedAvailabilty(option);
+    try {
+      const vote =
+        option === "Ja"
+          ? "available"
+          : option === "Nein"
+          ? "unavailable"
+          : "maybe";
+      await postAPI("/api/vote", {
+        vote,
+        clubSlug,
+        teamSlug,
+        matchId,
+        playerId: getUserData()[teamSlug]?.id || "",
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (!isButtonsVisible) return <></>;

@@ -2,6 +2,7 @@ import { getValidToken } from "@/lib/APIUtils";
 import { getAuthCookies } from "@/lib/cookieUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { matchAvailablilites } from "@/types/prismaTypes";
+import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 import z from "zod";
 
@@ -88,7 +89,7 @@ export async function POST(request: NextRequest) {
   if (club?.teams[0]?.players[0]?.id !== playerId)
     return new Response("Player not found", { status: 404 });
 
-  prisma
+  const response = await prisma
     .$transaction(async (tx) => {
       for (const vote of club?.teams[0]?.players[0]?.matchAvailabilityVotes) {
         await tx.matchAvailabilityVote.delete({
@@ -97,17 +98,24 @@ export async function POST(request: NextRequest) {
           },
         });
       }
-
-      await tx.matchAvailabilityVote.create({
+      const res = await tx.matchAvailabilityVote.create({
         data: {
           availability: vote,
           matchId,
           playerId,
         },
       });
+
+      return res?.availability || "unknown";
     })
     .catch(() => {
       return new Response("Error while saving vote", { status: 500 });
     });
-  return new Response("ok");
+
+  if (typeof response === "string") {
+    revalidatePath(`/${clubSlug}/${teamSlug}`);
+    return new Response(JSON.stringify({ data: response }), { status: 200 });
+  } else {
+    return response;
+  }
 }

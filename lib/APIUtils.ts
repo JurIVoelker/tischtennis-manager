@@ -45,3 +45,25 @@ export const fetchAPI = async (url: string, options?: object) => {
   const data = await response.json();
   return data;
 };
+
+export const postAPI = async (url: string, body: object, options?: object) => {
+  const isLogging = process.env.NODE_ENV === "development";
+  const queryString = options ? qs.stringify(options) : "";
+
+  const requestUrl = url + (queryString ? `?${queryString}` : "");
+
+  if (isLogging) console.info(`[POST] -> ${requestUrl}`);
+  const response = await fetch(requestUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    if (isLogging) console.info(`[ERROR-${response.status}] -> ${requestUrl}`);
+    return null;
+  }
+  const data = await response.json();
+  return data;
+};
