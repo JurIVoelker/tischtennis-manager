@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
    * Get valid token serverside
    */
 
-  const { token, allTokens } = await getValidToken(clubSlug, teamSlug);
+  const { token, allTokens } = (await getValidToken(clubSlug, teamSlug)) || {};
 
   if (token === null) {
     return NextResponse.redirect(
