@@ -1,8 +1,8 @@
 import { getValidToken } from "@/lib/APIUtils";
 import { getAuthCookies } from "@/lib/cookieUtils";
 import { prisma } from "@/lib/prisma/prisma";
+import { revalidateAfterVote } from "@/lib/revalidateUtils";
 import { matchAvailablilites } from "@/types/prismaTypes";
-import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 import z from "zod";
 
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     });
 
   if (typeof response === "string") {
-    revalidatePath(`/${clubSlug}/${teamSlug}`);
+    revalidateAfterVote(clubSlug, teamSlug, matchId);
     return new Response(JSON.stringify({ data: response }), { status: 200 });
   } else {
     return response;
