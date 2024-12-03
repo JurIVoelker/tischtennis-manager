@@ -1,4 +1,12 @@
-import { Club, Lineup, Location, Match, Player, Team } from "@prisma/client";
+import {
+  Club,
+  Lineup,
+  Location,
+  Match,
+  MatchAvailabilityVote,
+  Player,
+  Team,
+} from "@prisma/client";
 
 export type LineupWithPlayers = Lineup & {
   player: Player;
@@ -48,6 +56,10 @@ export type MatchWithLocation =
       location: Location | null;
     })
   | null;
+
+export type AvailabilityVoteWithPlayer = MatchAvailabilityVote & {
+  player: Player;
+};
 
 export const matchAvailablilites = [
   "available",

@@ -13,7 +13,6 @@ import {
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { getOrderedPlayers } from "@/lib/prismaUtils";
-import { ClubWithTeamsWithoutMatches } from "@/types/prismaTypes";
 
 const ClubTeamPage = async ({
   params,
@@ -22,7 +21,7 @@ const ClubTeamPage = async ({
 }) => {
   const { clubSlug, teamSlug } = await decodeClubTeamParams(params);
 
-  const club: ClubWithTeamsWithoutMatches = await prisma.club.findUnique({
+  const club = await prisma.club.findUnique({
     where: { slug: clubSlug },
     include: {
       teams: {
@@ -36,6 +35,11 @@ const ClubTeamPage = async ({
                 },
                 orderBy: {
                   position: "asc",
+                },
+              },
+              matchAvailabilityVotes: {
+                include: {
+                  player: true,
                 },
               },
             },
@@ -80,7 +84,7 @@ const ClubTeamPage = async ({
                 return (
                   <GameCard
                     teamSlug={teamSlug}
-                    teamName={teamName}
+                    matchAvailabilityVotes={match.matchAvailabilityVotes}
                     match={match}
                     isLineup={isLineup}
                     key={id}
