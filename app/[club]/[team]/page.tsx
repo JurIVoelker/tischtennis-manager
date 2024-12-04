@@ -108,12 +108,6 @@ const ClubTeamPage = async ({
 
 export default ClubTeamPage;
 
-/*
- * Nextjs settings
- */
-
-export const dynamicParams = true;
-
 export async function generateStaticParams() {
   return await generateTeamPageParams();
 }

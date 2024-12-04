@@ -1,4 +1,3 @@
-export const dynamicParams = false;
 import EditMatchForm from "@/components/edit-match/edit-match-form";
 import Navbar from "@/components/navbar";
 import Typography from "@/components/typography";
