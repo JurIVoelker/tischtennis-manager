@@ -11,6 +11,7 @@ import {
 import { postAPI } from "@/lib/APIUtils";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { PLAYER_NOT_FOUND_ERROR } from "@/constants/APIError";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -86,7 +87,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     });
 
     if ((!res.data && !res.ok) || res?.error) {
-      if (res.error === "Player not found") {
+      if (res.error === PLAYER_NOT_FOUND_ERROR) {
         setUserData({
           [teamSlug]: {
             id: undefined,
@@ -110,7 +111,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
           description: (
             <div className="mt-2 w-[340px] flex gap-2">
               <Typography variant="p" className="leading-1">
-                Bitte versuche es erneut.
+                Fehler: {res?.error || "Unbekannter Fehler"}
               </Typography>
             </div>
           ),

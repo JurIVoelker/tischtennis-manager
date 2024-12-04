@@ -1,6 +1,13 @@
+import {
+  BODY_NOT_DEFINED_ERROR,
+  BODY_NOT_JSON_ERROR,
+  INVALID_TOKEN_ERROR,
+  MATCH_NOT_FOUND_ERROR,
+  PLAYER_NOT_FOUND_ERROR,
+  UNKNOWN_ERROR,
+} from "@/constants/APIError";
 import { getLeaderData, getValidToken } from "@/lib/APIUtils";
 import { getAuthCookies } from "@/lib/cookieUtils";
-import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidateAfterVote } from "@/lib/revalidateUtils";
 import { matchAvailablilites } from "@/types/prismaTypes";
@@ -13,13 +20,13 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return new Response("body must be json", {
+    return new Response(BODY_NOT_JSON_ERROR, {
       status: 400,
     });
   }
 
   if (!body) {
-    return new Response("body must be defined", { status: 400 });
+    return new Response(BODY_NOT_DEFINED_ERROR, { status: 400 });
   }
 
   const { clubSlug, teamSlug, playerId, matchId, vote } = body || {};
@@ -43,8 +50,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  asyncLog("debug", `Vote received: ${JSON.stringify({ data: body })}`);
-
   const loggedinUserData = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
@@ -62,7 +67,7 @@ export async function POST(request: NextRequest) {
     const { token } = await getValidToken(clubSlug, teamSlug);
 
     if (token !== userToken)
-      return new Response("invalid token", { status: 401 });
+      return new Response(INVALID_TOKEN_ERROR, { status: 401 });
   }
 
   const club = await prisma.club.findUnique({
@@ -98,10 +103,10 @@ export async function POST(request: NextRequest) {
   });
 
   if (!club?.teams[0]?.matches[0])
-    return new Response("Match not found", { status: 404 });
+    return new Response(MATCH_NOT_FOUND_ERROR, { status: 404 });
 
   if (club?.teams[0]?.players[0]?.id !== playerId)
-    return new Response("Player not found", { status: 404 });
+    return new Response(PLAYER_NOT_FOUND_ERROR, { status: 404 });
 
   const response = await prisma
     .$transaction(async (tx) => {
@@ -123,7 +128,7 @@ export async function POST(request: NextRequest) {
       return res?.availability || "unknown";
     })
     .catch(() => {
-      return new Response("Error while saving vote", { status: 500 });
+      return new Response(UNKNOWN_ERROR, { status: 500 });
     });
 
   if (typeof response === "string") {
