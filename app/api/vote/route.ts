@@ -1,9 +1,10 @@
-import { getValidToken } from "@/lib/APIUtils";
+import { getLeaderData, getValidToken } from "@/lib/APIUtils";
 import { getAuthCookies } from "@/lib/cookieUtils";
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidateAfterVote } from "@/lib/revalidateUtils";
 import { matchAvailablilites } from "@/types/prismaTypes";
+import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
 import z from "zod";
 
@@ -21,11 +22,7 @@ export async function POST(request: NextRequest) {
     return new Response("body must be defined", { status: 400 });
   }
 
-  const clubSlug = body.clubSlug;
-  const teamSlug = body.teamSlug;
-  const playerId = body.playerId;
-  const matchId = body.matchId;
-  const vote = body.vote;
+  const { clubSlug, teamSlug, playerId, matchId, vote } = body || {};
 
   const schema = z.object({
     clubSlug: z.string(),
@@ -48,11 +45,25 @@ export async function POST(request: NextRequest) {
 
   asyncLog("debug", `Vote received: ${JSON.stringify({ data: body })}`);
 
-  const { token: userToken } = getAuthCookies(request, clubSlug, teamSlug);
-  const { token } = await getValidToken(clubSlug, teamSlug);
+  const loggedinUserData = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
-  if (token !== userToken)
-    return new Response("invalid token", { status: 401 });
+  const { email } = loggedinUserData || {};
+  let isTeamLeader = false;
+  if (email) {
+    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
+      .isTeamLeader;
+  }
+
+  if (!isTeamLeader) {
+    const { token: userToken } = getAuthCookies(request, clubSlug, teamSlug);
+    const { token } = await getValidToken(clubSlug, teamSlug);
+
+    if (token !== userToken)
+      return new Response("invalid token", { status: 401 });
+  }
 
   const club = await prisma.club.findUnique({
     where: {

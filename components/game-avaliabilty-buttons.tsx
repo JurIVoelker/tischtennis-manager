@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Typography from "./typography";
 import { useIsPermitted } from "@/hooks/use-has-permission";
-import { getUserData } from "@/lib/localstorageUtils";
+import { getUserData, setUserData } from "@/lib/localstorageUtils";
 import {
   AvailabilityVoteWithPlayer,
   MatchAvailablilites,
 } from "@/types/prismaTypes";
 import { postAPI } from "@/lib/APIUtils";
 import { toast } from "@/hooks/use-toast";
-import { asyncLog } from "@/lib/logUtils";
+import { useRouter } from "next/navigation";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -37,6 +37,8 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
   const [selectedAvailabilty, setSelectedAvailabilty] = useState(
     defaultSelectedValue || null
   );
+
+  const { push } = useRouter();
 
   useEffect(() => {
     const userId = getUserData()[teamSlug]?.id;
@@ -83,22 +85,37 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
       playerId: getUserData()[teamSlug]?.id || "",
     });
 
-    if (!res.data && !res.ok) {
-      console.error(res);
-      asyncLog(
-        "error",
-        "Error while sending availability vote: " + JSON.stringify(res)
-      );
-      toast({
-        title: "Übermitteln der Anfrage fehlgeschlagen",
-        description: (
-          <div className="mt-2 w-[340px] flex gap-2">
-            <Typography variant="p" className="leading-1">
-              Bitte versuche es erneut.
-            </Typography>
-          </div>
-        ),
-      });
+    if ((!res.data && !res.ok) || res?.error) {
+      if (res.error === "Player not found") {
+        setUserData({
+          [teamSlug]: {
+            id: undefined,
+          },
+        });
+        toast({
+          title: "Übermitteln der Anfrage fehlgeschlagen",
+          description: (
+            <div className="mt-2 w-[340px] flex gap-2">
+              <Typography variant="p" className="leading-1">
+                Mit deinem Account stimmt etwas nicht. Bitte logge dich erneut
+                ein.
+              </Typography>
+            </div>
+          ),
+        });
+        push(`./${teamSlug}/login`);
+      } else {
+        toast({
+          title: "Übermitteln der Anfrage fehlgeschlagen",
+          description: (
+            <div className="mt-2 w-[340px] flex gap-2">
+              <Typography variant="p" className="leading-1">
+                Bitte versuche es erneut.
+              </Typography>
+            </div>
+          ),
+        });
+      }
     }
   };
 

@@ -6,7 +6,7 @@ import {
   getAuthCookies as getUserAuthCookie,
 } from "./lib/cookieUtils";
 import { handleUnauthorizedUser } from "./lib/middlewareUtils";
-import { getValidToken } from "./lib/APIUtils";
+import { getLeaderData, getValidToken } from "./lib/APIUtils";
 import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 import { LOGIN_PAGE_REGEX } from "./constants/regex";
 import { isIgnoredMiddlewarePath } from "./lib/routeUtils";
@@ -55,13 +55,7 @@ export async function middleware(request: NextRequest) {
 
   const { email } = loggedinUserData || {};
   if (email) {
-    const { isSomeLeader } = (
-      await axios.get(
-        `${
-          process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-        }/api/protected/is-team-leader?clubSlug=${clubSlug}&teamSlug=${teamSlug}&email=${email}`
-      )
-    ).data;
+    const { isSomeLeader } = await getLeaderData(clubSlug, teamSlug, email);
     if (isSomeLeader) {
       return NextResponse.next();
     }

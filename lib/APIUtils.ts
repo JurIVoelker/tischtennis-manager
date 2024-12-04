@@ -1,6 +1,7 @@
 import { GetTeamAuthResponseInterface } from "@/app/api/protected/team-auth/route";
 import { asyncLog } from "./logUtils";
 import qs from "qs";
+import axios from "axios";
 
 export const getValidToken = async (
   clubSlug: string,
@@ -28,6 +29,19 @@ export const getValidToken = async (
     return { token: null, allTokens: [] };
   }
   return tokenData;
+};
+
+export const getLeaderData = async (
+  clubSlug: string,
+  teamSlug: string,
+  email: string
+) => {
+  const res = await axios.get(
+    `${
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+    }/api/protected/is-team-leader?clubSlug=${clubSlug}&teamSlug=${teamSlug}&email=${email}`
+  );
+  return res?.data;
 };
 
 export const fetchAPI = async (url: string, options?: object) => {
@@ -62,7 +76,14 @@ export const postAPI = async (url: string, body: object, options?: object) => {
   });
   if (!response.ok) {
     if (isLogging) console.info(`[ERROR-${response.status}] -> ${requestUrl}`);
-    return response;
+    const contentType = response.headers.get("content-type");
+    let error;
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      error = await response.json();
+    } else {
+      error = await response.text();
+    }
+    return { ...response, error };
   }
   const data = await response.json();
   return data;
