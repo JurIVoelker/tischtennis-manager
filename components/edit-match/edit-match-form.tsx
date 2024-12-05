@@ -38,8 +38,8 @@ export type Time = {
 interface EditMatchFormProps {
   match?: MatchWithLocation;
   isCreate?: boolean;
-  teamSlug: string;
-  clubSlug: string;
+  teamSlug?: string;
+  clubSlug?: string;
 }
 
 const EditMatchForm: React.FC<EditMatchFormProps> = ({
