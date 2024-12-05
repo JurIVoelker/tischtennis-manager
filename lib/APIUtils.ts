@@ -101,7 +101,7 @@ export const handleGetBody = async (
   request: NextRequest
 ): Promise<{
   success: boolean;
-  body?: object;
+  body?: unknown;
   responseReturnValue?: Response;
 }> => {
   let body;

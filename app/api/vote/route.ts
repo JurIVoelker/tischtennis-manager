@@ -5,7 +5,7 @@ import {
 } from "@/constants/zodSchemaConstants";
 import { handleGetBody, hasLeaderPermission } from "@/lib/APIUtils";
 import { prisma } from "@/lib/prisma/prisma";
-import { revalidateAfterVote } from "@/lib/revalidateUtils";
+import { revalidatePaths } from "@/lib/revalidateUtils";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -92,7 +92,10 @@ export async function POST(request: NextRequest) {
     });
 
   if (typeof response === "string") {
-    revalidateAfterVote(clubSlug, teamSlug, matchId);
+    revalidatePaths([
+      `/${clubSlug}/${teamSlug}`,
+      `/${clubSlug}/${teamSlug}/spiel/aufstellung/verwalten/${matchId}`,
+    ]);
     return new Response(JSON.stringify({ data: response }), { status: 200 });
   } else {
     return response;

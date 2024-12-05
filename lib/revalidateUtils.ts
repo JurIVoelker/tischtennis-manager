@@ -1,14 +1,6 @@
 import { revalidatePath } from "next/cache";
 
-export const revalidateAfterVote = (
-  clubSlug: string,
-  teamSlug: string,
-  matchId: string
-) => {
-  const pathsToRevalidate = [
-    `/${clubSlug}/${teamSlug}`,
-    `/${clubSlug}/${teamSlug}/spiel/aufstellung/verwalten/${matchId}`,
-  ];
+export const revalidatePaths = (pathsToRevalidate: string[]) => {
   pathsToRevalidate.forEach((path) => {
     revalidatePath(path);
   });
