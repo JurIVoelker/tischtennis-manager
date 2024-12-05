@@ -64,15 +64,20 @@ export const fetchAPI = async (url: string, options?: object) => {
   return data;
 };
 
-export const postAPI = async (url: string, body: object, options?: object) => {
+const makeRequest = async (
+  method: "POST" | "PUT",
+  url: string,
+  body: object,
+  options?: object
+) => {
   const isLogging = process.env.NODE_ENV === "development";
   const queryString = options ? qs.stringify(options) : "";
 
   const requestUrl = url + (queryString ? `?${queryString}` : "");
 
-  if (isLogging) console.info(`[POST] -> ${requestUrl}`);
+  if (isLogging) console.info(`[${method}] -> ${requestUrl}`);
   const response = await fetch(requestUrl, {
-    method: "POST",
+    method,
     headers: {
       "Content-Type": "application/json",
     },
@@ -93,8 +98,16 @@ export const postAPI = async (url: string, body: object, options?: object) => {
     }
     return { ...response, error: json };
   }
-  const data = await response.json();
-  return data;
+
+  return { ok: true, error: false };
+};
+
+export const postAPI = async (url: string, body: object, options?: object) => {
+  return await makeRequest("POST", url, body, options);
+};
+
+export const putAPI = async (url: string, body: object, options?: object) => {
+  return await makeRequest("PUT", url, body, options);
 };
 
 export const handleGetBody = async (

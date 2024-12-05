@@ -15,7 +15,7 @@ const EditMatchPage = async ({
 }: {
   params: Promise<MatchPageParams>;
 }) => {
-  const { matchId } = await decodeMatchPageParams(params);
+  const { matchId, teamSlug, clubSlug } = await decodeMatchPageParams(params);
 
   const match: MatchWithLocation = await prisma.match.findUnique({
     where: {
@@ -36,7 +36,11 @@ const EditMatchPage = async ({
         <Navbar title={"Spiel bearbeiten"} />
         <div className="px-6 pb-6 pt-16 space-y-6">
           <Typography variant="h3">{match?.enemyClubName}</Typography>
-          <EditMatchForm match={match} />
+          <EditMatchForm
+            match={match}
+            teamSlug={teamSlug}
+            clubSlug={clubSlug}
+          />
         </div>
       </div>
     </>

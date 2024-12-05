@@ -23,6 +23,10 @@ import { Cancel01Icon, Tick01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { MatchWithLocation } from "@/types/prismaTypes";
+import { putAPI } from "@/lib/APIUtils";
+import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
+import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 export type Time = {
   hour: number;
@@ -34,13 +38,19 @@ export type Time = {
 interface EditMatchFormProps {
   match?: MatchWithLocation;
   isCreate?: boolean;
+  teamSlug: string;
+  clubSlug: string;
 }
 
 const EditMatchForm: React.FC<EditMatchFormProps> = ({
   match,
   isCreate = false,
+  teamSlug,
+  clubSlug,
 }) => {
   const [isLoading, setLoading] = useState(true);
+
+  const { push } = useRouter();
 
   useEffect(() => {
     setLoading(false);
@@ -57,7 +67,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
       })
       .passthrough(),
     hallName: z.string().min(1),
-    streetAdress: z.string().min(1),
+    streetAddress: z.string().min(1),
     city: z.string().min(1),
     isHomeGame: z.boolean(),
     enemyTeamName: isCreate ? z.string().optional() : z.undefined(),
@@ -81,7 +91,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       hallName: location?.hallName,
-      streetAdress: location?.streetAddress,
+      streetAddress: location?.streetAddress,
       city: location?.city,
       isHomeGame: match?.isHomeGame,
       date,
@@ -89,8 +99,21 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
     },
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    const res = await putAPI(`/api/game-data`, {
+      ...data,
+      teamSlug,
+      clubSlug,
+      matchId: match?.id || 0,
+    });
+    if (!res.ok || res.error) {
+      setUnknownErrorToastMessage();
+    } else {
+      toast({
+        title: "Das Spiel wurde erfolgreich bearbeitet",
+      });
+      push("../../");
+    }
   };
 
   return (
@@ -180,7 +203,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
             )}
           />
           <FormField
-            name="streetAdress"
+            name="streetAddress"
             control={form.control}
             render={({ field }) => (
               <FormItem>

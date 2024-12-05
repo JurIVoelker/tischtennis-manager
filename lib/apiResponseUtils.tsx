@@ -2,13 +2,13 @@ import React from "react";
 import { toast as setToastMessage } from "@/hooks/use-toast";
 import Typography from "@/components/typography";
 
-const returnUnkownError = () => {
+export const setUnknownErrorToastMessage = () => {
   setToastMessage({
     title: "Übermitteln der Anfrage fehlgeschlagen",
     description: (
       <div className="mt-2 w-[340px] flex gap-2">
         <Typography variant="p" className="leading-1">
-          {"Fehler: Unbekannter Fehler"}
+          Fehler: Unbekannter Fehler
         </Typography>
       </div>
     ),
@@ -43,8 +43,7 @@ export const handlePostRequestError = (
             description: (
               <div className="mt-2 w-[340px] flex gap-2">
                 <Typography variant="p" className="leading-1">
-                  Mit deinem Account stimmt etwas nicht. Bitte logge dich erneut
-                  ein.
+                  {toast.description}
                 </Typography>
               </div>
             ),
@@ -54,8 +53,8 @@ export const handlePostRequestError = (
         return;
       }
     }
-    if (!errorFound) returnUnkownError();
+    if (!errorFound) setUnknownErrorToastMessage();
   } else {
-    returnUnkownError();
+    setUnknownErrorToastMessage();
   }
 };
