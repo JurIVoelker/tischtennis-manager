@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Typography from "./typography";
 import { useIsPermitted } from "@/hooks/use-has-permission";
-import { getUserData, setUserData } from "@/lib/localstorageUtils";
+import { getUserData } from "@/lib/localstorageUtils";
 import {
   AvailabilityVoteWithPlayer,
   MatchAvailablilites,
 } from "@/types/prismaTypes";
 import { postAPI } from "@/lib/APIUtils";
-import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { PLAYER_NOT_FOUND_ERROR } from "@/constants/APIError";
+import { handlePostRequestError } from "@/lib/apiResponseUtils";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -78,7 +78,8 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
         : option === "Nein"
         ? "unavailable"
         : "maybe";
-    const res = await postAPI("/api/vote", {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const res: any = await postAPI("/api/vote", {
       vote,
       clubSlug,
       teamSlug,
@@ -87,36 +88,19 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     });
 
     if ((!res.data && !res.ok) || res?.error) {
-      if (res.error === PLAYER_NOT_FOUND_ERROR) {
-        setUserData({
-          [teamSlug]: {
-            id: undefined,
+      handlePostRequestError(res, [
+        {
+          message: PLAYER_NOT_FOUND_ERROR,
+          toast: {
+            title: "Übermitteln der Anfrage fehlgeschlagen",
+            description:
+              "Mit deinem Account stimmt etwas nicht. Bitte logge dich erneut ein.",
           },
-        });
-        toast({
-          title: "Übermitteln der Anfrage fehlgeschlagen",
-          description: (
-            <div className="mt-2 w-[340px] flex gap-2">
-              <Typography variant="p" className="leading-1">
-                Mit deinem Account stimmt etwas nicht. Bitte logge dich erneut
-                ein.
-              </Typography>
-            </div>
-          ),
-        });
-        push(`./${teamSlug}/login`);
-      } else {
-        toast({
-          title: "Übermitteln der Anfrage fehlgeschlagen",
-          description: (
-            <div className="mt-2 w-[340px] flex gap-2">
-              <Typography variant="p" className="leading-1">
-                Fehler: {res?.error || "Unbekannter Fehler"}
-              </Typography>
-            </div>
-          ),
-        });
-      }
+          callback: () => {
+            push(`./${teamSlug}/login`);
+          },
+        },
+      ]);
     }
   };
 

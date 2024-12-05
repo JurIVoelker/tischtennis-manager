@@ -2,6 +2,10 @@ import { GetTeamAuthResponseInterface } from "@/app/api/protected/team-auth/rout
 import { asyncLog } from "./logUtils";
 import qs from "qs";
 import axios from "axios";
+import { NextRequest } from "next/server";
+import { BODY_NOT_JSON_ERROR, INVALID_TOKEN_ERROR } from "@/constants/APIError";
+import { getToken } from "next-auth/jwt";
+import { getAuthCookies } from "./cookieUtils";
 
 export const getValidToken = async (
   clubSlug: string,
@@ -60,15 +64,20 @@ export const fetchAPI = async (url: string, options?: object) => {
   return data;
 };
 
-export const postAPI = async (url: string, body: object, options?: object) => {
+const makeRequest = async (
+  method: "POST" | "PUT",
+  url: string,
+  body: object,
+  options?: object
+) => {
   const isLogging = process.env.NODE_ENV === "development";
   const queryString = options ? qs.stringify(options) : "";
 
   const requestUrl = url + (queryString ? `?${queryString}` : "");
 
-  if (isLogging) console.info(`[POST] -> ${requestUrl}`);
+  if (isLogging) console.info(`[${method}] -> ${requestUrl}`);
   const response = await fetch(requestUrl, {
-    method: "POST",
+    method,
     headers: {
       "Content-Type": "application/json",
     },
@@ -76,15 +85,79 @@ export const postAPI = async (url: string, body: object, options?: object) => {
   });
   if (!response.ok) {
     if (isLogging) console.info(`[ERROR-${response.status}] -> ${requestUrl}`);
-    const contentType = response.headers.get("content-type");
-    let error;
-    if (contentType && contentType.indexOf("application/json") !== -1) {
-      error = await response.json();
-    } else {
-      error = await response.text();
+    let json;
+    try {
+      json = await response.json();
+    } catch {
+      const res = await response.text();
+      try {
+        json = JSON.parse(res);
+      } catch {
+        json = res;
+      }
     }
-    return { ...response, error };
+    return { ...response, error: json };
   }
-  const data = await response.json();
-  return data;
+
+  return { ok: true, error: false };
+};
+
+export const postAPI = async (url: string, body: object, options?: object) => {
+  return await makeRequest("POST", url, body, options);
+};
+
+export const putAPI = async (url: string, body: object, options?: object) => {
+  return await makeRequest("PUT", url, body, options);
+};
+
+export const handleGetBody = async (
+  request: NextRequest
+): Promise<{
+  success: boolean;
+  body?: unknown;
+  responseReturnValue?: Response;
+}> => {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return {
+      success: false,
+      responseReturnValue: new Response(BODY_NOT_JSON_ERROR, { status: 400 }),
+    };
+  }
+  return { success: true, body };
+};
+
+export const hasLeaderPermission = async (
+  clubSlug: string,
+  teamSlug: string,
+  request: NextRequest
+): Promise<{ success: boolean; responseReturnValue?: Response }> => {
+  const loggedinUserData = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  const { email } = loggedinUserData || {};
+  let isTeamLeader = false;
+  if (email) {
+    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
+      .isTeamLeader;
+  }
+
+  if (!isTeamLeader) {
+    const { token: userToken } = getAuthCookies(request, clubSlug, teamSlug);
+    const { token } = await getValidToken(clubSlug, teamSlug);
+
+    if (token !== userToken)
+      return {
+        success: false,
+        responseReturnValue: new Response(
+          JSON.stringify([{ message: INVALID_TOKEN_ERROR }]),
+          { status: 401 }
+        ),
+      };
+  }
+  return { success: true };
 };

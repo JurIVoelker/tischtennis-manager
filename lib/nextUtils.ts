@@ -73,5 +73,7 @@ export async function decodeMatchPageParams(
 ) {
   const params = await paramsPromise;
   const matchId = decodeURIComponent(params.matchId);
-  return { matchId };
+  const clubSlug = decodeURIComponent(params.club);
+  const teamSlug = decodeURIComponent(params.team);
+  return { matchId, clubSlug, teamSlug };
 }
