@@ -78,7 +78,8 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
         : option === "Nein"
         ? "unavailable"
         : "maybe";
-    const res = await postAPI("/api/vote", {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const res: any = await postAPI("/api/vote", {
       vote,
       clubSlug,
       teamSlug,
