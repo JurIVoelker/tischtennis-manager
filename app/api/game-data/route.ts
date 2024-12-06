@@ -58,7 +58,8 @@ export async function PUT(request: NextRequest) {
 
   await prisma
     .$transaction(async (tx) => {
-      matchDateTime.setHours(time.hour, time.minute, time.second);
+      matchDateTime.setHours(time.hour - 1, time.minute, time.second);
+      matchDateTime.setDate(matchDateTime.getDate() + 1);
       await tx.match.update({
         where: {
           id: matchId,
