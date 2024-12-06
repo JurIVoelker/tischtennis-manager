@@ -100,7 +100,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    const res = await putAPI(`/api/game-data`, {
+    const res = await putAPI(`/api/game`, {
       ...data,
       teamSlug,
       clubSlug,
