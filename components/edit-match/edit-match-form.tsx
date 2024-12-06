@@ -156,7 +156,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
           </Card>
         )}
         <Card className="p-4 space-y-4">
-          <Typography variant="p-gray">Spielort</Typography>
+          <Typography variant="p-gray">Datum und Uhrzeit</Typography>
           <FormField
             name="date"
             control={form.control}
@@ -196,7 +196,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
           />
         </Card>
         <Card className="p-4 space-y-4">
-          <Typography variant="p-gray">Datum und Uhrzeit</Typography>
+          <Typography variant="p-gray">Spielort</Typography>
           <FormField
             name="hallName"
             control={form.control}
