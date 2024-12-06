@@ -23,7 +23,7 @@ import { Cancel01Icon, Tick01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { MatchWithLocation } from "@/types/prismaTypes";
-import { putAPI } from "@/lib/APIUtils";
+import { postAPI, putAPI } from "@/lib/APIUtils";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
@@ -38,14 +38,16 @@ export type Time = {
 interface EditMatchFormProps {
   match?: MatchWithLocation;
   isCreate?: boolean;
-  teamSlug?: string;
-  clubSlug?: string;
+  teamSlug: string;
+  clubSlug: string;
+  returnPath?: string;
 }
 
 const EditMatchForm: React.FC<EditMatchFormProps> = ({
   match,
   isCreate = false,
   teamSlug,
+  returnPath = "../../",
   clubSlug,
 }) => {
   const [isLoading, setLoading] = useState(true);
@@ -70,7 +72,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
     streetAddress: z.string().min(1),
     city: z.string().min(1),
     isHomeGame: z.boolean(),
-    enemyTeamName: isCreate ? z.string().optional() : z.undefined(),
+    enemyClubName: isCreate ? z.string().min(1) : z.undefined(),
   });
 
   const location = match?.location;
@@ -100,19 +102,30 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    const res = await putAPI(`/api/game`, {
-      ...data,
-      teamSlug,
-      clubSlug,
-      matchId: match?.id || 0,
-    });
+    let res;
+    if (!isCreate) {
+      res = await putAPI(`/api/match`, {
+        ...data,
+        teamSlug,
+        clubSlug,
+        matchId: match?.id || 0,
+      });
+    } else {
+      res = await postAPI(`/api/match`, {
+        ...data,
+        teamSlug,
+        clubSlug,
+      });
+    }
     if (!res.ok || res.error) {
       setUnknownErrorToastMessage();
     } else {
       toast({
-        title: "Das Spiel wurde erfolgreich bearbeitet",
+        title: `Das Spiel wurde erfolgreich ${
+          isCreate ? "erstellt" : "bearbeitet"
+        }.`,
       });
-      push("../../");
+      push(returnPath);
     }
   };
 
@@ -123,7 +136,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
           <Card className="p-4 space-y-4">
             <Typography variant="p-gray">Name des Gegnerteams</Typography>
             <FormField
-              name="enemyTeamName"
+              name="enemyClubName"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
