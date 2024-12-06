@@ -98,3 +98,26 @@ export const API_PUT_GAME_DATA_SCHEMA = z.object({
   teamSlug: validateTeamSlug(),
   matchId: validateMatchId(),
 });
+
+export const API_POST_GAME_DATA_SCHEMA = z.object({
+  city: z.string(),
+  date: z
+    .string()
+    .refine(
+      (val) => !isNaN(Date.parse(val)) && val === new Date(val).toISOString(),
+      {
+        message: "Invalid date format. Must be an ISO 8601 string.",
+      }
+    ),
+  hallName: z.string(),
+  isHomeGame: z.boolean(),
+  streetAddress: z.string(),
+  time: z.object({
+    hour: z.number(),
+    minute: z.number(),
+    second: z.number(),
+  }),
+  clubSlug: validateClubSlug(),
+  teamSlug: validateTeamSlug(),
+  enemyClubName: z.string(),
+});
