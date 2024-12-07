@@ -39,7 +39,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     defaultSelectedValue || null
   );
 
-  const { push } = useRouter();
+  const { push, refresh } = useRouter();
 
   useEffect(() => {
     const userId = getUserData()[teamSlug]?.id;
@@ -101,6 +101,8 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
           },
         },
       ]);
+    } else {
+      refresh();
     }
   };
 
