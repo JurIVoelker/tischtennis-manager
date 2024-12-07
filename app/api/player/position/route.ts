@@ -122,6 +122,10 @@ export async function POST(request: NextRequest) {
     (match) => `/${clubSlug}/${teamSlug}/aufstellung/verwalten/${match.id}`
   );
 
+  const lineupPaths = allMatches.map(
+    (match) => `/${clubSlug}/${teamSlug}/aufstellung/verwalten/${match.id}`
+  );
+
   const allTeamSlugs = await prisma.team.findMany({
     where: {
       club: {
@@ -143,6 +147,7 @@ export async function POST(request: NextRequest) {
     `/${clubSlug}/${teamSlug}/spieler/verwalten`,
     ...matchPaths,
     ...addPlayerTeamPaths,
+    ...lineupPaths,
   ]);
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 }
