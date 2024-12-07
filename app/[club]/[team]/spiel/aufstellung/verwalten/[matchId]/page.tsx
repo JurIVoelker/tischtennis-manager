@@ -42,13 +42,17 @@ const ManageLineup = async ({
       id: match?.team.club.id || "",
     },
     include: {
-      teams: {
-        include: {
-          players: true,
-        },
-      },
+      teams: true,
     },
   });
+
+  //  players = await getOrderedPlayers(club?.teams[0].id || "");
+
+  const teamsWithOrderedPlayers = [];
+  for (const team of club?.teams || []) {
+    const players = await getOrderedPlayers(team.id);
+    teamsWithOrderedPlayers.push({ ...team, players });
+  }
 
   const lineups = match?.lineups || [];
 
@@ -72,7 +76,7 @@ const ManageLineup = async ({
         <ConfigureLineupWrapper
           defaultLineup={lineups}
           matchAvailablilityVotes={matchAvailablilityVotes}
-          allTeams={club?.teams || []}
+          allTeams={teamsWithOrderedPlayers || []}
           teamName={match?.team.name || ""}
           mainPlayers={orderedPlayers}
           disabledPlayerIds={disabledPlayerIds}

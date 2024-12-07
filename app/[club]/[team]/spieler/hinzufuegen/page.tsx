@@ -6,7 +6,8 @@ import {
   generateTeamPageParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
-import { TeamWithPlayers } from "@/types/prismaTypes";
+import { getOrderedPlayers } from "@/lib/prismaUtils";
+import { Team } from "@prisma/client";
 
 const AddPlayersPage = async ({
   params,
@@ -20,24 +21,24 @@ const AddPlayersPage = async ({
       slug: clubSlug,
     },
     include: {
-      teams: {
-        include: {
-          players: true,
-        },
-      },
+      teams: true,
     },
   });
 
   const { teams } = club || { teams: [] };
-  const teamsWithoutOwn = teams.filter(
-    (team: TeamWithPlayers) => team.slug !== teamSlug
-  );
+  const teamsWithoutOwn = teams.filter((team: Team) => team.slug !== teamSlug);
+
+  const teamsWithOrderedPlayers = [];
+  for (const team of teamsWithoutOwn || []) {
+    const players = await getOrderedPlayers(team.id);
+    teamsWithOrderedPlayers.push({ ...team, players });
+  }
 
   return (
     <div className="w-full">
       <Navbar title="Spieler hinzufügen" />
       <div className="px-6 pb-6 pt-16 ">
-        <AddPlayersWrapper teams={teamsWithoutOwn} />
+        <AddPlayersWrapper teams={teamsWithOrderedPlayers} />
       </div>
     </div>
   );
