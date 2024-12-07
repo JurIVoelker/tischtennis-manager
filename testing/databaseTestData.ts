@@ -249,6 +249,7 @@ const runScripts = async () => {
   const models = [
     "lineup",
     "location",
+    "matchAvailabilityVote",
     "match",
     "teamLeader",
     "teamAuth",
