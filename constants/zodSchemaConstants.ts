@@ -38,6 +38,25 @@ const validatePlayerId = () =>
     }
   );
 
+const validatePlayerIds = () =>
+  z
+    .string()
+    .array()
+    .refine(
+      async (ids: string[]) => {
+        let isValid = true;
+        for (const id of ids) {
+          isValid =
+            isValid &&
+            Boolean(await prisma.player.findUnique({ where: { id } }));
+        }
+        return isValid;
+      },
+      {
+        message: PLAYER_NOT_FOUND_ERROR,
+      }
+    );
+
 const validateMatchId = () =>
   z.string().refine(
     async (id: string) => {
@@ -120,4 +139,10 @@ export const API_POST_GAME_DATA_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamSlug: validateTeamSlug(),
   enemyClubName: z.string(),
+});
+
+export const API_PUT_PLAYER_POSITIONS_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamSlug: validateTeamSlug(),
+  playerIds: validatePlayerIds(),
 });

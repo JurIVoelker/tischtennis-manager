@@ -20,7 +20,7 @@ const CreateNewGame = async ({
           isCreate
           clubSlug={clubSlug}
           teamSlug={teamSlug}
-          returnPath="../"
+          returnPath="../?refresh=true"
         />
       </div>
     </div>

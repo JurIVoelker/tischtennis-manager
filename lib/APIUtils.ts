@@ -85,16 +85,16 @@ const makeRequest = async (
   });
   if (!response.ok) {
     if (isLogging) console.info(`[ERROR-${response.status}] -> ${requestUrl}`);
-    let json;
+    let json = "";
+    const contentType = response.headers.get("content-type");
     try {
-      json = await response.json();
-    } catch {
-      const res = await response.text();
-      try {
-        json = JSON.parse(res);
-      } catch {
-        json = res;
+      if (contentType && contentType.includes("application/json")) {
+        json = await response.json();
+      } else {
+        json = await response.text();
       }
+    } catch {
+      json = "Failed to parse response";
     }
     return { ...response, error: json };
   }

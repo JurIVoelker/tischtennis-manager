@@ -47,7 +47,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
   match,
   isCreate = false,
   teamSlug,
-  returnPath = "../../",
+  returnPath = "../../?refresh=true",
   clubSlug,
 }) => {
   const [isLoading, setLoading] = useState(true);

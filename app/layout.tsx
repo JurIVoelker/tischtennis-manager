@@ -5,6 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { NextAuthProvider } from "@/components/next-auth-provider";
+import Refresher from "@/components/refresher";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
             <SidebarProvider>
               <Toaster />
               <AppSidebar />
+              <Refresher />
               {children}
             </SidebarProvider>
           </NextAuthProvider>
