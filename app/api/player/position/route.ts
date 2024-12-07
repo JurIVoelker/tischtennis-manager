@@ -118,12 +118,10 @@ export async function POST(request: NextRequest) {
       },
     },
   });
-  const matchPaths = allMatches.map(
-    (match) => `/${clubSlug}/${teamSlug}/aufstellung/verwalten/${match.id}`
-  );
 
   const lineupPaths = allMatches.map(
-    (match) => `/${clubSlug}/${teamSlug}/aufstellung/verwalten/${match.id}`
+    (match) =>
+      `/${clubSlug}/${teamSlug}/spiel/aufstellung/verwalten/${match.id}`
   );
 
   const allTeamSlugs = await prisma.team.findMany({
@@ -145,7 +143,6 @@ export async function POST(request: NextRequest) {
     `/${clubSlug}/${teamSlug}`,
     `/${clubSlug}/${teamSlug}/spieler/sortieren`,
     `/${clubSlug}/${teamSlug}/spieler/verwalten`,
-    ...matchPaths,
     ...addPlayerTeamPaths,
     ...lineupPaths,
   ]);
