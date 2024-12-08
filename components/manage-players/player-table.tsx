@@ -34,6 +34,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+import { useState } from "react";
 
 interface PlayerTableProps {
   className?: string;
@@ -58,6 +59,10 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
   ...props
 }) => {
   const { push, refresh } = useRouter();
+  const [playerToDelete, setPlayerToDelete] = useState<{
+    uniqueName: string;
+    id: string;
+  } | null>(null);
 
   const handleClickOrderPlayers = () => {
     push("./sortieren");
@@ -73,8 +78,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
       setUnknownErrorToastMessage();
     } else {
       toast({
-        title: "Spieler entfernt",
-        description: "Der Spieler wurde erfolgreich entfernt.",
+        title: "Spieler erfolgreich entfernt",
       });
       refresh();
     }
@@ -91,7 +95,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {players?.map((player, i) => (
+          {players?.map((player: Player, i: number) => (
             <TableRow key={player.id}>
               {!isAddPlayers && (
                 <TableCell className="font-medium">{i + 1}</TableCell>
@@ -108,7 +112,15 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="p-2 w-60">
                         <AlertDialogTrigger asChild>
-                          <DropdownMenuItem className="flex items-center gap-2 p-2">
+                          <DropdownMenuItem
+                            className="flex items-center gap-2 p-2"
+                            onSelect={() =>
+                              setPlayerToDelete({
+                                uniqueName: getPlayerName(player, players),
+                                id: player.id,
+                              })
+                            }
+                          >
                             <UserMinus02Icon />
                             {`${getPlayerName(player, players)} entfernen`}
                           </DropdownMenuItem>
@@ -123,27 +135,6 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          {`${getPlayerName(player, players)} entfernen`}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Bist du dir sicher, dass du den Spieler entfernen
-                          möchtest?
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => {
-                            onDeletePlayer(player.id);
-                          }}
-                        >
-                          Spieler entfernen
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
                   </>
                 )}
                 {isAddPlayers && (
@@ -180,6 +171,26 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
               Diese Mannschaft hat keine Spieler
             </Typography>
           )}
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                {`${playerToDelete?.uniqueName} entfernen`}
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Bist du dir sicher, dass du den Spieler entfernen möchtest?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  onDeletePlayer(playerToDelete?.id || "");
+                }}
+              >
+                Spieler entfernen
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
         </TableBody>
       </Table>
     </AlertDialog>
