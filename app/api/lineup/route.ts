@@ -49,7 +49,7 @@ export async function PUT(request: NextRequest) {
     return new Response(INVALID_TOKEN_ERROR, { status: 401 });
   }
 
-  const result = await prisma
+  const transactionResult = await prisma
     .$transaction(async (tx) => {
       const uniquePlayerIds = new Set(playerIds);
       if (uniquePlayerIds.size !== playerIds.length) {
@@ -100,8 +100,8 @@ export async function PUT(request: NextRequest) {
       return new Response(UNKNOWN_ERROR, { status: 500 });
     });
 
-  if (result instanceof Response) {
-    return result;
+  if (transactionResult instanceof Response) {
+    return transactionResult;
   }
 
   revalidatePaths([

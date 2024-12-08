@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     return new Response(INVALID_TOKEN_ERROR, { status: 401 });
   }
 
-  await prisma
+  const transactionResult = await prisma
     .$transaction(async (tx) => {
       const team = await tx.team.findUnique({
         where: {
@@ -108,6 +108,10 @@ export async function POST(request: NextRequest) {
     .catch(() => {
       return new Response(UNKNOWN_ERROR, { status: 500 });
     });
+  if (transactionResult instanceof Response) {
+    return transactionResult;
+  }
+
   const allMatches = await prisma.match.findMany({
     where: {
       team: {

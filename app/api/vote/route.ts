@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  const response = await prisma
+  const transactionResult = await prisma
     .$transaction(async (tx) => {
       // @ts-expect-error zod validation ensures that club is defined
       for (const vote of club?.teams[0]?.players[0]?.matchAvailabilityVotes) {
@@ -91,13 +91,15 @@ export async function POST(request: NextRequest) {
       });
     });
 
-  if (typeof response === "string") {
+  if (typeof transactionResult === "string") {
     revalidatePaths([
       `/${clubSlug}/${teamSlug}`,
       `/${clubSlug}/${teamSlug}/spiel/aufstellung/verwalten/${matchId}`,
     ]);
-    return new Response(JSON.stringify({ data: response }), { status: 200 });
+    return new Response(JSON.stringify({ data: transactionResult }), {
+      status: 200,
+    });
   } else {
-    return response;
+    return transactionResult;
   }
 }

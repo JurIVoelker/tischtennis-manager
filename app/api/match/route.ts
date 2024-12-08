@@ -57,7 +57,7 @@ export async function PUT(request: NextRequest) {
 
   const matchDateTime = new Date(stringDate);
 
-  await prisma
+  const transactionResult = await prisma
     .$transaction(async (tx) => {
       matchDateTime.setHours(time.hour - 1, time.minute, time.second);
       matchDateTime.setDate(matchDateTime.getDate() + 1);
@@ -89,6 +89,9 @@ export async function PUT(request: NextRequest) {
     .catch(() => {
       return new Response(UNKNOWN_ERROR, { status: 500 });
     });
+  if (transactionResult instanceof Response) {
+    return transactionResult;
+  }
   revalidatePaths([
     `/${clubSlug}/${teamSlug}`,
     `/${clubSlug}/${teamSlug}/spiel/anpassen/${matchId}`,
@@ -143,7 +146,7 @@ export async function POST(request: NextRequest) {
 
   const matchDateTime = new Date(stringDate);
 
-  await prisma
+  const transactionResult = await prisma
     .$transaction(async (tx) => {
       matchDateTime.setHours(time.hour - 1, time.minute, time.second);
       matchDateTime.setDate(matchDateTime.getDate() + 1);
@@ -179,6 +182,10 @@ export async function POST(request: NextRequest) {
     .catch(() => {
       return new Response(UNKNOWN_ERROR, { status: 500 });
     });
+  if (transactionResult instanceof Response) {
+    return transactionResult;
+  }
+
   revalidatePaths([`/${clubSlug}/${teamSlug}`]);
   return new Response("success", { status: 200 });
 }
