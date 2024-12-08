@@ -1,0 +1,183 @@
+import { INVALID_TOKEN_ERROR, UNKNOWN_ERROR } from "@/constants/APIError";
+import {
+  API_DELETE_PLAYER_SCHEMA,
+  validateSchema,
+} from "@/constants/zodSchemaConstants";
+import { getLeaderData, handleGetBody } from "@/lib/APIUtils";
+import { prisma } from "@/lib/prisma/prisma";
+import { revalidatePaths } from "@/lib/revalidateUtils";
+import { getToken } from "next-auth/jwt";
+import { NextRequest } from "next/server";
+
+export async function DELETE(request: NextRequest) {
+  const {
+    success: isBodySuccess,
+    body,
+    responseReturnValue: invalidBodyResponse,
+  } = await handleGetBody(request);
+  if (!isBodySuccess) return invalidBodyResponse;
+
+  const {
+    success: isSchemaSuccess,
+    responseReturnValue: invalidSchemaResponse,
+  } = await validateSchema(API_DELETE_PLAYER_SCHEMA, body || {});
+
+  if (!isSchemaSuccess) {
+    return invalidSchemaResponse;
+  }
+
+  const {
+    clubSlug,
+    teamSlug,
+    playerId,
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any = body;
+
+  const loggedinUserData = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const { email } = loggedinUserData || {};
+  let isTeamLeader = false;
+  if (email) {
+    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
+      .isTeamLeader;
+  }
+
+  if (!isTeamLeader) {
+    return new Response(INVALID_TOKEN_ERROR, { status: 401 });
+  }
+
+  const transactionResult = await prisma
+    .$transaction(async (tx) => {
+      const team = await tx.team.findUnique({
+        where: {
+          slug: teamSlug,
+          club: {
+            slug: clubSlug,
+          },
+        },
+        include: {
+          players: true,
+          teamPosition: {
+            where: {
+              playerId: playerId,
+            },
+          },
+        },
+      });
+
+      if (!team?.id) throw new Error("Team not found");
+      if (!team.players.some((p) => p.id === playerId)) {
+        throw new Error("Player is not part of team");
+      }
+
+      const player = await tx.player.findUnique({
+        where: {
+          id: playerId,
+        },
+        include: {
+          teamPosition: true,
+        },
+      });
+
+      const lineups = await tx.lineup.findMany({
+        where: {
+          player: {
+            id: playerId,
+          },
+        },
+      });
+
+      if (
+        Array.isArray(player?.teamPosition) &&
+        player?.teamPosition.length >= 1
+      ) {
+        const teamPosition = player.teamPosition[0].id;
+        await tx.playerTeamPosition.delete({
+          where: {
+            id: teamPosition,
+          },
+        });
+      }
+
+      for (const lineup of lineups) {
+        await tx.lineup.delete({
+          where: {
+            id: lineup.id,
+          },
+        });
+      }
+
+      const votes = await tx.matchAvailabilityVote.findMany({
+        where: {
+          player: {
+            id: playerId,
+          },
+        },
+      });
+
+      for (const vote of votes) {
+        await tx.matchAvailabilityVote.delete({
+          where: {
+            id: vote.id,
+          },
+        });
+      }
+
+      await tx.player.delete({
+        where: {
+          id: playerId,
+        },
+      });
+    })
+    .catch((error) => {
+      if (error.message) {
+        return new Response(error.message, { status: 400 });
+      }
+      return new Response(UNKNOWN_ERROR, { status: 500 });
+    });
+  if (transactionResult instanceof Response) {
+    return transactionResult;
+  }
+
+  const allMatches = await prisma.match.findMany({
+    where: {
+      team: {
+        slug: teamSlug,
+        club: {
+          slug: clubSlug,
+        },
+      },
+    },
+  });
+
+  const lineupPaths = allMatches.map(
+    (match) =>
+      `/${clubSlug}/${teamSlug}/spiel/aufstellung/verwalten/${match.id}`
+  );
+
+  const allTeamSlugs = await prisma.team.findMany({
+    where: {
+      club: {
+        slug: clubSlug,
+      },
+    },
+    select: {
+      slug: true,
+    },
+  });
+
+  const addPlayerTeamPaths = allTeamSlugs.map(
+    (team) => `/${clubSlug}/${team.slug}/spieler/hinzufuegen`
+  );
+
+  revalidatePaths([
+    `/${clubSlug}/${teamSlug}`,
+    `/${clubSlug}/${teamSlug}/spieler/sortieren`,
+    `/${clubSlug}/${teamSlug}/spieler/verwalten`,
+    ...addPlayerTeamPaths,
+    ...lineupPaths,
+  ]);
+  return new Response(JSON.stringify({ ok: true }), { status: 200 });
+}

@@ -147,6 +147,12 @@ export const API_PUT_PLAYER_POSITIONS_SCHEMA = z.object({
   playerIds: validatePlayerIds(),
 });
 
+export const API_DELETE_PLAYER_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamSlug: validateTeamSlug(),
+  playerId: validatePlayerId(),
+});
+
 export const API_PUT_LINEUP_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamSlug: validateTeamSlug(),
