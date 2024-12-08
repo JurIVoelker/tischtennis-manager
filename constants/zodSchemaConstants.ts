@@ -153,6 +153,12 @@ export const API_DELETE_PLAYER_SCHEMA = z.object({
   playerId: validatePlayerId(),
 });
 
+export const API_DELETE_MATCH_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamSlug: validateTeamSlug(),
+  matchId: validateMatchId(),
+});
+
 export const API_POST_PLAYER_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamSlug: validateTeamSlug(),

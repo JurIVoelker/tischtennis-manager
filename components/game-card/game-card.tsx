@@ -25,7 +25,7 @@ const GameCard: React.FC<GameCardProps> = async ({
 }) => {
   return (
     <Card className="p-6 space-y-6">
-      <GameCardHeader match={match} teamSlug={teamSlug} />
+      <GameCardHeader match={match} teamSlug={teamSlug} clubSlug={clubSlug} />
       <GameCardBody match={match} teamSlug={teamSlug} />
       {!isLineup && (
         <AvailabiltyButtons

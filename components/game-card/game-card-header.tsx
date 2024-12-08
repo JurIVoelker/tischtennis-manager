@@ -33,15 +33,21 @@ import {
 } from "../ui/alert-dialog";
 import { useState } from "react";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
+import { deleteAPI } from "@/lib/APIUtils";
 
 interface GameCardHeaderProps {
   match: MatchWithLineupAndLocation;
   teamSlug: string;
+  clubSlug: string;
 }
 
-const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
+const GameCardHeader: React.FC<GameCardHeaderProps> = ({
+  match,
+  teamSlug,
+  clubSlug,
+}) => {
   const isGameCardOptionsVisible = useIsPermitted("view:game-card-options");
-  const { push } = useRouter();
+  const { push, refresh } = useRouter();
   const [matchToDelete, setMatchToDelete] = useState<{
     name: string;
     id: string;
@@ -87,6 +93,17 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({ match, teamSlug }) => {
 
   const onDeleteMatch = async () => {
     if (!matchToDelete) setUnknownErrorToastMessage();
+    const res = await deleteAPI("/api/match", {
+      matchId: matchToDelete?.id,
+      clubSlug,
+      teamSlug,
+    });
+    if (!res.ok) {
+      setUnknownErrorToastMessage();
+    } else {
+      refresh();
+      toast({ title: "Spiel erfolgreich gelöscht" });
+    }
   };
 
   const dropdownOptions = [

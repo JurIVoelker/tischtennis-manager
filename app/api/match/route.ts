@@ -1,5 +1,6 @@
 import { INVALID_TOKEN_ERROR, UNKNOWN_ERROR } from "@/constants/APIError";
 import {
+  API_DELETE_MATCH_SCHEMA,
   API_POST_GAME_DATA_SCHEMA,
   API_PUT_GAME_DATA_SCHEMA,
   validateSchema,
@@ -188,4 +189,99 @@ export async function POST(request: NextRequest) {
 
   revalidatePaths([`/${clubSlug}/${teamSlug}`]);
   return new Response("success", { status: 200 });
+}
+
+export async function DELETE(request: NextRequest) {
+  const {
+    success: isBodySuccess,
+    body,
+    responseReturnValue: invalidBodyResponse,
+  } = await handleGetBody(request);
+  if (!isBodySuccess) return invalidBodyResponse;
+
+  const {
+    success: isSchemaSuccess,
+    responseReturnValue: invalidSchemaResponse,
+  } = await validateSchema(API_DELETE_MATCH_SCHEMA, body || {});
+
+  if (!isSchemaSuccess) {
+    return invalidSchemaResponse;
+  }
+
+  const {
+    clubSlug,
+    teamSlug,
+    matchId,
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any = body;
+
+  const loggedinUserData = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const { email } = loggedinUserData || {};
+  let isTeamLeader = false;
+  if (email) {
+    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
+      .isTeamLeader;
+  }
+
+  if (!isTeamLeader) {
+    return new Response(INVALID_TOKEN_ERROR, { status: 401 });
+  }
+
+  const transactionResult = await prisma
+    .$transaction(async (tx) => {
+      const match = await tx.match.findUnique({
+        where: {
+          id: matchId,
+          AND: {
+            team: {
+              slug: teamSlug,
+              club: {
+                slug: clubSlug,
+              },
+            },
+          },
+        },
+      });
+
+      if (!match?.id) throw new Error("Match not found");
+
+      await tx.location.deleteMany({
+        where: {
+          matchId: matchId,
+        },
+      });
+
+      await tx.lineup.deleteMany({
+        where: {
+          matchId: matchId,
+        },
+      });
+
+      await tx.matchAvailabilityVote.deleteMany({
+        where: {
+          matchId: matchId,
+        },
+      });
+
+      await tx.match.delete({
+        where: {
+          id: matchId,
+        },
+      });
+    })
+    .catch((error) => {
+      if (error.message) {
+        return new Response(error.message, { status: 400 });
+      }
+      return new Response(UNKNOWN_ERROR, { status: 500 });
+    });
+  if (transactionResult instanceof Response) {
+    return transactionResult;
+  }
+
+  revalidatePaths([`/${clubSlug}/${teamSlug}`]);
+  return new Response(JSON.stringify({ ok: true }), { status: 200 });
 }
