@@ -41,7 +41,12 @@ const ManagePlayersPage = async ({
       <Navbar title="Spieler verwalten" />
       <div className="px-6 pb-6 pt-16 ">
         <ManagePlayersHeader clubSlug={clubSlug} teamSlug={teamSlug} />
-        <PlayerTable className="mt-16" players={players} />
+        <PlayerTable
+          className="mt-16"
+          players={players}
+          clubSlug={clubSlug}
+          teamSlug={teamSlug}
+        />
         <Link
           className={cn(buttonVariants({ variant: "outline" }), "w-full mt-6")}
           href="./hinzufuegen"

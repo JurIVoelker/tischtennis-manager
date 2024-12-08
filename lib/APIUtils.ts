@@ -65,7 +65,7 @@ export const fetchAPI = async (url: string, options?: object) => {
 };
 
 const makeRequest = async (
-  method: "POST" | "PUT",
+  method: "POST" | "PUT" | "DELETE",
   url: string,
   body: object,
   options?: object
@@ -108,6 +108,14 @@ export const postAPI = async (url: string, body: object, options?: object) => {
 
 export const putAPI = async (url: string, body: object, options?: object) => {
   return await makeRequest("PUT", url, body, options);
+};
+
+export const deleteAPI = async (
+  url: string,
+  body: object,
+  options?: object
+) => {
+  return await makeRequest("DELETE", url, body, options);
 };
 
 export const handleGetBody = async (

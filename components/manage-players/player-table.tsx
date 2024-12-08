@@ -20,6 +20,20 @@ import {
 } from "../ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { getPlayerName } from "@/lib/stringUtils";
+import { deleteAPI } from "@/lib/APIUtils";
+import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
+import { toast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 interface PlayerTableProps {
   className?: string;
@@ -28,6 +42,8 @@ interface PlayerTableProps {
   isAddPlayers?: boolean;
   handleRemovePlayer?: (id: string) => void;
   handleRemoveCustomPlayer?: (index: number) => void;
+  teamSlug?: string;
+  clubSlug?: string;
 }
 
 export const PlayerTable: React.FC<PlayerTableProps> = ({
@@ -37,88 +53,135 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
   handleRemoveCustomPlayer = () => {},
   customPlayers,
   handleRemovePlayer = () => {},
+  teamSlug,
+  clubSlug,
   ...props
 }) => {
-  const { push } = useRouter();
+  const { push, refresh } = useRouter();
 
   const handleClickOrderPlayers = () => {
     push("./sortieren");
   };
 
+  const onDeletePlayer = async (playerId: string) => {
+    const res = await deleteAPI("/api/player", {
+      clubSlug: clubSlug,
+      teamSlug: teamSlug,
+      playerId: playerId,
+    });
+    if (!res.ok) {
+      setUnknownErrorToastMessage();
+    } else {
+      toast({
+        title: "Spieler entfernt",
+        description: "Der Spieler wurde erfolgreich entfernt.",
+      });
+      refresh();
+    }
+  };
+
   return (
-    <Table className={className} {...props}>
-      <TableHeader>
-        <TableRow>
-          {!isAddPlayers && <TableHead className="w-[100px]">Pos.</TableHead>}
-          <TableHead>Spieler</TableHead>
-          <TableHead></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {players?.map((player, i) => (
-          <TableRow key={player.id}>
-            {!isAddPlayers && (
-              <TableCell className="font-medium">{i + 1}</TableCell>
-            )}
-            <TableCell>{getPlayerName(player, players)}</TableCell>
-            <TableCell className="flex justify-end p-1.5">
-              {!isAddPlayers && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <MoreHorizontal />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="p-2 w-60">
-                    <DropdownMenuItem className="flex items-center gap-2 p-2">
-                      <UserMinus02Icon />
-                      {`${getPlayerName(player, players)} entfernen`}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="flex items-center gap-2 p-2"
-                      onSelect={handleClickOrderPlayers}
-                    >
-                      <Move02Icon />
-                      Position verschieben
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-              {isAddPlayers && (
-                <Button
-                  variant={"destructive"}
-                  size={"icon"}
-                  className="h-8 w-8 mt-1"
-                  onClick={() => handleRemovePlayer(player.id)}
-                >
-                  <Cancel01Icon />
-                </Button>
-              )}
-            </TableCell>
+    <AlertDialog>
+      <Table className={className} {...props}>
+        <TableHeader>
+          <TableRow>
+            {!isAddPlayers && <TableHead className="w-[100px]">Pos.</TableHead>}
+            <TableHead>Spieler</TableHead>
+            <TableHead></TableHead>
           </TableRow>
-        ))}
-        {customPlayers &&
-          customPlayers.map((player, i) => (
-            <TableRow key={i}>
-              <TableCell>{`${player.firstName} ${player.lastName}`}</TableCell>
+        </TableHeader>
+        <TableBody>
+          {players?.map((player, i) => (
+            <TableRow key={player.id}>
+              {!isAddPlayers && (
+                <TableCell className="font-medium">{i + 1}</TableCell>
+              )}
+              <TableCell>{getPlayerName(player, players)}</TableCell>
               <TableCell className="flex justify-end p-1.5">
-                <Button
-                  variant={"destructive"}
-                  size={"icon"}
-                  className="h-8 w-8 mt-1"
-                  onClick={() => handleRemoveCustomPlayer(i)}
-                >
-                  <Cancel01Icon />
-                </Button>
+                {!isAddPlayers && (
+                  <>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon">
+                          <MoreHorizontal />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="p-2 w-60">
+                        <AlertDialogTrigger asChild>
+                          <DropdownMenuItem className="flex items-center gap-2 p-2">
+                            <UserMinus02Icon />
+                            {`${getPlayerName(player, players)} entfernen`}
+                          </DropdownMenuItem>
+                        </AlertDialogTrigger>
+
+                        <DropdownMenuItem
+                          className="flex items-center gap-2 p-2"
+                          onSelect={handleClickOrderPlayers}
+                        >
+                          <Move02Icon />
+                          Position verschieben
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {`${getPlayerName(player, players)} entfernen`}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Bist du dir sicher, dass du den Spieler entfernen
+                          möchtest?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => {
+                            onDeletePlayer(player.id);
+                          }}
+                        >
+                          Spieler entfernen
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </>
+                )}
+                {isAddPlayers && (
+                  <Button
+                    variant={"destructive"}
+                    size={"icon"}
+                    className="h-8 w-8 mt-1"
+                    onClick={() => handleRemovePlayer(player.id)}
+                  >
+                    <Cancel01Icon />
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}
-        {!players && (
-          <Typography variant="p-gray">
-            Diese Mannschaft hat keine Spieler
-          </Typography>
-        )}
-      </TableBody>
-    </Table>
+          {customPlayers &&
+            customPlayers.map((player, i) => (
+              <TableRow key={i}>
+                <TableCell>{`${player.firstName} ${player.lastName}`}</TableCell>
+                <TableCell className="flex justify-end p-1.5">
+                  <Button
+                    variant={"destructive"}
+                    size={"icon"}
+                    className="h-8 w-8 mt-1"
+                    onClick={() => handleRemoveCustomPlayer(i)}
+                  >
+                    <Cancel01Icon />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          {!players && (
+            <Typography variant="p-gray">
+              Diese Mannschaft hat keine Spieler
+            </Typography>
+          )}
+        </TableBody>
+      </Table>
+    </AlertDialog>
   );
 };
