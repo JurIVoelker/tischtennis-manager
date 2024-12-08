@@ -48,7 +48,7 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="w-full" variant="outline">
+        <Button className="w-full mb-6" variant="outline">
           {isExchangePlayers
             ? "Ersatzspieler hinzufügen"
             : "Bestehenden Spieler hinzufügen"}

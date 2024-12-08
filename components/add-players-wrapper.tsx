@@ -12,14 +12,24 @@ import { Cancel01Icon, Tick01Icon } from "hugeicons-react";
 import { Button, buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Card } from "./ui/card";
+import { postAPI } from "@/lib/APIUtils";
+import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
+import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 interface AddPlayersWrapperProps {
   teams: TeamWithPlayers[];
+  clubSlug: string;
+  teamSlug: string;
 }
 
-const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({ teams }) => {
+const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({
+  teams,
+  clubSlug,
+  teamSlug,
+}) => {
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>([]);
-
+  const { push } = useRouter();
   const [customPlayers, setCustomPlayers] = useState<
     { firstName: string; lastName: string }[]
   >([]);
@@ -60,6 +70,29 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({ teams }) => {
     setSelectedPlayerIds((prev) => prev.filter((playerId) => playerId !== id));
   };
 
+  const onSave = async () => {
+    const postPromises = selectedPlayers.map((player) =>
+      postAPI("/api/player", {
+        clubSlug,
+        teamSlug,
+        firstName: player.firstName,
+        lastName: player.lastName,
+      })
+    );
+    postPromises.push(
+      ...customPlayers.map((player) =>
+        postAPI("/api/player", { ...player, clubSlug, teamSlug })
+      )
+    );
+    const res = await Promise.all(postPromises);
+    if (!res.every((r) => r.ok)) {
+      setUnknownErrorToastMessage();
+    } else {
+      toast({ title: "Spieler erfolgreich hinzugefügt" });
+      push("./verwalten?refresh=true");
+    }
+  };
+
   return (
     <>
       <Card className="p-4 mb-6">
@@ -91,9 +124,9 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({ teams }) => {
           Abbrechen
         </Link>
         <Button
-          type="submit"
           className="w-full"
           disabled={!(selectedPlayers.length > 0 || customPlayers.length > 0)}
+          onClick={onSave}
         >
           <Tick01Icon />
           Speichern
