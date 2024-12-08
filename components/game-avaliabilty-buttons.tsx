@@ -70,7 +70,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     { name: "Nein", variant: "negative" },
   ];
 
-  const handleSelctOption = async (option: optionsType) => {
+  const handleSelectOption = async (option: optionsType) => {
     setSelectedAvailabilty(option);
     const vote =
       option === "Ja"
@@ -86,7 +86,6 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
       matchId,
       playerId: getUserData()[teamSlug]?.id || "",
     });
-
     if ((!res.data && !res.ok) || res?.error) {
       handlePostRequestError(res, [
         {
@@ -119,7 +118,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
             variant={
               selectedAvailabilty === option.name ? option.variant : "outline"
             }
-            onClick={() => handleSelctOption(option.name)}
+            onClick={() => handleSelectOption(option.name)}
           >
             {option.name}
           </Button>
