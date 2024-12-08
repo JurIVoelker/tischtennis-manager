@@ -80,6 +80,9 @@ const ManageLineup = async ({
           teamName={match?.team.name || ""}
           mainPlayers={orderedPlayers}
           disabledPlayerIds={disabledPlayerIds}
+          clubSlug={club?.slug || ""}
+          teamSlug={match?.team.slug || ""}
+          matchId={matchId}
         />
       </div>
     </div>
