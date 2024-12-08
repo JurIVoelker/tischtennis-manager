@@ -4,6 +4,7 @@ import {
   validateSchema,
 } from "@/constants/zodSchemaConstants";
 import { getLeaderData, handleGetBody } from "@/lib/APIUtils";
+import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
 import { getToken } from "next-auth/jwt";
@@ -95,6 +96,7 @@ export async function PUT(request: NextRequest) {
     })
     .catch((error) => {
       if (error.message) {
+        asyncLog("error", `Error while putting lineup: ${error?.message}`);
         return new Response(error.message, { status: 400 });
       }
       return new Response(UNKNOWN_ERROR, { status: 500 });

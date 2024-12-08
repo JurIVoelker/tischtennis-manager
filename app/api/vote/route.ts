@@ -4,6 +4,7 @@ import {
   validateSchema,
 } from "@/constants/zodSchemaConstants";
 import { handleGetBody, hasLeaderPermission } from "@/lib/APIUtils";
+import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
 import { NextRequest } from "next/server";
@@ -85,7 +86,11 @@ export async function POST(request: NextRequest) {
 
       return res?.availability || "unknown";
     })
-    .catch(() => {
+    .catch((error) => {
+      asyncLog(
+        "error",
+        `Error while creating match availability vote: ${error?.message}`
+      );
       return new Response(JSON.stringify([{ message: UNKNOWN_ERROR }]), {
         status: 500,
       });

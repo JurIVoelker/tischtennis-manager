@@ -4,6 +4,7 @@ import {
   validateSchema,
 } from "@/constants/zodSchemaConstants";
 import { getLeaderData, handleGetBody } from "@/lib/APIUtils";
+import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
 import { getToken } from "next-auth/jwt";
@@ -105,7 +106,13 @@ export async function POST(request: NextRequest) {
         });
       }
     })
-    .catch(() => {
+    .catch((error) => {
+      if (error.message) {
+        asyncLog(
+          "error",
+          `Error while creating player position: ${error?.message}`
+        );
+      }
       return new Response(UNKNOWN_ERROR, { status: 500 });
     });
   if (transactionResult instanceof Response) {
