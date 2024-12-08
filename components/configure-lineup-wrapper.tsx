@@ -18,6 +18,10 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Cancel01Icon, HelpCircleIcon, Tick01Icon } from "hugeicons-react";
 import AvailabilityColorsLegend from "./availibility-colors-legend";
+import { putAPI } from "@/lib/APIUtils";
+import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface ConfigureLineupWrapperProps {
   mainPlayers: Player[];
@@ -26,6 +30,9 @@ interface ConfigureLineupWrapperProps {
   teamName: string;
   matchAvailablilityVotes: MatchAvailabilityVote[];
   defaultLineup: LineupWithPlayers[];
+  clubSlug: string;
+  teamSlug: string;
+  matchId: string;
 }
 
 const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
@@ -35,7 +42,11 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
   allTeams,
   matchAvailablilityVotes,
   defaultLineup = [],
+  clubSlug,
+  teamSlug,
+  matchId,
 }) => {
+  const { push } = useRouter();
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>(
     defaultLineup.map((lineup) => lineup.player)
   );
@@ -78,6 +89,21 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
     setSelectedPlayers((prev: Player[]) =>
       prev.filter((player: Player) => player.id !== id)
     );
+  };
+
+  const onSave = async () => {
+    const res = await putAPI("/api/lineup", {
+      playerIds: selectedPlayers.map((player) => player.id),
+      matchId,
+      clubSlug,
+      teamSlug,
+    });
+    if (!res.ok) {
+      setUnknownErrorToastMessage();
+    } else {
+      toast({ title: "Aufstellung gespeichert" });
+      push("../../../?refresh=true");
+    }
   };
 
   return (
@@ -164,7 +190,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
           <Cancel01Icon />
           Abbrechen
         </Link>
-        <Button type="submit" className="w-full">
+        <Button className="w-full" onClick={onSave}>
           <Tick01Icon />
           Speichern
         </Button>

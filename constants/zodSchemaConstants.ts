@@ -146,3 +146,10 @@ export const API_PUT_PLAYER_POSITIONS_SCHEMA = z.object({
   teamSlug: validateTeamSlug(),
   playerIds: validatePlayerIds(),
 });
+
+export const API_PUT_LINEUP_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamSlug: validateTeamSlug(),
+  playerIds: validatePlayerIds(),
+  matchId: validateMatchId(),
+});
