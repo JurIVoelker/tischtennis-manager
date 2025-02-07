@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ChangeEmailModal } from "./popups/change-leader-mail-modal";
+import { ChangeUserDetailsModal } from "./popups/change-leader-mail-modal";
 import { useState } from "react";
 
 interface TeamLeaderCardProps {
@@ -23,10 +23,12 @@ interface TeamLeaderCardProps {
   id: string;
   variant?: "joined" | "pending" | "timeout";
   clubSlug: string;
+  name: string;
 }
 
 const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
   email,
+  name,
   className,
   clubSlug,
   variant = "joined",
@@ -34,10 +36,12 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
   ...props
 }) => {
   const [emailState, setEmailState] = useState(email);
+  const [nameState, setNameState] = useState(name);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleEmailChange = (newEmail: string) => {
+  const onChange = (newEmail: string, newName: string) => {
     setEmailState(newEmail);
+    setNameState(newName);
     setIsModalOpen(false);
   };
 
@@ -58,7 +62,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
             variant="p"
             className="leading-0 shrink text-ellipsis overflow-hidden"
           >
-            Juri Völker
+            {name}
           </Typography>
           <Typography
             variant="muted"
@@ -95,13 +99,12 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-60 p-2">
-              {/* <DropdownMenuItem>Umbenennen</DropdownMenuItem> */}
               <DropdownMenuItem
                 onClick={() => {
                   setIsModalOpen(true);
                 }}
               >
-                E-Mail-Adresse ändern
+                Daten ändern
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive">
@@ -111,10 +114,11 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
           </DropdownMenu>
         )}
       </div>
-      <ChangeEmailModal
+      <ChangeUserDetailsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onEmailChange={handleEmailChange}
+        onDetailsChange={onChange}
+        currentName={nameState}
         currentEmail={emailState}
         clubSlug={clubSlug}
         id={id}

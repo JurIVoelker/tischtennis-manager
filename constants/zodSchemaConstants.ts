@@ -187,5 +187,6 @@ export const API_PUT_LINEUP_SCHEMA = z.object({
 export const API_PUT_LEADER_EMAIL_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   leaderId: validateLeaderId(),
-  email: z.string().email(),
+  email: z.string().email().nullable(),
+  name: z.string().nullable(),
 });

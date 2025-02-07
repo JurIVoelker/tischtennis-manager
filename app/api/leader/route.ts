@@ -27,6 +27,7 @@ export async function PUT(request: NextRequest) {
   const {
     leaderId,
     email,
+    name,
     clubSlug,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
@@ -46,9 +47,20 @@ export async function PUT(request: NextRequest) {
   //   return new Response(INVALID_TOKEN_ERROR, { status: 401 });
   // }
 
-  await prisma.teamLeader.update({
-    where: { id: leaderId },
-    data: { email },
+  await prisma.$transaction(async (tx) => {
+    if (email) {
+      await tx.teamLeader.update({
+        where: { id: leaderId },
+        data: { email },
+      });
+    }
+    console.log(name);
+    if (name) {
+      await tx.teamLeader.update({
+        where: { id: leaderId },
+        data: { fullName: name },
+      });
+    }
   });
 
   revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);

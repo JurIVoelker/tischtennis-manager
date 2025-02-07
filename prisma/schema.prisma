@@ -58,10 +58,11 @@ model TeamAuth {
 }
 
 model TeamLeader {
-  id     String @id @default(cuid())
-  teamId String
-  email  String
-  team   Team   @relation(fields: [teamId], references: [id])
+  id         String @id @default(cuid())
+  teamId     String
+  email      String
+  fullName   String
+  team       Team @relation(fields: [teamId], references: [id])
 }
 
 model Player {

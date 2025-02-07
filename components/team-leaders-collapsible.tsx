@@ -51,6 +51,7 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
       <CollapsibleContent className="space-y-3">
         {team?.teamLeader.map((teamLeader) => (
           <TeamLeaderCard
+            name={teamLeader.fullName}
             email={teamLeader.email}
             key={teamLeader.id}
             id={teamLeader.id}
