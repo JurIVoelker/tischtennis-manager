@@ -6,6 +6,10 @@ export interface ClubTeamParams {
   team: string;
 }
 
+export interface ClubParams {
+  club: string;
+}
+
 export interface MatchPageParams {
   matchId: string;
   club: string;
@@ -19,6 +23,12 @@ export async function decodeClubTeamParams(
   const clubSlug = decodeURIComponent(params.club);
   const teamSlug = decodeURIComponent(params.team);
   return { clubSlug, teamSlug };
+}
+
+export async function decodeClubParams(paramsPromise: Promise<ClubParams>) {
+  const params = await paramsPromise;
+  const clubSlug = decodeURIComponent(params.club);
+  return { clubSlug };
 }
 
 export async function generateTeamPageParams() {
@@ -36,6 +46,19 @@ export async function generateTeamPageParams() {
         club: slugify(club.slug),
         team: slugify(team.slug),
       });
+    });
+  });
+  return paths;
+}
+
+export async function generateClubParams() {
+  const clubs = await prisma.club.findMany();
+
+  const paths: ClubParams[] = [];
+
+  clubs.forEach((club) => {
+    paths.push({
+      club: slugify(club.slug),
     });
   });
   return paths;

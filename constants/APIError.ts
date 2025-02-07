@@ -1,4 +1,5 @@
 export const PLAYER_NOT_FOUND_ERROR = "Spieler nicht gefunden";
+export const LEADER_NOT_FOUND_ERROR = "Mannschaftsführer nicht gefunden";
 export const MATCH_NOT_FOUND_ERROR = "Spiel nicht gefunden";
 export const CLUB_NOT_FOUND_ERROR = "Verein nicht gefunden";
 export const INVALID_TOKEN_ERROR = "Authentifizierung fehlgeschlagen";

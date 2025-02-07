@@ -6,6 +6,7 @@ import {
   MatchAvailabilityVote,
   Player,
   Team,
+  TeamLeader,
 } from "@prisma/client";
 
 export type LineupWithPlayers = Lineup & {
@@ -37,6 +38,10 @@ export type TeamWithPlayers = Team & {
 
 export type TeamWithMatches = Team & {
   matches: MatchWithLineupAndLocation[];
+};
+
+export type TeamWithTeamLeaders = Team & {
+  teamLeader: TeamLeader[];
 };
 
 export type ClubWithTeams =
