@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ChangeUserDetailsModal } from "./popups/change-leader-mail-modal";
+import { ChangeLeaderDetailsModal } from "./popups/change-leader-mail-modal";
 import { useState } from "react";
 
 interface TeamLeaderCardProps {
@@ -114,7 +114,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
           </DropdownMenu>
         )}
       </div>
-      <ChangeUserDetailsModal
+      <ChangeLeaderDetailsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onDetailsChange={onChange}

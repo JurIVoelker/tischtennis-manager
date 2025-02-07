@@ -24,7 +24,7 @@ interface ChangeUserDetailsModalProps {
   clubSlug: string;
 }
 
-export function ChangeUserDetailsModal({
+export function ChangeLeaderDetailsModal({
   isOpen,
   onClose,
   id,
