@@ -1,4 +1,5 @@
 import {
+  API_DELETE_LEADER_SCHEMA,
   API_PUT_LEADER_EMAIL_SCHEMA,
   validateSchema,
 } from "@/constants/zodSchemaConstants";
@@ -63,6 +64,35 @@ export async function PUT(request: NextRequest) {
     }
   });
 
+  revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);
+
+  return new Response(JSON.stringify({ ok: true }), { status: 200 });
+}
+
+export async function DELETE(request: NextRequest) {
+  const {
+    success: isBodySuccess,
+    body,
+    responseReturnValue: invalidBodyResponse,
+  } = await handleGetBody(request);
+  if (!isBodySuccess) return invalidBodyResponse;
+
+  const {
+    success: isSchemaSuccess,
+    responseReturnValue: invalidSchemaResponse,
+  } = await validateSchema(API_DELETE_LEADER_SCHEMA, body || {});
+
+  if (!isSchemaSuccess) {
+    return invalidSchemaResponse;
+  }
+
+  const {
+    leaderId,
+    clubSlug,
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any = body;
+
+  await prisma.teamLeader.delete({ where: { id: leaderId } });
   revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });

@@ -14,8 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ChangeLeaderDetailsModal } from "./popups/change-leader-mail-modal";
+import { ChangeLeaderDetailsModal } from "./popups/change-leader-details-modal";
 import { useState } from "react";
+import { DeleteLeaderDialog } from "./popups/delete-leader-modal";
 
 interface TeamLeaderCardProps {
   email: string;
@@ -37,12 +38,13 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
 }) => {
   const [emailState, setEmailState] = useState(email);
   const [nameState, setNameState] = useState(name);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChangeDetailsModalOpen, setChangeDetailsModalOpen] = useState(false);
+  const [isDeleteLeaderDialogOpen, setDeleteLeaderDialogOpen] = useState(false);
 
   const onChange = (newEmail: string, newName: string) => {
     setEmailState(newEmail);
     setNameState(newName);
-    setIsModalOpen(false);
+    setChangeDetailsModalOpen(false);
   };
 
   return (
@@ -101,13 +103,17 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
             <DropdownMenuContent className="w-60 p-2">
               <DropdownMenuItem
                 onClick={() => {
-                  setIsModalOpen(true);
+                  setChangeDetailsModalOpen(true);
                 }}
               >
                 Daten ändern
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+
+              <DropdownMenuItem
+                className="text-destructive"
+                onClick={() => setDeleteLeaderDialogOpen(true)}
+              >
                 Entfernen
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -115,13 +121,20 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
         )}
       </div>
       <ChangeLeaderDetailsModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isChangeDetailsModalOpen}
+        onClose={() => setChangeDetailsModalOpen(false)}
         onDetailsChange={onChange}
         currentName={nameState}
         currentEmail={emailState}
         clubSlug={clubSlug}
         id={id}
+      />
+      <DeleteLeaderDialog
+        open={isDeleteLeaderDialogOpen}
+        leaderName={name}
+        leaderId={id}
+        clubSlug={clubSlug}
+        onOpenChange={(bool) => setDeleteLeaderDialogOpen(bool)}
       />
     </Card>
   );

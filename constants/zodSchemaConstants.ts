@@ -190,3 +190,8 @@ export const API_PUT_LEADER_EMAIL_SCHEMA = z.object({
   email: z.string().email().nullable(),
   name: z.string().nullable(),
 });
+
+export const API_DELETE_LEADER_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  leaderId: validateLeaderId(),
+});
