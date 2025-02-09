@@ -11,6 +11,7 @@ import { Card } from "./ui/card";
 import { useState } from "react";
 import TeamLeaderCard from "./team-leader-card";
 import Typography from "./typography";
+import InviteLeaderModal from "./popups/invite-leader-modal";
 
 interface TeamLeadersCollapsibleProps {
   team: TeamWithTeamLeaders;
@@ -58,10 +59,12 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
             clubSlug={clubSlug}
           />
         ))}
-        <Button variant="outline" className="w-full">
-          <PlusSignIcon />
-          Hinzufügen
-        </Button>
+        <InviteLeaderModal teamName={team.name}>
+          <Button variant="outline" className="w-full">
+            <PlusSignIcon />
+            Hinzufügen
+          </Button>
+        </InviteLeaderModal>
       </CollapsibleContent>
     </Collapsible>
   );
