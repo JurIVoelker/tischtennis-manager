@@ -186,8 +186,9 @@ export default function InviteLeaderModal({
             </div>
           )}
           {step === 2 && (
-            <div className="py-12 flex justify-center items-center">
-              <Loader2 className="animate-spin" size={32} />
+            <div className="py-12 flex justify-center items-center gap-2">
+              <Loader2 className="animate-spin" size={24} />
+              Generiere Einladungslink...
             </div>
           )}
           {step === 3 && (
