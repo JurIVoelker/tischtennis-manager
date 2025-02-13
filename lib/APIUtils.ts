@@ -14,7 +14,7 @@ export const getValidToken = async (
   let tokenData;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   try {
-    const res = await fetchAPI(`${baseUrl}/api/protected/team-auth`, {
+    const res = await getAPI(`${baseUrl}/api/protected/team-auth`, {
       clubSlug,
       teamSlug,
     });
@@ -48,7 +48,7 @@ export const getLeaderData = async (
   return res?.data;
 };
 
-export const fetchAPI = async (url: string, options?: object) => {
+export const getAPI = async (url: string, options?: object) => {
   const isLogging = process.env.NODE_ENV === "development";
   const queryString = options ? qs.stringify(options) : "";
 

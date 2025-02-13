@@ -1,6 +1,6 @@
-import { fetchAPI } from "@/lib/APIUtils";
+import { getAPI } from "@/lib/APIUtils";
 
 export async function getTeams(clubSlug: string) {
-  const response = await fetchAPI(`/api/teams/${clubSlug}`);
+  const response = await getAPI(`/api/teams/${clubSlug}`);
   return response.data;
 }

@@ -1,6 +1,6 @@
 "use client";
 import Typography from "@/components/typography";
-import { fetchAPI } from "@/lib/APIUtils";
+import { getAPI } from "@/lib/APIUtils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ const ValidateLeaderLoggedInPage = () => {
   const { push } = useRouter();
   const verifyToken = async () => {
     try {
-      const response = await fetchAPI("/api/verify-auth");
+      const response = await getAPI("/api/verify-auth");
       const { leaderAt } = response.data || {};
       localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
       push("../../");
