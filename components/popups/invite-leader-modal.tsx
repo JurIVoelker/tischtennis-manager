@@ -30,15 +30,21 @@ import {
 } from "hugeicons-react";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { postAPI } from "@/lib/APIUtils";
+import { useRouter } from "next/navigation";
 
 interface InviteLeaderModalProps {
   teamName: string;
   children: React.ReactNode;
+  clubSlug: string;
+  teamSlug: string;
 }
 
 export default function InviteLeaderModal({
   teamName,
   children,
+  clubSlug,
+  teamSlug,
 }: InviteLeaderModalProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -50,6 +56,8 @@ export default function InviteLeaderModal({
   const [isFormValid, setIsFormValid] = useState(false);
   const [step, setStep] = useState(1);
 
+  const { refresh } = useRouter();
+
   useEffect(() => {
     const isNameValid = name.trim().length > 0;
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -57,16 +65,11 @@ export default function InviteLeaderModal({
     setIsFormValid(isNameValid && isEmailValid && isTimeLimitValid);
   }, [name, email, timeLimit]);
 
-  const onInvite = (
-    name: string,
-    email: string,
-    timeLimit: string,
-    link: string | null
-  ) => {
+  const onInvite = (name: string, email: string, timeLimit: string) => {
     // Simulating API call
     toast({ title: "Einladung senden..." });
     setTimeout(() => {
-      console.log("Invited", { name, email, timeLimit, link });
+      console.log("Invited", { name, email, timeLimit });
       toast({ title: "Einladung erfolgreich per E-Mail versendet" });
     }, 1500);
   };
@@ -74,7 +77,7 @@ export default function InviteLeaderModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      onInvite(name, email, timeLimit, inviteLink);
+      onInvite(name, email, timeLimit);
       resetForm();
     }
   };
@@ -83,28 +86,32 @@ export default function InviteLeaderModal({
     setName("");
     setEmail("");
     setTimeLimit("");
-    setInviteLink(null);
     setIsLinkCopied(false);
     setShowInfiniteWarning(false);
     setStep(1);
     setOpen(isOpen);
   };
 
-  const hashData = (data: string) => {
-    let hash = 0;
-    for (let i = 0; i < data.length; i++) {
-      const char = data.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32-bit integer
-    }
-    return Math.abs(hash).toString(36);
-  };
-
   const generateInviteLink = async () => {
     // Simulating API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    const hashedData = hashData(name + email + timeLimit);
-    setInviteLink(`https://example.com/invite/${hashedData}`);
+    const res = await postAPI("/api/leader/invite-token", {
+      clubSlug,
+      teamSlug,
+      name,
+      email,
+      timeLimit,
+    });
+    let token = "";
+    if (typeof res.data === "object") {
+      //@ts-expect-error parsing causes error
+      token = res.data?.token;
+    }
+    setInviteLink(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL || "localhost:3000"
+      }/${clubSlug}/${teamSlug}/invite?token=${token}`
+    );
+    refresh();
   };
 
   const copyInviteLink = () => {
@@ -215,7 +222,7 @@ export default function InviteLeaderModal({
                 </Button>
               </div>
               <div className="flex justify-between">
-                <Button type="submit">
+                <Button type="submit" disabled>
                   <Mail01Icon className="mr-2 h-4 w-4" />
                   Als E-Mail senden
                 </Button>

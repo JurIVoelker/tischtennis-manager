@@ -18,6 +18,14 @@ const AdminLeaderPage = async ({ params }: { params: Promise<ClubParams> }) => {
     },
     include: {
       teamLeader: true,
+      teamLeaderInvite: {
+        select: {
+          id: true,
+          expiresAt: true,
+          email: true,
+          fullName: true,
+        },
+      },
     },
   });
 

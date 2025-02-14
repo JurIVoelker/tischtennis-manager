@@ -44,6 +44,16 @@ export type TeamWithTeamLeaders = Team & {
   teamLeader: TeamLeader[];
 };
 
+export type TeamWithTeamLeadersAndTeamLeaderInvites = Team & {
+  teamLeader: TeamLeader[];
+  teamLeaderInvite: {
+    id: string;
+    expiresAt: Date;
+    email: string;
+    fullName: string;
+  }[];
+};
+
 export type ClubWithTeams =
   | (Club & {
       teams: TeamWithPlayersAndMatches[];

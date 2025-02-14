@@ -9,3 +9,4 @@ export const BODY_NOT_JSON_ERROR =
   "Fehlerhafte Anfrage: body nicht im JSON-Format";
 export const UNKNOWN_ERROR = "Es ist ein unbekannter Fehler aufgetreten";
 export const TEAM_NOT_FOUND_ERROR = "Team nicht gefunden";
+export const TEAM_LEADER_INVITE_NOT_FOUND_ERROR = "Einladung nicht gefunden";

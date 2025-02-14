@@ -6,7 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { TeamWithTeamLeaders } from "@/types/prismaTypes";
+import { TeamWithTeamLeadersAndTeamLeaderInvites } from "@/types/prismaTypes";
 import { Card } from "./ui/card";
 import { useState } from "react";
 import TeamLeaderCard from "./team-leader-card";
@@ -14,7 +14,7 @@ import Typography from "./typography";
 import InviteLeaderModal from "./popups/invite-leader-modal";
 
 interface TeamLeadersCollapsibleProps {
-  team: TeamWithTeamLeaders;
+  team: TeamWithTeamLeadersAndTeamLeaderInvites;
   clubSlug: string;
 }
 
@@ -59,7 +59,21 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
             clubSlug={clubSlug}
           />
         ))}
-        <InviteLeaderModal teamName={team.name}>
+        {team?.teamLeaderInvite.map((invite) => (
+          <TeamLeaderCard
+            variant={invite.expiresAt < new Date() ? "timeout" : "pending"}
+            name={invite.fullName}
+            email={invite.email}
+            key={invite.id}
+            id={invite.id}
+            clubSlug={clubSlug}
+          />
+        ))}
+        <InviteLeaderModal
+          teamName={team.name}
+          clubSlug={clubSlug}
+          teamSlug={team.slug}
+        >
           <Button variant="outline" className="w-full">
             <PlusSignIcon />
             Hinzufügen

@@ -17,12 +17,8 @@ import {
 import { ChangeLeaderDetailsModal } from "./popups/change-leader-details-modal";
 import { useState } from "react";
 import { DeleteLeaderDialog } from "./popups/delete-leader-modal";
-import { ConfirmModal } from "./popups/confirm-modal";
-import { deleteAPI, putAPI } from "@/lib/APIUtils";
-import { useRouter } from "next/navigation";
-import { toast } from "@/hooks/use-toast";
 
-interface TeamLeaderCardProps {
+interface TeamLeaderInviteCardProps {
   email: string;
   className?: string;
   id: string;
@@ -31,7 +27,7 @@ interface TeamLeaderCardProps {
   name: string;
 }
 
-const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
+const TeamLeaderInviteCard: React.FC<TeamLeaderInviteCardProps> = ({
   email,
   name,
   className,
@@ -44,72 +40,11 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
   const [nameState, setNameState] = useState(name);
   const [isChangeDetailsModalOpen, setChangeDetailsModalOpen] = useState(false);
   const [isDeleteLeaderDialogOpen, setDeleteLeaderDialogOpen] = useState(false);
-  const [confirmModalSettings, setConfirmModalSettings] = useState({
-    open: false,
-    onConfirm: () => {},
-    onClose: () =>
-      setConfirmModalSettings((prev) => ({ ...prev, open: false })),
-    description: "",
-    isDestructive: false,
-    isLoading: false,
-  });
-
-  const router = useRouter();
 
   const onChange = (newEmail: string, newName: string) => {
     setEmailState(newEmail);
     setNameState(newName);
     setChangeDetailsModalOpen(false);
-  };
-
-  const onRevokeInviteModalOpen = () => {
-    setConfirmModalSettings((prev) => ({
-      ...prev,
-      open: true,
-      onConfirm: onRevokeInvite,
-      description: "Möchtest du die Einladung wirklich widerrufen?",
-      isDestructive: true,
-    }));
-  };
-
-  const onRevokeInvite = async () => {
-    setConfirmModalSettings((prev) => ({ ...prev, isLoading: true }));
-    await deleteAPI("/api/leader/invite-token", { id, clubSlug });
-    setConfirmModalSettings((prev) => ({
-      ...prev,
-      open: false,
-      isLoading: false,
-    }));
-    router.refresh();
-  };
-
-  const onRenewInviteModalOpen = () => {
-    setConfirmModalSettings((prev) => ({
-      ...prev,
-      open: true,
-      onConfirm: onRenewInvite,
-      description: "Möchtest du die Einladung wirklich erneuern?",
-      isDestructive: false,
-    }));
-  };
-
-  const onRenewInvite = async () => {
-    setConfirmModalSettings((prev) => ({ ...prev, isLoading: true }));
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 14);
-    const res = await putAPI("/api/leader/invite-token", {
-      id,
-      clubSlug,
-      expiresAt,
-    });
-    console.log(res);
-    setConfirmModalSettings((prev) => ({
-      ...prev,
-      open: false,
-      isLoading: false,
-    }));
-    toast({ title: "Einladung um zwei Wochen erneuert" });
-    router.refresh();
   };
 
   return (
@@ -143,12 +78,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
         {variant === "pending" && (
           <>
             <Badge className="shrink-0">Ausstehend</Badge>
-            <Button
-              variant="ghost"
-              size="icon-lg"
-              className="text-destructive"
-              onClick={onRevokeInviteModalOpen}
-            >
+            <Button variant="ghost" size="icon-lg" className="text-destructive">
               <Cancel01Icon />
             </Button>
           </>
@@ -158,11 +88,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
             <Badge className="shrink-0" variant="secondary">
               Abgelaufen
             </Badge>
-            <Button
-              variant="ghost"
-              size="icon-lg"
-              onClick={onRenewInviteModalOpen}
-            >
+            <Button variant="ghost" size="icon-lg">
               <ArrowReloadHorizontalIcon />
             </Button>
           </>
@@ -210,15 +136,8 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
         clubSlug={clubSlug}
         onOpenChange={(bool) => setDeleteLeaderDialogOpen(bool)}
       />
-      <ConfirmModal
-        isDestructive={confirmModalSettings.isDestructive}
-        isOpen={confirmModalSettings.open}
-        onConfirm={confirmModalSettings.onConfirm}
-        onClose={confirmModalSettings.onClose}
-        description={confirmModalSettings.description}
-        isLoading={confirmModalSettings.isLoading}
-      />
     </Card>
   );
 };
-export default TeamLeaderCard;
+
+export default TeamLeaderInviteCard;
