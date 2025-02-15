@@ -37,6 +37,7 @@ import {
 import { ArrowUp01Icon } from "hugeicons-react";
 import { getUserData, setUserData } from "@/lib/localstorageUtils";
 import { User2Icon } from "lucide-react";
+import Link from "next/link";
 
 export const AppSidebar = ({}) => {
   const { data: session } = useSession();
@@ -176,11 +177,21 @@ export const AppSidebar = ({}) => {
                     <SidebarSeparator className="my-1" />
                   )}
                   {session && (
-                    <DropdownMenuItem onClick={handleSignOut}>
-                      <span className="inline-flex items-center gap-2">
-                        Logout
-                      </span>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem>
+                        <Link
+                          className="inline-flex items-center gap-2"
+                          href={`/${userClub}/admin/mannschaftsfuehrer`}
+                        >
+                          Mannschaften verwalten
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleSignOut}>
+                        <span className="inline-flex items-center gap-2 text-destructive">
+                          Logout
+                        </span>
+                      </DropdownMenuItem>
+                    </>
                   )}
                   {!session && (
                     <>

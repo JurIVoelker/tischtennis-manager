@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { ArrowLeft01Icon, Copy01Icon } from "hugeicons-react";
 import React, { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { fetchAPI } from "@/lib/APIUtils";
+import { getAPI } from "@/lib/APIUtils";
 import { toast } from "@/hooks/use-toast";
 import Typography from "../typography";
 
@@ -36,7 +36,7 @@ const ManagePlayersHeader: React.FC<ManagePlayersHeaderProps> = ({
 
   const fetchInviteToken = async () => {
     try {
-      const data = await fetchAPI("/api/invite-token", { clubSlug, teamSlug });
+      const data = await getAPI("/api/invite-token", { clubSlug, teamSlug });
       const { token } = data || {};
       if (token) setInviteToken(token);
       else {

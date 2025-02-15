@@ -2,11 +2,20 @@ import { prisma } from "@/lib/prisma/prisma";
 import { z } from "zod";
 import {
   CLUB_NOT_FOUND_ERROR,
+  LEADER_NOT_FOUND_ERROR,
   MATCH_NOT_FOUND_ERROR,
   PLAYER_NOT_FOUND_ERROR,
+  TEAM_LEADER_INVITE_NOT_FOUND_ERROR,
   TEAM_NOT_FOUND_ERROR,
 } from "./APIError";
 import { matchAvailablilites } from "@/types/prismaTypes";
+
+export const timeLimitMap: { [key: string]: number } = {
+  "2weeks": 2 * 7 * 24 * 60 * 60 * 1000,
+  "1month": 30 * 24 * 60 * 60 * 1000,
+  "2months": 60 * 24 * 60 * 60 * 1000,
+  infinite: 10 * 365 * 24 * 60 * 60 * 1000, // 10 years
+};
 
 const validateTeamSlug = () =>
   z.string().refine(
@@ -15,6 +24,18 @@ const validateTeamSlug = () =>
     },
     {
       message: TEAM_NOT_FOUND_ERROR,
+    }
+  );
+
+const validateTeamLeaderInvite = () =>
+  z.string().refine(
+    async (id: string) => {
+      return Boolean(
+        await prisma.teamLeaderInvite.findUnique({ where: { id } })
+      );
+    },
+    {
+      message: TEAM_LEADER_INVITE_NOT_FOUND_ERROR,
     }
   );
 
@@ -35,6 +56,26 @@ const validatePlayerId = () =>
     },
     {
       message: PLAYER_NOT_FOUND_ERROR,
+    }
+  );
+
+const validateLeaderId = () =>
+  z.string().refine(
+    async (id: string) => {
+      return Boolean(await prisma.teamLeader.findUnique({ where: { id } }));
+    },
+    {
+      message: LEADER_NOT_FOUND_ERROR,
+    }
+  );
+
+const validateTeamId = () =>
+  z.string().refine(
+    async (id: string) => {
+      return Boolean(await prisma.team.findUnique({ where: { id } }));
+    },
+    {
+      message: TEAM_NOT_FOUND_ERROR,
     }
   );
 
@@ -171,4 +212,47 @@ export const API_PUT_LINEUP_SCHEMA = z.object({
   teamSlug: validateTeamSlug(),
   playerIds: validatePlayerIds(),
   matchId: validateMatchId(),
+});
+
+export const API_PUT_LEADER_EMAIL_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  leaderId: validateLeaderId(),
+  email: z.string().email().nullable(),
+  name: z.string().nullable(),
+});
+
+export const API_DELETE_LEADER_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  leaderId: validateLeaderId(),
+});
+
+export const API_DELETE_TEAM_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamId: validateTeamId(),
+});
+
+export const API_POST_LEADER_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamId: z.string(),
+  email: z.string().email(),
+  fullName: z.string(),
+});
+
+export const API_POST_LEADER_INVITE_TOKEN_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamSlug: validateTeamSlug(),
+  name: z.string(),
+  email: z.string().email(),
+  timeLimit: z.enum(Object.keys(timeLimitMap) as [string, ...string[]]),
+});
+
+export const API_DELETE_LEADER_INVITE_TOKEN_SCHEMA = z.object({
+  id: validateTeamLeaderInvite(),
+  clubSlug: validateClubSlug(),
+});
+
+export const API_PUT_LEADER_INVITE_TOKEN_SCHEMA = z.object({
+  id: validateTeamLeaderInvite(),
+  expiresAt: z.string(),
+  clubSlug: validateClubSlug(),
 });

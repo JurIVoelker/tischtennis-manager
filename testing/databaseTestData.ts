@@ -49,6 +49,7 @@ const addTeamLeader = async (teamId: string) => {
     data: {
       teamId,
       email: "jurivoelker03@gmail.com",
+      fullName: "Juri Völker",
     },
   });
 };

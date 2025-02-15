@@ -15,7 +15,7 @@ const Refresher = () => {
       refresh();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params, refresh, window.location.href]);
+  }, [params, refresh]);
   return <></>;
 };
 

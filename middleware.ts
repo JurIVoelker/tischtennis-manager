@@ -11,7 +11,6 @@ import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants"
 import { LOGIN_PAGE_REGEX } from "./constants/regex";
 import { isIgnoredMiddlewarePath } from "./lib/routeUtils";
 import { getToken } from "next-auth/jwt";
-import axios from "axios";
 
 export async function middleware(request: NextRequest) {
   const urlPath = request.url.replace(/^https?:\/\/[^/]+/, "");
@@ -78,7 +77,7 @@ export async function middleware(request: NextRequest) {
   if (
     !LOGIN_PAGE_REGEX.test(urlPath) &&
     Array.isArray(allUserTokens) &&
-    allUserTokens.some((userToken) => allTokens.includes(userToken))
+    allUserTokens.some((userToken) => allTokens?.includes(userToken))
   ) {
     return NextResponse.next();
   } else if (LOGIN_PAGE_REGEX.test(urlPath) && token === pageUserToken) {
