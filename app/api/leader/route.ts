@@ -65,7 +65,7 @@ export async function PUT(request: NextRequest) {
     }
   });
 
-  revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);
+  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 }
@@ -94,7 +94,7 @@ export async function DELETE(request: NextRequest) {
   any = body;
 
   await prisma.teamLeader.delete({ where: { id: leaderId } });
-  revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);
+  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 }
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
   any = body;
 
   await prisma.teamLeader.create({ data: { email, fullName, teamId } });
-  revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);
+  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 }

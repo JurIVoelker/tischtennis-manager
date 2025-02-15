@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);
+  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
   return new Response(JSON.stringify({ ok: true, token: inviteToken }), {
     status: 200,
@@ -110,7 +110,7 @@ export async function DELETE(request: NextRequest) {
     },
   });
 
-  revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);
+  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
@@ -150,7 +150,7 @@ export async function PUT(request: NextRequest) {
     },
   });
 
-  revalidatePath(`${clubSlug}/admin/mannschaftsfuehrer`);
+  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
