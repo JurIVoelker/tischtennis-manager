@@ -216,6 +216,13 @@ export const API_DELETE_LEADER_SCHEMA = z.object({
   leaderId: validateLeaderId(),
 });
 
+export const API_POST_LEADER_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamId: z.string(),
+  email: z.string().email(),
+  fullName: z.string(),
+});
+
 export const API_POST_LEADER_INVITE_TOKEN_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamSlug: validateTeamSlug(),
