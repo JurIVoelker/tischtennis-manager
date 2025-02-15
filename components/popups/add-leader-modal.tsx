@@ -51,7 +51,7 @@ export default function AddLeaderModal({
     const res = await postAPI("/api/leader", {
       teamId,
       fullName: name,
-      email,
+      email: email.toLowerCase().trim(),
       clubSlug,
     });
     setLoading(false);
