@@ -69,6 +69,16 @@ const validateLeaderId = () =>
     }
   );
 
+const validateTeamId = () =>
+  z.string().refine(
+    async (id: string) => {
+      return Boolean(await prisma.team.findUnique({ where: { id } }));
+    },
+    {
+      message: TEAM_NOT_FOUND_ERROR,
+    }
+  );
+
 const validatePlayerIds = () =>
   z
     .string()
@@ -214,6 +224,11 @@ export const API_PUT_LEADER_EMAIL_SCHEMA = z.object({
 export const API_DELETE_LEADER_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   leaderId: validateLeaderId(),
+});
+
+export const API_DELETE_TEAM_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamId: validateTeamId(),
 });
 
 export const API_POST_LEADER_SCHEMA = z.object({

@@ -12,6 +12,7 @@ import { useState } from "react";
 import TeamLeaderCard from "./team-leader-card";
 import Typography from "./typography";
 import AddLeaderModal from "./popups/add-leader-modal";
+import { DeleteTeamDialog } from "./popups/delete-team-modal";
 
 interface TeamLeadersCollapsibleProps {
   team: TeamWithTeamLeadersAndTeamLeaderInvites;
@@ -24,6 +25,7 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
   ...props
 }) => {
   const [isOpen, setOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
   return (
     <Collapsible
@@ -37,7 +39,12 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
           {team.name}
         </Typography>
         <div className="flex">
-          <Button variant="ghost" className="text-destructive" size="icon-lg">
+          <Button
+            variant="ghost"
+            className="text-destructive"
+            size="icon-lg"
+            onClick={() => setDeleteModalOpen(true)}
+          >
             <Delete02Icon />
           </Button>
           <CollapsibleTrigger asChild>
@@ -80,6 +87,13 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
           </Button>
         </AddLeaderModal>
       </CollapsibleContent>
+      <DeleteTeamDialog
+        teamName={team.name}
+        teamId={team.id}
+        clubSlug={clubSlug}
+        open={isDeleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+      />
     </Collapsible>
   );
 };
