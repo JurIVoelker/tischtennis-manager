@@ -37,7 +37,6 @@ import {
 import { ArrowUp01Icon } from "hugeicons-react";
 import { getUserData, setUserData } from "@/lib/localstorageUtils";
 import { User2Icon } from "lucide-react";
-import Link from "next/link";
 
 export const AppSidebar = ({}) => {
   const { data: session } = useSession();
@@ -71,8 +70,8 @@ export const AppSidebar = ({}) => {
   // Handle click on team
   const currentTeamSlug = pathname.split("/")[2];
 
-  const handleClickLink = (teamSlug: string) => {
-    push(`/${userClub}/${teamSlug}`);
+  const handleClickLink = (path: string) => {
+    push(path);
     if (isMobile) toggleSidebar();
   };
 
@@ -116,7 +115,9 @@ export const AppSidebar = ({}) => {
                           customButtonStyles,
                           "justify-start"
                         )}
-                        onClick={() => handleClickLink(team.slug)}
+                        onClick={() =>
+                          handleClickLink(`/${userClub}/${team.slug}`)
+                        }
                       >
                         {team.name}
                       </Button>
@@ -178,13 +179,15 @@ export const AppSidebar = ({}) => {
                   )}
                   {session && (
                     <>
-                      <DropdownMenuItem>
-                        <Link
-                          className="inline-flex items-center gap-2"
-                          href={`/${userClub}/admin/mannschaftsfuehrer`}
-                        >
-                          Mannschaften verwalten
-                        </Link>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          handleClickLink(
+                            `/${userClub}/admin/mannschaftsfuehrer`
+                          )
+                        }
+                        className="inline-flex items-center gap-2 w-full"
+                      >
+                        Mannschaften verwalten
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={handleSignOut}>
                         <span className="inline-flex items-center gap-2 text-destructive">
