@@ -8,6 +8,7 @@ import { handleGetBody } from "@/lib/APIUtils";
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
+import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 import slugify from "slugify";
 
@@ -152,5 +153,6 @@ export async function POST(request: NextRequest) {
     },
   });
 
+  revalidatePath(`/${clubSlug}/${teamSlug}/admin/mannschaftsfuehrer`);
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 }
