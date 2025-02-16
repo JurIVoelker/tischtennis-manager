@@ -7,7 +7,6 @@ import {
 } from "./lib/cookieUtils";
 import { handleUnauthorizedUser } from "./lib/middlewareUtils";
 import { getLeaderData, getValidToken } from "./lib/APIUtils";
-import { MIDDLEWARE_STATUS_UNAUTHORIZED } from "./constants/middlewareConstants";
 import { LOGIN_PAGE_REGEX } from "./constants/regex";
 import { isIgnoredMiddlewarePath } from "./lib/routeUtils";
 import { getToken } from "next-auth/jwt";
@@ -35,12 +34,7 @@ export async function middleware(request: NextRequest) {
   const { token, allTokens } = (await getValidToken(clubSlug, teamSlug)) || {};
 
   if (token === null) {
-    return NextResponse.redirect(
-      new URL(
-        `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,
-        request.url
-      )
-    );
+    return NextResponse.redirect(new URL(`/${clubSlug}/welcome`, request.url));
   }
 
   /*
@@ -86,10 +80,7 @@ export async function middleware(request: NextRequest) {
     return response;
   } else if (!LOGIN_PAGE_REGEX.test(urlPath) && pageUserToken) {
     const response = NextResponse.redirect(
-      new URL(
-        `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,
-        request.url
-      )
+      new URL(`/${clubSlug}/welcome`, request.url)
     );
     response.cookies.delete(getAuthCookieName(clubSlug));
     return response;
@@ -122,12 +113,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(
-    new URL(
-      `/ungueltiger-link?statusCode=${MIDDLEWARE_STATUS_UNAUTHORIZED}`,
-      request.url
-    )
-  );
+  return NextResponse.redirect(new URL(`/${clubSlug}/welcome`, request.url));
 }
 
 // See "Matching Paths" below to learn more

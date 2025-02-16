@@ -15,7 +15,8 @@ interface TypographyProps {
     | "lead"
     | "large"
     | "small"
-    | "muted";
+    | "muted"
+    | "error";
   children: React.ReactNode;
   className?: string;
 }
@@ -85,6 +86,10 @@ const Typography: React.FC<TypographyProps> = ({
     muted: {
       component: "p",
       className: "text-sm text-muted-foreground",
+    },
+    error: {
+      component: "p",
+      className: "text-sm text-red-600",
     },
   };
 

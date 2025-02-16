@@ -5,11 +5,21 @@ import { GoogleIcon } from "hugeicons-react";
 import { usePathname } from "next/navigation";
 import Typography from "./typography";
 
-const GoogleLoginButton = () => {
+interface GoogleLoginButtonProps {
+  callbackUrl?: string;
+}
+
+const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
+  callbackUrl = "",
+}) => {
   const { data: session } = useSession();
   const pathName = usePathname();
   const clubSlug = pathName.split("/")[1];
   const teamSlug = pathName.split("/")[2];
+
+  const URL =
+    callbackUrl ||
+    `${window.location.protocol}//${window.location.host}/${clubSlug}/${teamSlug}/mannschaftsfuehrer/login/validieren`;
 
   return (
     <>
@@ -30,7 +40,7 @@ const GoogleLoginButton = () => {
           <Button
             onClick={() =>
               signIn("google", {
-                callbackUrl: `${window.location.protocol}//${window.location.host}/${clubSlug}/${teamSlug}/mannschaftsfuehrer/login/validieren`,
+                callbackUrl: URL,
                 redirect: true,
               })
             }

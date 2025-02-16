@@ -1,4 +1,5 @@
 const UNKNOWN_ERROR = "Es ist ein unbekannter Fehler aufgetreten";
+const INVALID_LOGIN_ERROR = "invalid-login";
 const DATABASE_CONNECTION_ERROR =
   "Es ist ein Fehler mit der Verbindung zur Datenbank aufgetreten";
 const DATABASE_ERROR = "Es ist ein Fehler mit der Datenbank aufgetreten";
@@ -54,4 +55,5 @@ export const ERRORS = {
   TOO_MANY_REQUESTS,
   PROJECT_DISABLED,
   SERVER_ERROR,
+  INVALID_LOGIN_ERROR,
 };
