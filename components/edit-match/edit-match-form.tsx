@@ -87,7 +87,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
     millisecond: 0,
   };
 
-  const locationOptions = ["Heimspiel", "Auswährts"];
+  const locationOptions = ["Heimspiel", "Auswärts"];
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

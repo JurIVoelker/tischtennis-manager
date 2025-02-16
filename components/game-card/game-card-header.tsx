@@ -137,7 +137,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
         <Typography variant="h4">{match.enemyClubName}</Typography>
         <div className="inline-flex gap-2 flex-wrap items-center">
           <Badge variant="secondary" className="h-fit">
-            {match.isHomeGame ? "Heim" : "Auswährts"}
+            {match.isHomeGame ? "Heim" : "Auswärts"}
           </Badge>
           {isGameCardOptionsVisible && (
             <DropdownMenu>
