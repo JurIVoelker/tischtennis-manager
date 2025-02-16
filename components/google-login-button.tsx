@@ -7,10 +7,14 @@ import Typography from "./typography";
 
 interface GoogleLoginButtonProps {
   callbackUrl?: string;
+  includeText?: boolean;
+  className?: string;
 }
 
 const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   callbackUrl = "",
+  includeText = true,
+  className = "",
 }) => {
   const { data: session } = useSession();
   const pathName = usePathname();
@@ -22,21 +26,25 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     `${window.location.protocol}//${window.location.host}/${clubSlug}/${teamSlug}/mannschaftsfuehrer/login/validieren`;
 
   return (
-    <>
+    <div className={className}>
       {session && (
         <>
-          <Typography variant="p" className="leading-10 mt-4 mb-2">
-            Du bist bereits eingeloggt. Möchtest du dich ausloggen?
-          </Typography>
+          {includeText && (
+            <Typography variant="p" className="leading-10 mt-4 mb-2">
+              Du bist bereits eingeloggt. Möchtest du dich ausloggen?
+            </Typography>
+          )}
 
           <Button onClick={() => signOut()}>Ausloggen</Button>
         </>
       )}
       {!session && (
         <>
-          <Typography variant="p" className="leading-10 mt-4 mb-2">
-            Bitte melde dich mit deinem Google-Konto an.
-          </Typography>
+          {includeText && (
+            <Typography variant="p" className="leading-10 mt-4 mb-2">
+              Bitte melde dich mit deinem Google-Konto an.
+            </Typography>
+          )}
           <Button
             onClick={() =>
               signIn("google", {
@@ -49,7 +57,7 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
           </Button>
         </>
       )}
-    </>
+    </div>
   );
 };
 

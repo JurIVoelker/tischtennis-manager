@@ -7,15 +7,19 @@ const IndexPage = () => {
   return (
     <div className="w-full">
       <Navbar title="Mannschaftsführer" />
-      <div className="space-y-3 px-6 pb-6 pt-16">
-        <Typography variant="h3">Tischtennis Manager</Typography>
+      <div className="px-6 pb-6 pt-16">
+        <Typography variant="h3" className="mb-2">
+          Tischtennis Manager
+        </Typography>
         <Typography variant="p">
           Willkommen beim TT-Manager. Um einer Mannschaft beizutreten, musst du
           den Einladungslink, den du von deinem Mannschaftsführer bekommen hast
           öffnen.
         </Typography>
-        <Separator />
-        <Typography variant="h3">Login für Mannschaftsführer</Typography>
+        <Separator className="my-8" />
+        <Typography variant="h3" className="mb-2">
+          Login für Mannschaftsführer
+        </Typography>
         <Typography variant="p">
           Falls du Mannschaftsführer bist, kannst du dich hier anmelden, um
           deiner Mannschaft beizutreten.

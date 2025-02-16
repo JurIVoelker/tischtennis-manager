@@ -26,6 +26,7 @@ import {
   ADMIN_PAGE_REGEX,
   LOGIN_PAGE_REGEX,
   LEADER_LOGIN_PAGES_REGEX,
+  INDEX_PAGE_REGEX,
 } from "@/constants/regex";
 import { signIn, signOut, useSession } from "next-auth/react";
 import {
@@ -45,6 +46,7 @@ export const AppSidebar = ({}) => {
   const { push } = useRouter();
   const isMobile = useIsMobile();
   const [usersTeams, setUsersTeams] = useState<string[]>([]);
+  const [userClub, setUserClub] = useState<string>("");
 
   // Hide sidebar on excludedPages
   const pathname = usePathname();
@@ -53,18 +55,19 @@ export const AppSidebar = ({}) => {
     INVALID_LINK_PAGE_REGEX,
     LOGIN_PAGE_REGEX,
     LEADER_LOGIN_PAGES_REGEX,
+    INDEX_PAGE_REGEX,
   ];
 
-  // Get club teams of user
-  const userClub = "Test-Club";
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    getTeams(userClub).then((fetchedTeams: Team[]) => {
-      setTeams(fetchedTeams);
-    });
-    const usersTeamsData = getUserData();
-    setUsersTeams(Object.keys(usersTeamsData));
+    const clubSlug = window.location.pathname.split("/")[1];
+    setUserClub(clubSlug);
+    if (clubSlug) {
+      getTeams(clubSlug).then((fetchedTeams: Team[]) => {
+        setTeams(fetchedTeams);
+      });
+      const usersTeamsData = getUserData();
+      setUsersTeams(Object.keys(usersTeamsData));
+    }
   }, []);
 
   // Handle click on team

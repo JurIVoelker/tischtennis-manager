@@ -1,3 +1,4 @@
+export const INDEX_PAGE_REGEX = /^\/$/;
 export const ADMIN_PAGE_REGEX = /^\/[^\/]+\/[^\/]+\/login(\?.*)?$/i;
 export const TEAM_CLUB_PAGES_REGEX = /^\/[^\/]+\/[^\/]+\/[^\/]+(\?.*)?$/;
 export const LOGIN_PAGE_REGEX = /^\/[^\/]+\/[^\/]+\/login(\?.*)?$/i;

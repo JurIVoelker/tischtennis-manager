@@ -44,7 +44,11 @@ const IndexLoginManager = () => {
 
   return (
     <>
-      <GoogleLoginButton callbackUrl={pathName} />
+      <GoogleLoginButton
+        callbackUrl={pathName}
+        includeText={false}
+        className="mt-3"
+      />
       {error && (
         <Typography variant="error">
           {error === ERRORS.INVALID_LOGIN_ERROR

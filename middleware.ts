@@ -15,17 +15,17 @@ export async function middleware(request: NextRequest) {
   const urlPath = request.url.replace(/^https?:\/\/[^/]+/, "");
   if (isIgnoredMiddlewarePath(urlPath)) return NextResponse.next();
 
+  const splitUrl = urlPath.split("/");
+  const clubSlug = splitUrl.length > 0 ? splitUrl[1] : "";
+  const teamSlug = splitUrl.length > 1 ? splitUrl[2] : "";
+
+  if (urlPath.split("/").length <= 2) {
+    return NextResponse.redirect(new URL(`/${clubSlug}/welcome`, request.url));
+  }
+
   if (urlPath.split("/").length < 3) {
     return NextResponse.redirect(new URL(`/ungueltiger-link`, request.url));
   }
-
-  /*
-   * Get slugs from url
-   */
-
-  const splitUrl = urlPath.split("/");
-  const clubSlug = splitUrl[1];
-  const teamSlug = splitUrl[2];
 
   /*
    * Get valid token serverside
