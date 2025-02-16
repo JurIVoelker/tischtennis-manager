@@ -154,6 +154,7 @@ export async function POST(request: NextRequest) {
     `/${clubSlug}/${teamSlug}`,
     `/${clubSlug}/${teamSlug}/spieler/sortieren`,
     `/${clubSlug}/${teamSlug}/spieler/verwalten`,
+    `/${clubSlug}/${teamSlug}/login`,
     ...addPlayerTeamPaths,
     ...lineupPaths,
   ]);
