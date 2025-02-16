@@ -1,5 +1,5 @@
 export const isIgnoredMiddlewarePath = (urlPath: string): boolean => {
-  const ignoredPaths = ["ungueltiger-link", "login"];
+  const ignoredPaths = ["", "ungueltiger-link", "login"];
   if (ignoredPaths.some((route) => urlPath.startsWith(`/${route}`)))
     return true;
   if (/^\/[^\/]+\/welcome(\?.*)?(\/.*)?$/.test(urlPath)) return true;

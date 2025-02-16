@@ -1,20 +1,15 @@
-import { prisma } from "@/lib/prisma/prisma";
+import Typography from "@/components/typography";
 
 export default async function Home() {
-  const clubs = await prisma.club.findMany({
-    include: {
-      teams: true,
-    },
-  });
   return (
-    <div className="p-4 flex flex-col gap-y-4">
-      <h2>Home</h2>
-      {clubs.map((club) => (
-        <>
-          <p>{club.name}</p>
-          <p>{JSON.stringify(club.teams)}</p>
-        </>
-      ))}
+    <div className="w-full">
+      <div className="space-y-3 px-6 pb-6 pt-16">
+        <Typography variant="h3">Tischtennis Manager</Typography>
+        <Typography variant="p-gray" className="max-w-[600px]">
+          Willkommen beim Tischtennis Manager. Bitte verwende den Login Link,
+          den dir dein Mannschaftsführer geschickt hat.
+        </Typography>
+      </div>
     </div>
   );
 }
