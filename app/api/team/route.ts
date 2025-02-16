@@ -1,5 +1,7 @@
+import { TEAM_SLUG_ALREADY_EXISTS_ERROR } from "@/constants/APIError";
 import {
   API_DELETE_TEAM_SCHEMA,
+  API_POST_TEAM_SCHEMA,
   validateSchema,
 } from "@/constants/zodSchemaConstants";
 import { handleGetBody } from "@/lib/APIUtils";
@@ -7,6 +9,7 @@ import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
 import { NextRequest } from "next/server";
+import slugify from "slugify";
 
 export async function DELETE(request: NextRequest) {
   const {
@@ -92,6 +95,62 @@ export async function DELETE(request: NextRequest) {
     `/${clubSlug}/${teamSlug}/spieler`,
     `/${clubSlug}/${teamSlug}/admin/mannschaftsfuehrer`,
   ]);
+
+  return new Response(JSON.stringify({ ok: true }), { status: 200 });
+}
+
+export async function POST(request: NextRequest) {
+  const {
+    success: isBodySuccess,
+    body,
+    responseReturnValue: invalidBodyResponse,
+  } = await handleGetBody(request);
+  if (!isBodySuccess) return invalidBodyResponse;
+
+  const {
+    success: isSchemaSuccess,
+    responseReturnValue: invalidSchemaResponse,
+  } = await validateSchema(API_POST_TEAM_SCHEMA, body || {});
+
+  if (!isSchemaSuccess) {
+    return invalidSchemaResponse;
+  }
+
+  const {
+    clubSlug,
+    teamName,
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any = body;
+
+  const teamSlug = slugify(teamName, { lower: true });
+
+  const club = await prisma.club.findMany({
+    where: {
+      slug: clubSlug,
+    },
+    include: {
+      teams: {
+        where: {
+          slug: teamSlug,
+        },
+      },
+    },
+  });
+
+  if (club[0].teams.length > 0) {
+    return new Response(
+      JSON.stringify({ error: [TEAM_SLUG_ALREADY_EXISTS_ERROR], ok: false }),
+      { status: 400 }
+    );
+  }
+
+  await prisma.team.create({
+    data: {
+      club: { connect: { slug: clubSlug } },
+      name: teamName,
+      slug: teamSlug,
+    },
+  });
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 }

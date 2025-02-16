@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import { AddTeamModal } from "@/components/popups/add-team-modal";
 import TeamLeadersCollapsible from "@/components/team-leaders-collapsible";
 import {
   ClubParams,
@@ -41,6 +42,7 @@ const AdminLeaderPage = async ({ params }: { params: Promise<ClubParams> }) => {
               clubSlug={clubSlug}
             />
           ))}
+          <AddTeamModal clubSlug={clubSlug} />
         </div>
       </div>
     </div>

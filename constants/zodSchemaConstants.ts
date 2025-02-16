@@ -231,6 +231,11 @@ export const API_DELETE_TEAM_SCHEMA = z.object({
   teamId: validateTeamId(),
 });
 
+export const API_POST_TEAM_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamName: z.string(),
+});
+
 export const API_POST_LEADER_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamId: z.string(),

@@ -10,3 +10,5 @@ export const BODY_NOT_JSON_ERROR =
 export const UNKNOWN_ERROR = "Es ist ein unbekannter Fehler aufgetreten";
 export const TEAM_NOT_FOUND_ERROR = "Team nicht gefunden";
 export const TEAM_LEADER_INVITE_NOT_FOUND_ERROR = "Einladung nicht gefunden";
+export const TEAM_SLUG_ALREADY_EXISTS_ERROR =
+  "Eine Mannschaft mit diesem Namen existiert bereits";
