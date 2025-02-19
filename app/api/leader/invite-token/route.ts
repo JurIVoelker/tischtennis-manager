@@ -1,158 +1,162 @@
-import {
-  API_DELETE_LEADER_INVITE_TOKEN_SCHEMA,
-  API_POST_LEADER_INVITE_TOKEN_SCHEMA,
-  API_PUT_LEADER_INVITE_TOKEN_SCHEMA,
-  timeLimitMap,
-  validateSchema,
-} from "@/constants/zodSchemaConstants";
-import { handleGetBody } from "@/lib/APIUtils";
-import { prisma } from "@/lib/prisma/prisma";
-import { createHash } from "crypto";
-import { revalidatePath } from "next/cache";
-import { NextRequest } from "next/server";
+/**
+ * Not implemented
+ */
 
-export async function POST(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+// import {
+//   API_DELETE_LEADER_INVITE_TOKEN_SCHEMA,
+//   API_POST_LEADER_INVITE_TOKEN_SCHEMA,
+//   API_PUT_LEADER_INVITE_TOKEN_SCHEMA,
+//   timeLimitMap,
+//   validateSchema,
+// } from "@/constants/zodSchemaConstants";
+// import { handleGetBody } from "@/lib/APIUtils";
+// import { prisma } from "@/lib/prisma/prisma";
+// import { createHash } from "crypto";
+// import { revalidatePath } from "next/cache";
+// import { NextRequest } from "next/server";
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_POST_LEADER_INVITE_TOKEN_SCHEMA, body || {});
+// export async function POST(request: NextRequest) {
+//   const {
+//     success: isBodySuccess,
+//     body,
+//     responseReturnValue: invalidBodyResponse,
+//   } = await handleGetBody(request);
+//   if (!isBodySuccess) return invalidBodyResponse;
 
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+//   const {
+//     success: isSchemaSuccess,
+//     responseReturnValue: invalidSchemaResponse,
+//   } = await validateSchema(API_POST_LEADER_INVITE_TOKEN_SCHEMA, body || {});
 
-  const {
-    clubSlug,
-    teamSlug,
-    email,
-    timeLimit,
-    name,
-  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any = body;
+//   if (!isSchemaSuccess) {
+//     return invalidSchemaResponse;
+//   }
 
-  const inviteToken = createHash("sha256")
-    .update(
-      clubSlug + teamSlug + email + timeLimit + name + Math.random().toString()
-    )
-    .digest("hex");
+//   const {
+//     clubSlug,
+//     teamSlug,
+//     email,
+//     timeLimit,
+//     name,
+//   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   any = body;
 
-  const club = await prisma.club.findMany({
-    where: {
-      slug: clubSlug,
-    },
-    include: {
-      teams: {
-        where: {
-          slug: teamSlug,
-        },
-      },
-    },
-  });
+//   const inviteToken = createHash("sha256")
+//     .update(
+//       clubSlug + teamSlug + email + timeLimit + name + Math.random().toString()
+//     )
+//     .digest("hex");
 
-  const teamId = club[0]?.teams[0]?.id;
-  if (!teamId) {
-    return new Response("Team not found", { status: 404 });
-  }
+//   const club = await prisma.club.findMany({
+//     where: {
+//       slug: clubSlug,
+//     },
+//     include: {
+//       teams: {
+//         where: {
+//           slug: teamSlug,
+//         },
+//       },
+//     },
+//   });
 
-  const expiresAt = timeLimitMap[timeLimit]
-    ? new Date(Date.now() + timeLimitMap[timeLimit])
-    : new Date(Date.now() + timeLimitMap["infinite"]);
+//   const teamId = club[0]?.teams[0]?.id;
+//   if (!teamId) {
+//     return new Response("Team not found", { status: 404 });
+//   }
 
-  await prisma.teamLeaderInvite.create({
-    data: {
-      email,
-      fullName: name,
-      teamId,
-      expiresAt,
-      token: inviteToken,
-    },
-  });
+//   const expiresAt = timeLimitMap[timeLimit]
+//     ? new Date(Date.now() + timeLimitMap[timeLimit])
+//     : new Date(Date.now() + timeLimitMap["infinite"]);
 
-  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
+//   await prisma.teamLeaderInvite.create({
+//     data: {
+//       email,
+//       fullName: name,
+//       teamId,
+//       expiresAt,
+//       token: inviteToken,
+//     },
+//   });
 
-  return new Response(JSON.stringify({ ok: true, token: inviteToken }), {
-    status: 200,
-  });
-}
+//   revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
-export async function DELETE(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+//   return new Response(JSON.stringify({ ok: true, token: inviteToken }), {
+//     status: 200,
+//   });
+// }
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_DELETE_LEADER_INVITE_TOKEN_SCHEMA, body || {});
+// export async function DELETE(request: NextRequest) {
+//   const {
+//     success: isBodySuccess,
+//     body,
+//     responseReturnValue: invalidBodyResponse,
+//   } = await handleGetBody(request);
+//   if (!isBodySuccess) return invalidBodyResponse;
 
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+//   const {
+//     success: isSchemaSuccess,
+//     responseReturnValue: invalidSchemaResponse,
+//   } = await validateSchema(API_DELETE_LEADER_INVITE_TOKEN_SCHEMA, body || {});
 
-  const {
-    clubSlug,
-    id,
-  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any = body;
-  await prisma.teamLeaderInvite.delete({
-    where: {
-      id,
-    },
-  });
+//   if (!isSchemaSuccess) {
+//     return invalidSchemaResponse;
+//   }
 
-  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
+//   const {
+//     clubSlug,
+//     id,
+//   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   any = body;
+//   await prisma.teamLeaderInvite.delete({
+//     where: {
+//       id,
+//     },
+//   });
 
-  return new Response(JSON.stringify({ ok: true }), {
-    status: 200,
-  });
-}
+//   revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
-export async function PUT(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+//   return new Response(JSON.stringify({ ok: true }), {
+//     status: 200,
+//   });
+// }
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_PUT_LEADER_INVITE_TOKEN_SCHEMA, body || {});
+// export async function PUT(request: NextRequest) {
+//   const {
+//     success: isBodySuccess,
+//     body,
+//     responseReturnValue: invalidBodyResponse,
+//   } = await handleGetBody(request);
+//   if (!isBodySuccess) return invalidBodyResponse;
 
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+//   const {
+//     success: isSchemaSuccess,
+//     responseReturnValue: invalidSchemaResponse,
+//   } = await validateSchema(API_PUT_LEADER_INVITE_TOKEN_SCHEMA, body || {});
 
-  const {
-    clubSlug,
-    expiresAt,
-    id,
-  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any = body;
+//   if (!isSchemaSuccess) {
+//     return invalidSchemaResponse;
+//   }
 
-  await prisma.teamLeaderInvite.update({
-    where: {
-      id,
-    },
-    data: {
-      expiresAt,
-    },
-  });
+//   const {
+//     clubSlug,
+//     expiresAt,
+//     id,
+//   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   any = body;
 
-  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
+//   await prisma.teamLeaderInvite.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       expiresAt,
+//     },
+//   });
 
-  return new Response(JSON.stringify({ ok: true }), {
-    status: 200,
-  });
-}
+//   revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
+
+//   return new Response(JSON.stringify({ ok: true }), {
+//     status: 200,
+//   });
+// }

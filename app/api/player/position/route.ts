@@ -1,31 +1,19 @@
-import { INVALID_TOKEN_ERROR, UNKNOWN_ERROR } from "@/constants/APIError";
-import {
-  API_PUT_PLAYER_POSITIONS_SCHEMA,
-  validateSchema,
-} from "@/constants/zodSchemaConstants";
-import { getLeaderData, handleGetBody } from "@/lib/APIUtils";
+import { UNKNOWN_ERROR } from "@/constants/APIError";
+import { API_PUT_PLAYER_POSITIONS_SCHEMA } from "@/constants/zodSchemaConstants";
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
-import { getToken } from "next-auth/jwt";
+import { validateRequest } from "@/lib/serversideAPIUtils";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+  const { response, body } = await validateRequest(
+    request,
+    ["leader:own"],
+    API_PUT_PLAYER_POSITIONS_SCHEMA
+  );
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_PUT_PLAYER_POSITIONS_SCHEMA, body || {});
-
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+  if (response) return response;
 
   const {
     clubSlug,
@@ -33,21 +21,6 @@ export async function POST(request: NextRequest) {
     playerIds,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
-
-  const loggedinUserData = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-  const { email } = loggedinUserData || {};
-  let isTeamLeader = false;
-  if (email) {
-    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
-      .isTeamLeader;
-  }
-
-  if (!isTeamLeader) {
-    return new Response(INVALID_TOKEN_ERROR, { status: 401 });
-  }
 
   const transactionResult = await prisma
     .$transaction(async (tx) => {

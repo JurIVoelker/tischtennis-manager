@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   });
 
   const { email } = token || {};
-  if (!email) return new Response("Forbidden", { status: 403 });
+  if (!email) return new Response("Unauthorized", { status: 401 });
 
   let teamLeaders;
   try {

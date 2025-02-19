@@ -1,0 +1,20 @@
+meta {
+  name: is-admin
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{url}}/protected/is-admin?clubSlug={{clubSlug}}&email=jurivoelker03@gmail.com
+  body: none
+  auth: none
+}
+
+params:query {
+  clubSlug: {{clubSlug}}
+  email: jurivoelker03@gmail.com
+}
+
+headers {
+  Cookie: server-token={{server-secret}}
+}

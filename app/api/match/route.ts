@@ -3,31 +3,24 @@ import {
   API_DELETE_MATCH_SCHEMA,
   API_POST_GAME_DATA_SCHEMA,
   API_PUT_GAME_DATA_SCHEMA,
-  validateSchema,
 } from "@/constants/zodSchemaConstants";
-import { getLeaderData, handleGetBody } from "@/lib/APIUtils";
+import { getLeaderData } from "@/lib/APIUtils";
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
+import { validateRequest } from "@/lib/serversideAPIUtils";
 import { getToken } from "next-auth/jwt";
+import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 
 export async function PUT(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+  const { response, body } = await validateRequest(
+    request,
+    ["leader:own"],
+    API_PUT_GAME_DATA_SCHEMA
+  );
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_PUT_GAME_DATA_SCHEMA, body || {});
-
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+  if (response) return response;
 
   const {
     city,
@@ -105,21 +98,13 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+  const { response, body } = await validateRequest(
+    request,
+    ["leader:own"],
+    API_POST_GAME_DATA_SCHEMA
+  );
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_POST_GAME_DATA_SCHEMA, body || {});
-
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+  if (response) return response;
 
   const {
     city,
@@ -168,7 +153,7 @@ export async function POST(request: NextRequest) {
 
       if (!teamId) throw new Error("Team not found");
 
-      await tx.match.create({
+      const res = await tx.match.create({
         data: {
           enemyClubName,
           teamId,
@@ -183,6 +168,7 @@ export async function POST(request: NextRequest) {
           },
         },
       });
+      return res;
     })
     .catch((error) => {
       if (error.message) {
@@ -190,30 +176,25 @@ export async function POST(request: NextRequest) {
       }
       return new Response(UNKNOWN_ERROR, { status: 500 });
     });
+
   if (transactionResult instanceof Response) {
     return transactionResult;
   }
 
-  revalidatePaths([`/${clubSlug}/${teamSlug}`]);
-  return new Response("success", { status: 200 });
+  revalidatePath(`/${clubSlug}/${teamSlug}`);
+  return new Response(JSON.stringify({ data: transactionResult }), {
+    status: 200,
+  });
 }
 
 export async function DELETE(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+  const { response, body } = await validateRequest(
+    request,
+    ["leader:own"],
+    API_DELETE_MATCH_SCHEMA
+  );
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_DELETE_MATCH_SCHEMA, body || {});
-
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+  if (response) return response;
 
   const {
     clubSlug,
@@ -221,21 +202,6 @@ export async function DELETE(request: NextRequest) {
     matchId,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
-
-  const loggedinUserData = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-  const { email } = loggedinUserData || {};
-  let isTeamLeader = false;
-  if (email) {
-    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
-      .isTeamLeader;
-  }
-
-  if (!isTeamLeader) {
-    return new Response(INVALID_TOKEN_ERROR, { status: 401 });
-  }
 
   const transactionResult = await prisma
     .$transaction(async (tx) => {

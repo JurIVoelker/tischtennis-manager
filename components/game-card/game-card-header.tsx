@@ -158,11 +158,10 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
                     },
                     id
                   ) => (
-                    <>
+                    <div key={id}>
                       {isDeleteMatch && (
                         <AlertDialogTrigger asChild>
                           <DropdownMenuItem
-                            key={id}
                             onSelect={() => {
                               setMatchToDelete({
                                 name: match.enemyClubName,
@@ -179,7 +178,6 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
                       )}
                       {!isDeleteMatch && (
                         <DropdownMenuItem
-                          key={id}
                           onSelect={handler}
                           className="flex items-center gap-2 p-2"
                           disabled={isDisabled}
@@ -188,7 +186,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
                           {name}
                         </DropdownMenuItem>
                       )}
-                    </>
+                    </div>
                   )
                 )}
               </DropdownMenuContent>

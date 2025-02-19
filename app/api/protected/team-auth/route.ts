@@ -1,4 +1,5 @@
 import { handlePrismaError, prisma } from "@/lib/prisma/prisma";
+import { hasServersidePermission } from "@/lib/serversideAPIUtils";
 import { NextRequest } from "next/server";
 export const dynamic = "force-dynamic"; // defaults to auto
 
@@ -20,6 +21,10 @@ export async function GET(request: NextRequest) {
       status: 400,
     });
   }
+
+  const success = await hasServersidePermission(["server"], request);
+
+  if (!success) return new Response("Unauthorized", { status: 401 });
 
   let club;
   try {

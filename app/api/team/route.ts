@@ -2,32 +2,23 @@ import { TEAM_SLUG_ALREADY_EXISTS_ERROR } from "@/constants/APIError";
 import {
   API_DELETE_TEAM_SCHEMA,
   API_POST_TEAM_SCHEMA,
-  validateSchema,
 } from "@/constants/zodSchemaConstants";
-import { handleGetBody } from "@/lib/APIUtils";
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
+import { validateRequest } from "@/lib/serversideAPIUtils";
 import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 import slugify from "slugify";
 
 export async function DELETE(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+  const { response, body } = await validateRequest(
+    request,
+    ["admin"],
+    API_DELETE_TEAM_SCHEMA
+  );
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_DELETE_TEAM_SCHEMA, body || {});
-
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+  if (response) return response;
 
   const {
     teamId,
@@ -101,21 +92,13 @@ export async function DELETE(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+  const { response, body } = await validateRequest(
+    request,
+    ["admin"],
+    API_POST_TEAM_SCHEMA
+  );
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_POST_TEAM_SCHEMA, body || {});
-
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+  if (response) return response;
 
   const {
     clubSlug,

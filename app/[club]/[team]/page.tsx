@@ -58,7 +58,7 @@ const ClubTeamPage = async ({
     asyncLog("error", `${clubSlug} has more than one team with the same name`);
   }
 
-  const players = await getOrderedPlayers(club?.teams[0].id || "");
+  const players = await getOrderedPlayers(club?.teams[0]?.id || "");
 
   const { matches, name: teamName } =
     club?.teams?.find((team) => team.slug === teamSlug) || {};

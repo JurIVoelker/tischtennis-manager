@@ -36,7 +36,9 @@ const ManagePlayersHeader: React.FC<ManagePlayersHeaderProps> = ({
 
   const fetchInviteToken = async () => {
     try {
-      const data = await getAPI("/api/invite-token", { clubSlug, teamSlug });
+      const data = await getAPI("/api/invite-token", {
+        query: { clubSlug, teamSlug },
+      });
       const { token } = data || {};
       if (token) setInviteToken(token);
       else {

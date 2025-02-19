@@ -15,8 +15,8 @@ export const getValidToken = async (
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   try {
     const res = await getAPI(`${baseUrl}/api/protected/team-auth`, {
-      clubSlug,
-      teamSlug,
+      query: { clubSlug, teamSlug },
+      headers: { Cookie: "server-token=" + process.env.SERVER_API_TOKEN },
     });
     tokenData = res;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,19 +43,36 @@ export const getLeaderData = async (
   const res = await axios.get(
     `${
       process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-    }/api/protected/is-team-leader?clubSlug=${clubSlug}&teamSlug=${teamSlug}&email=${email}`
+    }/api/protected/is-team-leader?clubSlug=${clubSlug}&teamSlug=${teamSlug}&email=${email}`,
+    { headers: { Cookie: "server-token=" + process.env.SERVER_API_TOKEN } }
   );
   return res?.data;
 };
 
-export const getAPI = async (url: string, options?: object) => {
+export const getAdminData = async (clubSlug: string, email: string) => {
+  const res = await axios.get(
+    `${
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+    }/api/protected/is-admin?clubSlug=${clubSlug}&email=${email}`,
+    { headers: { Cookie: "server-token=" + process.env.SERVER_API_TOKEN } }
+  );
+  return res?.data;
+};
+
+export const getAPI = async (
+  url: string,
+  options: { query?: object; headers?: object } = {}
+) => {
   const isLogging = process.env.NODE_ENV === "development";
-  const queryString = options ? qs.stringify(options) : "";
+  const { query, headers } = options || {};
+  const queryString = query ? qs.stringify(query) : "";
 
   const requestUrl = url + (queryString ? `?${queryString}` : "");
 
   if (isLogging) console.info(`[GET] -> ${requestUrl}`);
-  const response = await fetch(requestUrl);
+  const response = await fetch(requestUrl, {
+    headers: { ...headers },
+  });
   if (!response.ok) {
     if (isLogging) console.info(`[ERROR-${response.status}] -> ${requestUrl}`);
     return null;
@@ -68,10 +85,11 @@ const makeRequest = async (
   method: "POST" | "PUT" | "DELETE",
   url: string,
   body: object,
-  options?: object
+  options: { query?: object; headers?: object } = {}
 ) => {
   const isLogging = process.env.NODE_ENV === "development";
-  const queryString = options ? qs.stringify(options) : "";
+  const { query, headers } = options || {};
+  const queryString = query ? qs.stringify(query) : "";
 
   const requestUrl = url + (queryString ? `?${queryString}` : "");
 
@@ -80,6 +98,7 @@ const makeRequest = async (
     method,
     headers: {
       "Content-Type": "application/json",
+      ...headers,
     },
     body: JSON.stringify(body),
   });
@@ -155,17 +174,40 @@ export const hasLeaderPermission = async (
   }
 
   if (!isTeamLeader) {
-    const { token: userToken } = getAuthCookies(request, clubSlug, teamSlug);
-    const { token } = await getValidToken(clubSlug, teamSlug);
+    return {
+      success: false,
+      responseReturnValue: new Response(
+        JSON.stringify([{ message: INVALID_TOKEN_ERROR }]),
+        { status: 401 }
+      ),
+    };
+  }
+  return { success: true };
+};
 
-    if (token !== userToken)
-      return {
-        success: false,
-        responseReturnValue: new Response(
-          JSON.stringify([{ message: INVALID_TOKEN_ERROR }]),
-          { status: 401 }
-        ),
-      };
+export const hasAdminPermission = async (
+  clubSlug: string,
+  request: NextRequest
+): Promise<{ success: boolean; responseReturnValue?: Response }> => {
+  const loggedinUserData = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  const { email } = loggedinUserData || {};
+  let isAdmin = false;
+  if (email) {
+    isAdmin = (await getAdminData(clubSlug, email)).isAdmin;
+  }
+
+  if (!isAdmin) {
+    return {
+      success: false,
+      responseReturnValue: new Response(
+        JSON.stringify([{ message: INVALID_TOKEN_ERROR }]),
+        { status: 401 }
+      ),
+    };
   }
   return { success: true };
 };

@@ -1,12 +1,22 @@
 import { handlePrismaError, prisma } from "@/lib/prisma/prisma";
+import { hasServersidePermission } from "@/lib/serversideAPIUtils";
 import { NextRequest } from "next/server";
 export const dynamic = "force-dynamic"; // defaults to auto
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
 
-  const clubSlug = searchParams.get("clubSlug");
-  const teamSlug = searchParams.get("teamSlug");
+  const clubSlug = searchParams.get("clubSlug") || "";
+  const teamSlug = searchParams.get("teamSlug") || "";
+
+  const success = await hasServersidePermission(
+    ["leader:own"],
+    request,
+    clubSlug,
+    teamSlug
+  );
+
+  if (!success) return new Response("Unauthorized", { status: 401 });
 
   if (!clubSlug || !teamSlug) {
     return new Response(`clubSlug and teamSlug must be defined`, {

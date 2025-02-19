@@ -1,0 +1,20 @@
+meta {
+  name: team-auth
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{url}}/protected/team-auth?clubSlug=Test-Club&teamSlug=Herren-I
+  body: none
+  auth: none
+}
+
+params:query {
+  clubSlug: Test-Club
+  teamSlug: Herren-I
+}
+
+headers {
+  Cookie: server-token={{server-secret}}
+}

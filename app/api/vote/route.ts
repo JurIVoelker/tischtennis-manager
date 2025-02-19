@@ -1,38 +1,22 @@
 import { UNKNOWN_ERROR } from "@/constants/APIError";
-import {
-  API_VOTE_SCHEMA,
-  validateSchema,
-} from "@/constants/zodSchemaConstants";
-import { handleGetBody, hasLeaderPermission } from "@/lib/APIUtils";
+import { API_VOTE_SCHEMA } from "@/constants/zodSchemaConstants";
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
+import { validateRequest } from "@/lib/serversideAPIUtils";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const {
-    success: isBodySuccess,
-    body,
-    responseReturnValue: invalidBodyResponse,
-  } = await handleGetBody(request);
-  if (!isBodySuccess) return invalidBodyResponse;
+  const { response, body } = await validateRequest(
+    request,
+    ["user:own", "leader:own"],
+    API_VOTE_SCHEMA
+  );
 
-  const {
-    success: isSchemaSuccess,
-    responseReturnValue: invalidSchemaResponse,
-  } = await validateSchema(API_VOTE_SCHEMA, body || {});
-
-  if (!isSchemaSuccess) {
-    return invalidSchemaResponse;
-  }
+  if (response) return response;
 
   // @ts-expect-error zod validation ensures that body is defined
   const { clubSlug, teamSlug, playerId, matchId, vote } = body || {};
-
-  const { success: isLeaderSuccess, responseReturnValue: leaderResponse } =
-    await hasLeaderPermission(clubSlug, teamSlug, request);
-
-  if (!isLeaderSuccess) return leaderResponse;
 
   const club = await prisma.club.findUnique({
     where: {

@@ -1,0 +1,21 @@
+meta {
+  name: is-team-leader
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/protected/is-team-leader?clubSlug=Test-Club&teamSlug=Herren-II&email=jurivoelker03@gmail.com
+  body: none
+  auth: none
+}
+
+params:query {
+  clubSlug: Test-Club
+  teamSlug: Herren-II
+  email: jurivoelker03@gmail.com
+}
+
+headers {
+  Cookie: server-token={{server-secret}}
+}

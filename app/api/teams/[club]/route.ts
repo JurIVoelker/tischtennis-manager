@@ -15,7 +15,12 @@ export async function GET(
         slug: clubSlug,
       },
       include: {
-        teams: true,
+        teams: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
       },
     });
   } catch (error) {

@@ -113,7 +113,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                       <DropdownMenuContent className="p-2 w-60">
                         <AlertDialogTrigger asChild>
                           <DropdownMenuItem
-                            className="flex items-center gap-2 p-2"
+                            className="flex items-center gap-2 p-2 text-destructive"
                             onSelect={() =>
                               setPlayerToDelete({
                                 uniqueName: getPlayerName(player, players),

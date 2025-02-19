@@ -34,21 +34,6 @@ export async function PUT(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
-  // const loggedinUserData = await getToken({
-  //   req: request,
-  //   secret: process.env.NEXTAUTH_SECRET,
-  // });
-  // const { email } = loggedinUserData || {};
-  // let isTeamLeader = false;
-  // if (email) {
-  //   isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
-  //     .isTeamLeader;
-  // }
-
-  // if (!isTeamLeader) {
-  //   return new Response(INVALID_TOKEN_ERROR, { status: 401 });
-  // }
-
   await prisma.$transaction(async (tx) => {
     if (email) {
       await tx.teamLeader.update({

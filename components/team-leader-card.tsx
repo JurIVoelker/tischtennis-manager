@@ -97,12 +97,11 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
     setConfirmModalSettings((prev) => ({ ...prev, isLoading: true }));
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 14);
-    const res = await putAPI("/api/leader/invite-token", {
+    await putAPI("/api/leader/invite-token", {
       id,
       clubSlug,
       expiresAt,
     });
-    console.log(res);
     setConfirmModalSettings((prev) => ({
       ...prev,
       open: false,
