@@ -5,7 +5,6 @@ import axios from "axios";
 import { NextRequest } from "next/server";
 import { BODY_NOT_JSON_ERROR, INVALID_TOKEN_ERROR } from "@/constants/APIError";
 import { getToken } from "next-auth/jwt";
-import { getAuthCookies } from "./cookieUtils";
 
 export const getValidToken = async (
   clubSlug: string,
