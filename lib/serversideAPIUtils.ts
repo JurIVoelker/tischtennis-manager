@@ -75,7 +75,6 @@ export const validateRequest = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: ZodObject<any>
 ) => {
-  console.log({ permissions });
   const {
     success: isBodySuccess,
     body,

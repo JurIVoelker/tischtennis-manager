@@ -6,6 +6,7 @@ import {
 } from "@/constants/zodSchemaConstants";
 import { handleGetBody } from "@/lib/APIUtils";
 import { prisma } from "@/lib/prisma/prisma";
+import { validateLeaderId, validateTeamId } from "@/lib/prismaUtils";
 import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 
@@ -34,6 +35,9 @@ export async function PUT(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
+  const { response } = await validateLeaderId(clubSlug, leaderId);
+  if (response) return response;
+
   await prisma.$transaction(async (tx) => {
     if (email) {
       await tx.teamLeader.update({
@@ -41,7 +45,6 @@ export async function PUT(request: NextRequest) {
         data: { email },
       });
     }
-    console.log(name);
     if (name) {
       await tx.teamLeader.update({
         where: { id: leaderId },
@@ -78,6 +81,9 @@ export async function DELETE(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
+  const { response } = await validateLeaderId(clubSlug, leaderId);
+  if (response) return response;
+
   await prisma.teamLeader.delete({ where: { id: leaderId } });
   revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
@@ -108,6 +114,9 @@ export async function POST(request: NextRequest) {
     clubSlug,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
+
+  const { response } = await validateTeamId(clubSlug, teamId);
+  if (response) return response;
 
   await prisma.teamLeader.create({ data: { email, fullName, teamId } });
   revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
