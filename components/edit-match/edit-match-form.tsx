@@ -102,6 +102,15 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    const now = new Date();
+    if (data.date.setHours(0, 0, 0, 0) < now.setHours(0, 0, 0, 0)) {
+      toast({
+        title: "Fehler",
+        description:
+          "Das Datum liegt in der Vergangenheit. Bitte wähle ein anderes Datum aus.",
+      });
+      return;
+    }
     let res;
     if (!isCreate) {
       res = await putAPI(`/api/match`, {
