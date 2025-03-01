@@ -85,7 +85,7 @@ export async function DELETE(request: NextRequest) {
     `/${clubSlug}/${teamSlug}/spieler/sortieren`,
     `/${clubSlug}/${teamSlug}/spieler/verwalten`,
     `/${clubSlug}/${teamSlug}/spieler`,
-    `/${clubSlug}/${teamSlug}/admin/mannschaftsfuehrer`,
+    `/${clubSlug}/admin/mannschaftsfuehrer`,
   ]);
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
@@ -136,6 +136,6 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  revalidatePath(`/${clubSlug}/${teamSlug}/admin/mannschaftsfuehrer`);
+  revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 }
