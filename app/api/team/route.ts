@@ -6,7 +6,7 @@ import {
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
-import { validateRequest } from "@/lib/serversideAPIUtils";
+import { validateRequest, validateTeamId } from "@/lib/serversideAPIUtils";
 import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 import slugify from "slugify";
@@ -26,7 +26,9 @@ export async function DELETE(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
-  // TODO security check team id
+  const res = await validateTeamId(clubSlug, teamId);
+  if (!res.success)
+    return new Response(JSON.stringify(res.error), { status: 404 });
 
   const team = await prisma.team.findUnique({
     where: { id: teamId },

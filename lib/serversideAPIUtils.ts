@@ -168,3 +168,20 @@ export const validatePlayerId = async (
   }, "Player not found");
   return await playerIdSchema.safeParseAsync(playerId);
 };
+
+export const validateTeamId = async (clubSlug: string, teamId: string) => {
+  const teamIdSchema = z.string().refine(async (id) => {
+    const team = await prisma.team.findUnique({
+      where: {
+        id,
+        AND: {
+          club: {
+            slug: clubSlug,
+          },
+        },
+      },
+    });
+    return Boolean(team?.id);
+  }, "Team not found");
+  return await teamIdSchema.safeParseAsync(teamId);
+};
