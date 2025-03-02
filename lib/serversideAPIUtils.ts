@@ -140,3 +140,31 @@ export const validateMatchId = async (
   }, "Match not found");
   return await matchIdSchema.safeParseAsync(matchId);
 };
+
+export const validatePlayerId = async (
+  clubSlug: string,
+  teamSlug: string,
+  playerId: string
+) => {
+  const playerIdSchema = z.string().refine(async (id) => {
+    const player = await prisma.player.findUnique({
+      where: {
+        id,
+        AND: {
+          team: {
+            slug: teamSlug,
+          },
+          AND: {
+            team: {
+              club: {
+                slug: clubSlug,
+              },
+            },
+          },
+        },
+      },
+    });
+    return Boolean(player?.id);
+  }, "Player not found");
+  return await playerIdSchema.safeParseAsync(playerId);
+};

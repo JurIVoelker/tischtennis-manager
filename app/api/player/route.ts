@@ -25,7 +25,7 @@ export async function DELETE(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
-  // TODO security check playerIds
+  // TODO security check playerId
 
   const transactionResult = await prisma
     .$transaction(async (tx) => {

@@ -1,0 +1,25 @@
+meta {
+  name: vote
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{url}}/vote
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: server-token={{server-secret}}
+}
+
+body:json {
+  {
+    "clubSlug": "Test-Club",
+    "teamSlug": "Herren-I",
+    "playerId": "123",
+    "matchId": "1235",
+    "vote": "available"
+  }
+}
