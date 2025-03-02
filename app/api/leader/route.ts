@@ -35,8 +35,8 @@ export async function PUT(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
-  const { response } = await validateLeaderId(clubSlug, leaderId);
-  if (response) return response;
+  const { ok, response } = await validateLeaderId(clubSlug, leaderId);
+  if (!ok) return response;
 
   await prisma.$transaction(async (tx) => {
     if (email) {
@@ -81,8 +81,8 @@ export async function DELETE(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
-  const { response } = await validateLeaderId(clubSlug, leaderId);
-  if (response) return response;
+  const { ok, response } = await validateLeaderId(clubSlug, leaderId);
+  if (!ok) return response;
 
   await prisma.teamLeader.delete({ where: { id: leaderId } });
   revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
@@ -115,8 +115,8 @@ export async function POST(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
-  const { response } = await validateTeamId(clubSlug, teamId);
-  if (response) return response;
+  const { ok, response } = await validateTeamId(clubSlug, teamId);
+  if (!ok) return response;
 
   await prisma.teamLeader.create({ data: { email, fullName, teamId } });
   revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
