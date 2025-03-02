@@ -1,15 +1,13 @@
-import { INVALID_TOKEN_ERROR, UNKNOWN_ERROR } from "@/constants/APIError";
+import { UNKNOWN_ERROR } from "@/constants/APIError";
 import {
   API_DELETE_MATCH_SCHEMA,
   API_POST_GAME_DATA_SCHEMA,
   API_PUT_GAME_DATA_SCHEMA,
 } from "@/constants/zodSchemaConstants";
-import { getLeaderData } from "@/lib/APIUtils";
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
-import { validateRequest } from "@/lib/serversideAPIUtils";
-import { getToken } from "next-auth/jwt";
+import { validateMatchId, validateRequest } from "@/lib/serversideAPIUtils";
 import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 
@@ -35,20 +33,9 @@ export async function PUT(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
-  const loggedinUserData = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-  const { email } = loggedinUserData || {};
-  let isTeamLeader = false;
-  if (email) {
-    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
-      .isTeamLeader;
-  }
-
-  if (!isTeamLeader) {
-    return new Response(INVALID_TOKEN_ERROR, { status: 401 });
-  }
+  const res = await validateMatchId(clubSlug, teamSlug, matchId);
+  if (!res.success)
+    return new Response(JSON.stringify(res.error), { status: 400 });
 
   const matchDateTime = new Date(stringDate);
 
@@ -56,6 +43,21 @@ export async function PUT(request: NextRequest) {
     .$transaction(async (tx) => {
       matchDateTime.setHours(time.hour - 1, time.minute, time.second);
       matchDateTime.setDate(matchDateTime.getDate() + 1);
+      const location = await tx.location.findFirst({
+        where: {
+          matchId,
+        },
+      });
+      if (!location) {
+        await tx.location.create({
+          data: {
+            city,
+            hallName,
+            streetAddress,
+            matchId,
+          },
+        });
+      }
       await tx.match.update({
         where: {
           id: matchId,
@@ -82,6 +84,7 @@ export async function PUT(request: NextRequest) {
       });
     })
     .catch((error) => {
+      console.log(error);
       if (error.message) {
         asyncLog("error", `Error while putting match match: ${error?.message}`);
       }
@@ -118,21 +121,6 @@ export async function POST(request: NextRequest) {
     enemyClubName,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
-
-  const loggedinUserData = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-  const { email } = loggedinUserData || {};
-  let isTeamLeader = false;
-  if (email) {
-    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
-      .isTeamLeader;
-  }
-
-  if (!isTeamLeader) {
-    return new Response(INVALID_TOKEN_ERROR, { status: 401 });
-  }
 
   const matchDateTime = new Date(stringDate);
 
@@ -202,6 +190,10 @@ export async function DELETE(request: NextRequest) {
     matchId,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
+
+  const res = await validateMatchId(clubSlug, teamSlug, matchId);
+  if (!res.success)
+    return new Response(JSON.stringify(res.error), { status: 400 });
 
   const transactionResult = await prisma
     .$transaction(async (tx) => {

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { ZodObject } from "zod";
+import { z, ZodObject } from "zod";
 import {
   getValidToken,
   handleGetBody,
@@ -9,6 +9,7 @@ import {
 import { validateSchema } from "@/constants/zodSchemaConstants";
 import { asyncLog } from "./logUtils";
 import { getAuthCookies } from "./cookieUtils";
+import { prisma } from "./prisma/prisma";
 
 type Permission =
   | "server"
@@ -110,4 +111,32 @@ export const validateRequest = async (
   }
 
   return { body, response: null };
+};
+
+export const validateMatchId = async (
+  clubSlug: string,
+  teamSlug: string,
+  matchId: string
+) => {
+  const matchIdSchema = z.string().refine(async (id) => {
+    const match = await prisma.match.findUnique({
+      where: {
+        id,
+        AND: {
+          team: {
+            slug: teamSlug,
+          },
+          AND: {
+            team: {
+              club: {
+                slug: clubSlug,
+              },
+            },
+          },
+        },
+      },
+    });
+    return Boolean(match?.id);
+  }, "Match not found");
+  return await matchIdSchema.safeParseAsync(matchId);
 };
