@@ -3,7 +3,11 @@ import { API_VOTE_SCHEMA } from "@/constants/zodSchemaConstants";
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
-import { validateRequest } from "@/lib/serversideAPIUtils";
+import {
+  validateMatchId,
+  validatePlayerId,
+  validateRequest,
+} from "@/lib/serversideAPIUtils";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -17,6 +21,14 @@ export async function POST(request: NextRequest) {
 
   // @ts-expect-error zod validation ensures that body is defined
   const { clubSlug, teamSlug, playerId, matchId, vote } = body || {};
+
+  let res = await validateMatchId(clubSlug, teamSlug, matchId);
+  if (!res.success)
+    return new Response(JSON.stringify(res.error), { status: 404 });
+
+  res = await validatePlayerId(clubSlug, teamSlug, playerId);
+  if (!res.success)
+    return new Response(JSON.stringify(res.error), { status: 404 });
 
   const club = await prisma.club.findUnique({
     where: {

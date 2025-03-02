@@ -1,0 +1,15 @@
+meta {
+  name: team
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{url}}/team
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: server-token={{server-secret}}
+}

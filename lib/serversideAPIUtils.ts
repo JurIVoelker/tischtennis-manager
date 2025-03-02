@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { ZodObject } from "zod";
+import { z, ZodObject } from "zod";
 import {
   getValidToken,
   handleGetBody,
@@ -9,6 +9,7 @@ import {
 import { validateSchema } from "@/constants/zodSchemaConstants";
 import { asyncLog } from "./logUtils";
 import { getAuthCookies } from "./cookieUtils";
+import { prisma } from "./prisma/prisma";
 
 type Permission =
   | "server"
@@ -75,7 +76,6 @@ export const validateRequest = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: ZodObject<any>
 ) => {
-  console.log({ permissions });
   const {
     success: isBodySuccess,
     body,
@@ -111,4 +111,77 @@ export const validateRequest = async (
   }
 
   return { body, response: null };
+};
+
+export const validateMatchId = async (
+  clubSlug: string,
+  teamSlug: string,
+  matchId: string
+) => {
+  const matchIdSchema = z.string().refine(async (id) => {
+    const match = await prisma.match.findUnique({
+      where: {
+        id,
+        AND: {
+          team: {
+            slug: teamSlug,
+          },
+          AND: {
+            team: {
+              club: {
+                slug: clubSlug,
+              },
+            },
+          },
+        },
+      },
+    });
+    return Boolean(match?.id);
+  }, "Match not found");
+  return await matchIdSchema.safeParseAsync(matchId);
+};
+
+export const validatePlayerId = async (
+  clubSlug: string,
+  teamSlug: string,
+  playerId: string
+) => {
+  const playerIdSchema = z.string().refine(async (id) => {
+    const player = await prisma.player.findUnique({
+      where: {
+        id,
+        AND: {
+          team: {
+            slug: teamSlug,
+          },
+          AND: {
+            team: {
+              club: {
+                slug: clubSlug,
+              },
+            },
+          },
+        },
+      },
+    });
+    return Boolean(player?.id);
+  }, "Player not found");
+  return await playerIdSchema.safeParseAsync(playerId);
+};
+
+export const validateTeamId = async (clubSlug: string, teamId: string) => {
+  const teamIdSchema = z.string().refine(async (id) => {
+    const team = await prisma.team.findUnique({
+      where: {
+        id,
+        AND: {
+          club: {
+            slug: clubSlug,
+          },
+        },
+      },
+    });
+    return Boolean(team?.id);
+  }, "Team not found");
+  return await teamIdSchema.safeParseAsync(teamId);
 };

@@ -19,7 +19,7 @@ export const getOrderedPlayers = async (
     },
   });
 
-  const players = playerTeamPositions.map(
+  const players = playerTeamPositions.map(  
     (playerTeamPosition) => playerTeamPosition.player
   );
 
@@ -73,4 +73,89 @@ export const sortLineupsOfMatches = (
   players: Player[]
 ): MatchWithLineup[] => {
   return matches.map((match) => sortLineupsOfMatch(match, players));
+};
+
+export const validateLeaderId = async (clubSlug: string, leaderId: string) => {
+  const club = (await prisma.club.findFirst({
+    where: { slug: clubSlug },
+    include: {
+      teams: {
+        include: {
+          teamLeader: {
+            where: { id: leaderId },
+          },
+        },
+      },
+    },
+  })) || { teams: [] };
+
+  const teamLeader = club?.teams[0]?.teamLeader[0];
+
+  if (teamLeader?.id !== leaderId) {
+    return {
+      ok: false,
+      response: new Response(JSON.stringify({ ok: false }), { status: 404 }),
+    };
+  }
+
+  return {
+    ok: true,
+    response: false,
+  };
+};
+
+export const validateMatchId = async (clubSlug: string, matchId: string) => {
+  const club = (await prisma.club.findFirst({
+    where: { slug: clubSlug },
+    include: {
+      teams: {
+        include: {
+          matches: {
+            where: { id: matchId },
+          },
+        },
+      },
+    },
+  })) || { teams: [] };
+
+  const someIdValid = club.teams.some((team) =>
+    team.matches.length > 0 ? team.matches[0].id === matchId : null
+  );
+
+  if (!someIdValid) {
+    return {
+      ok: false,
+      response: new Response(JSON.stringify({ ok: false }), { status: 404 }),
+    };
+  }
+
+  return {
+    ok: true,
+    response: false,
+  };
+};
+
+export const validateTeamId = async (clubSlug: string, teamId: string) => {
+  const club = (await prisma.club.findFirst({
+    where: { slug: clubSlug },
+    include: {
+      teams: {
+        where: { id: teamId },
+      },
+    },
+  })) || { teams: [] };
+
+  const team = club?.teams[0];
+
+  if (team?.id !== teamId) {
+    return {
+      ok: false,
+      response: new Response(JSON.stringify({ ok: false }), { status: 404 }),
+    };
+  }
+
+  return {
+    ok: true,
+    response: false,
+  };
 };

@@ -1,0 +1,33 @@
+meta {
+  name: match
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{url}}/match
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: server-token={{server-secret}}
+}
+
+body:json {
+  {
+    "clubSlug": "Test-Club",
+    "teamSlug": "Herren-I",
+    "matchId": "cm73sf9v0003uq43t2fka3mo2",
+    "city": "test",
+    "date": "2023-10-05T14:48:00.000Z",
+    "hallName": "test",
+    "isHomeGame": false, 
+    "streetAddress": "test",
+    "time": {
+      "hour": 12,
+      "minute": 12,
+      "second": 12
+    }
+  }
+}
