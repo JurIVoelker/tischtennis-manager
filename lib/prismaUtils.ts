@@ -19,7 +19,7 @@ export const getOrderedPlayers = async (
     },
   });
 
-  const players = playerTeamPositions.map(  
+  const players = playerTeamPositions.map(
     (playerTeamPosition) => playerTeamPosition.player
   );
 
@@ -100,7 +100,7 @@ export const validateLeaderId = async (clubSlug: string, leaderId: string) => {
 
   return {
     ok: true,
-    response: false,
+    response: new Response(JSON.stringify({ ok: true }), { status: 200 }),
   };
 };
 
@@ -156,6 +156,6 @@ export const validateTeamId = async (clubSlug: string, teamId: string) => {
 
   return {
     ok: true,
-    response: false,
+    response: new Response(JSON.stringify({ ok: true }), { status: 200 }),
   };
 };
