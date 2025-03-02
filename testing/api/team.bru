@@ -6,10 +6,17 @@ meta {
 
 delete {
   url: {{url}}/team
-  body: none
+  body: json
   auth: none
 }
 
 headers {
   Cookie: server-token={{server-secret}}
+}
+
+body:json {
+  {
+    "clubSlug": "{{clubSlug}}",
+    "teamId": "cm73sf9h60004q43t8n1ql9tw"
+  } 
 }
