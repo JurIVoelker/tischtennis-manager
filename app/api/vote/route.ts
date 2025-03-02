@@ -18,6 +18,8 @@ export async function POST(request: NextRequest) {
   // @ts-expect-error zod validation ensures that body is defined
   const { clubSlug, teamSlug, playerId, matchId, vote } = body || {};
 
+  // TODO security check playerId, matchId
+
   const club = await prisma.club.findUnique({
     where: {
       slug: clubSlug,

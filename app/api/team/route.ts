@@ -26,6 +26,8 @@ export async function DELETE(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
+  // TODO security check team id
+
   const team = await prisma.team.findUnique({
     where: { id: teamId },
     include: { matches: true },

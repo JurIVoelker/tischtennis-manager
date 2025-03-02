@@ -22,6 +22,8 @@ export async function POST(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
+  // TODO security check playerIds
+
   const transactionResult = await prisma
     .$transaction(async (tx) => {
       const team = await tx.team.findUnique({
