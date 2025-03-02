@@ -36,8 +36,6 @@ Meine Lösung ist eine Web-App, die diese Probleme gezielt adressiert und den Pl
 
 ## Verzeichnisstruktur
 
-## Sicherheit
-
 ```markdown
 tischtennis-manager
 │── app/ # Next.js App Router Pages
@@ -55,6 +53,8 @@ tischtennis-manager
 │── tsconfig.json # TypeScript Konfiguration
 │── .github/workflows/ # CI/CD Workflows
 ```
+
+## Sicherheit
 
 Da viele Nutzer die App nur gelegentlich verwenden, ist ein einfacher Login-Prozess essenziell. Eine klassische Anmeldung mit Passwort könnte insbesondere für ältere, weniger technikaffine Nutzer eine Hürde darstellen. Daher setze ich auf Magic Links, sodass sich Nutzer ohne Passwort sicher und bequem anmelden können.
 
