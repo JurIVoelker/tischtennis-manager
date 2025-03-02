@@ -6,7 +6,7 @@ import {
 import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { revalidatePaths } from "@/lib/revalidateUtils";
-import { validateRequest } from "@/lib/serversideAPIUtils";
+import { validatePlayerId, validateRequest } from "@/lib/serversideAPIUtils";
 import { NextRequest } from "next/server";
 
 export async function DELETE(request: NextRequest) {
@@ -25,7 +25,9 @@ export async function DELETE(request: NextRequest) {
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
 
-  // TODO security check playerId
+  const res = await validatePlayerId(clubSlug, teamSlug, playerId);
+  if (!res.success)
+    return new Response(JSON.stringify(res.error), { status: 404 });
 
   const transactionResult = await prisma
     .$transaction(async (tx) => {
