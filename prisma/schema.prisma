@@ -21,10 +21,11 @@ model Club {
 }
 
 model Owner {
-  id     String @id @default(cuid())
-  email  String @unique
-  clubId String
-  club   Club   @relation(fields: [clubId], references: [id])
+  id       String @id @default(cuid())
+  email    String @unique
+  fullName String
+  clubId   String
+  club     Club   @relation(fields: [clubId], references: [id])
 }
 
 model Team {

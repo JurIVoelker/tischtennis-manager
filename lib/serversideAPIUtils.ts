@@ -185,3 +185,20 @@ export const validateTeamId = async (clubSlug: string, teamId: string) => {
   }, "Team not found");
   return await teamIdSchema.safeParseAsync(teamId);
 };
+
+export const validateAdminId = async (clubSlug: string, adminId: string) => {
+  const adminIdSchema = z.string().refine(async (id) => {
+    const owner = await prisma.owner.findUnique({
+      where: {
+        id,
+        AND: {
+          club: {
+            slug: clubSlug,
+          },
+        },
+      },
+    });
+    return Boolean(owner?.id);
+  }, "Owner not found");
+  return await adminIdSchema.safeParseAsync(adminId);
+};

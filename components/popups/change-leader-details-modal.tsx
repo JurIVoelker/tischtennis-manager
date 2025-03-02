@@ -22,6 +22,7 @@ interface ChangeUserDetailsModalProps {
   currentEmail: string;
   currentName: string;
   clubSlug: string;
+  isAdmin?: boolean;
 }
 
 export function ChangeLeaderDetailsModal({
@@ -32,6 +33,7 @@ export function ChangeLeaderDetailsModal({
   clubSlug,
   currentEmail,
   currentName,
+  isAdmin,
 }: ChangeUserDetailsModalProps) {
   const router = useRouter();
   const [newEmail, setNewEmail] = useState("");
@@ -59,12 +61,21 @@ export function ChangeLeaderDetailsModal({
     }
 
     try {
-      await putAPI("/api/leader", {
-        leaderId: id,
-        email: newEmail || null,
-        name: newName || null,
-        clubSlug,
-      });
+      if (!isAdmin) {
+        await putAPI("/api/leader", {
+          leaderId: id,
+          email: newEmail || null,
+          name: newName || null,
+          clubSlug,
+        });
+      } else {
+        await putAPI("/api/admin", {
+          adminId: id,
+          email: newEmail || null,
+          fullName: newName || null,
+          clubSlug,
+        });
+      }
       onDetailsChange(newEmail || currentEmail, newName || currentName);
       router.refresh();
       onClose();
@@ -80,7 +91,9 @@ export function ChangeLeaderDetailsModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Mannschaftsführer-Details ändern</DialogTitle>
+          <DialogTitle>
+            {isAdmin ? "Admin" : "Mannschaftsführer"}-Details ändern
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">

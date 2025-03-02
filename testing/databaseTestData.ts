@@ -16,6 +16,7 @@ const createClubAuth = async (clubId: string) => {
     data: {
       clubId,
       email: "jurivoelker03@gmail.com",
+      fullName: "Juri Völker",
     },
   });
 };

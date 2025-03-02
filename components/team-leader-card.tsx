@@ -29,6 +29,7 @@ interface TeamLeaderCardProps {
   variant?: "joined" | "pending" | "timeout";
   clubSlug: string;
   name: string;
+  isAdmin?: boolean;
 }
 
 const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
@@ -38,6 +39,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
   clubSlug,
   variant = "joined",
   id,
+  isAdmin = false,
   ...props
 }) => {
   const [emailState, setEmailState] = useState(email);
@@ -201,6 +203,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
         currentEmail={emailState}
         clubSlug={clubSlug}
         id={id}
+        isAdmin={isAdmin}
       />
       <DeleteLeaderDialog
         open={isDeleteLeaderDialogOpen}
@@ -208,6 +211,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
         leaderId={id}
         clubSlug={clubSlug}
         onOpenChange={(bool) => setDeleteLeaderDialogOpen(bool)}
+        isAdmin={isAdmin}
       />
       <ConfirmModal
         isDestructive={confirmModalSettings.isDestructive}

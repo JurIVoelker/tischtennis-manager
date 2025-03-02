@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma/prisma";
 import { z } from "zod";
 import {
+  ADMIN_NOT_FOUND_ERROR,
   CLUB_NOT_FOUND_ERROR,
   LEADER_NOT_FOUND_ERROR,
   MATCH_NOT_FOUND_ERROR,
@@ -66,6 +67,16 @@ const validateLeaderId = () =>
     },
     {
       message: LEADER_NOT_FOUND_ERROR,
+    }
+  );
+
+const validateAdminId = () =>
+  z.string().refine(
+    async (id: string) => {
+      return Boolean(await prisma.owner.findUnique({ where: { id } }));
+    },
+    {
+      message: ADMIN_NOT_FOUND_ERROR,
     }
   );
 
@@ -229,6 +240,24 @@ export const API_DELETE_LEADER_SCHEMA = z.object({
 export const API_DELETE_TEAM_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamId: validateTeamId(),
+});
+
+export const API_POST_ADMIN_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  fullName: z.string(),
+  email: z.string().email(),
+});
+
+export const API_PUT_ADMIN_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  fullName: z.string(),
+  email: z.string().email(),
+  adminId: validateAdminId(),
+});
+
+export const API_DELETE_ADMIN_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  adminId: validateAdminId(),
 });
 
 export const API_POST_TEAM_SCHEMA = z.object({

@@ -2,13 +2,13 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button, buttonVariants } from "./ui/button";
@@ -28,19 +28,16 @@ import {
   LEADER_LOGIN_PAGES_REGEX,
   INDEX_PAGE_REGEX,
 } from "@/constants/regex";
-import { signIn, signOut, useSession } from "next-auth/react";
+import AppSidebarFooter from "./sidebar/sidebar-footer";
+import { getUserData } from "@/lib/localstorageUtils";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { ArrowUp01Icon } from "hugeicons-react";
-import { getUserData, setUserData } from "@/lib/localstorageUtils";
-import { User2Icon } from "lucide-react";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
+import { ChevronDown } from "lucide-react";
 
 export const AppSidebar = ({}) => {
-  const { data: session } = useSession();
   const { toggleSidebar } = useSidebar();
   const [teams, setTeams] = useState<Team[] | null>(null);
   const { push } = useRouter();
@@ -78,147 +75,144 @@ export const AppSidebar = ({}) => {
     if (isMobile) toggleSidebar();
   };
 
-  const handleLeaveTeam = (teamName: string) => {
-    setUserData({ [teamName]: undefined });
-    window.location.reload();
-  };
+  const getButtonStyles = (isCurrentTeam: boolean) => {
+    const buttonStyles = buttonVariants({
+      variant: isCurrentTeam ? "default" : "ghost",
+    });
+    const customButtonStyles = isCurrentTeam
+      ? "hover:text-primary-foreground"
+      : "bg-transparent text-primary hover:bg-sidebar-accent";
 
-  const handleSignOut = () => {
-    signOut();
-    localStorage.removeItem("leaderAt");
+    return cn(buttonStyles, customButtonStyles, "justify-start");
   };
 
   if (excludedRoutes.some((regex) => regex.test(pathname))) {
     return <></>;
   }
 
+  const sortings = ["Herren", "Damen", "Jungen", "Mädchen"];
+
   return (
     <Sidebar>
-      <SidebarHeader />
+      <SidebarHeader className="h-20" />
       <SidebarContent>
-        <SidebarGroup className="mt-28">
-          <Typography variant="muted">Alle Mannschaften</Typography>
-          <div className="flex flex-col gap-2 pt-4">
-            {teams &&
-              teams
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((team) => {
-                  const isCurrentTeam = team.slug === currentTeamSlug;
-                  const buttonStyles = buttonVariants({
-                    variant: isCurrentTeam ? "default" : "ghost",
-                  });
-                  const customButtonStyles = isCurrentTeam
-                    ? "hover:text-primary-foreground"
-                    : "bg-transparent text-primary hover:bg-sidebar-accent";
+        <SidebarGroup>
+          {usersTeams.length > 0 && (
+            <SidebarMenu>
+              <Typography variant="muted">Meine Mannschaften</Typography>
+              <div className="flex flex-col gap-2 pt-1 mb-4">
+                {usersTeams.map((teamSlug) => {
+                  const team = teams?.find((t) => t.slug === teamSlug);
                   return (
-                    <SidebarMenuButton asChild key={team.id}>
+                    <SidebarMenuButton asChild key={team?.id}>
                       <Button
-                        className={cn(
-                          buttonStyles,
-                          customButtonStyles,
-                          "justify-start"
+                        className={getButtonStyles(
+                          teamSlug === currentTeamSlug
                         )}
                         onClick={() =>
-                          handleClickLink(`/${userClub}/${team.slug}`)
+                          handleClickLink(`/${userClub}/${teamSlug}`)
                         }
                       >
-                        {team.name}
+                        {team?.name}
                       </Button>
                     </SidebarMenuButton>
                   );
                 })}
-            {teams === null &&
-              Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="w-full h-10" />
-              ))}
-            {Array.isArray(teams) && teams.length === 0 && (
-              <Typography variant="muted">
-                Keine Mannschaften gefunden
-              </Typography>
-            )}
-          </div>
+              </div>
+            </SidebarMenu>
+          )}
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarMenu>
+            <Typography variant="muted">Alle Mannschaften</Typography>
+            <div className="flex flex-col gap-2 pt-1">
+              {sortings.map((category) => {
+                const categoryTeams = teams?.filter((team) =>
+                  team.name.includes(category)
+                );
+
+                if (!categoryTeams || categoryTeams.length === 0) return null;
+
+                return (
+                  <Collapsible
+                    key={category}
+                    defaultOpen
+                    className={cn("group/collapsible")}
+                  >
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton
+                          className={cn(
+                            buttonVariants({
+                              variant: "secondary",
+                            }),
+                            "justify-start",
+                            "flex justify-between items-center"
+                          )}
+                        >
+                          {category}
+                          <ChevronDown />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {categoryTeams
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((team) => (
+                              <SidebarMenuSubItem key={team.id}>
+                                <Button
+                                  className={cn(
+                                    getButtonStyles(
+                                      team.slug === currentTeamSlug
+                                    ),
+                                    "w-full"
+                                  )}
+                                  onClick={() =>
+                                    handleClickLink(`/${userClub}/${team.slug}`)
+                                  }
+                                >
+                                  {team.name}
+                                </Button>
+                              </SidebarMenuSubItem>
+                            ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                );
+              })}
+              {teams
+                ?.filter(
+                  (team) =>
+                    !sortings.some((category) => team.name.includes(category))
+                )
+                .map((team) => (
+                  <SidebarMenuButton asChild key={team.id}>
+                    <Button
+                      className={getButtonStyles(team.slug === currentTeamSlug)}
+                      onClick={() =>
+                        handleClickLink(`/${userClub}/${team.slug}`)
+                      }
+                    >
+                      {team.name}
+                    </Button>
+                  </SidebarMenuButton>
+                ))}
+              {teams === null &&
+                Array.from({ length: 5 }).map((_, i) => (
+                  <Skeleton key={i} className="w-full h-10" />
+                ))}
+              {Array.isArray(teams) && teams.length === 0 && (
+                <Typography variant="muted">
+                  Keine Mannschaften gefunden
+                </Typography>
+              )}
+            </div>
+          </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter>
-        <div className="pb-4 space-y-4">
-          <SidebarSeparator />
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton className="h-10">
-                    {session?.user?.name ? (
-                      <>
-                        <span className="flex justify-center items-center rounded-full bg-gray-200 h-6 w-6">
-                          <User2Icon size={16} />
-                        </span>{" "}
-                        {session.user.name}
-                      </>
-                    ) : (
-                      "Meine Mannschaften"
-                    )}
-                    <ArrowUp01Icon size={20} className="ml-auto" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  side="top"
-                  className="w-[--radix-popper-anchor-width]"
-                >
-                  {usersTeams
-                    .sort((a, b) => a.localeCompare(b))
-                    .map((teamName) => (
-                      <DropdownMenuItem
-                        key={teamName}
-                        onClick={() => handleLeaveTeam(teamName)}
-                      >
-                        <span className="inline-flex items-center gap-2">
-                          {`${teamName.replace("-", " ")} verlassen`}
-                        </span>
-                      </DropdownMenuItem>
-                    ))}
-                  {Boolean(usersTeams.length) && (
-                    <SidebarSeparator className="my-1" />
-                  )}
-                  {session && (
-                    <>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          handleClickLink(
-                            `/${userClub}/admin/mannschaftsfuehrer`
-                          )
-                        }
-                        className="inline-flex items-center gap-2 w-full"
-                      >
-                        Mannschaften verwalten
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={handleSignOut}>
-                        <span className="inline-flex items-center gap-2 text-destructive">
-                          Logout
-                        </span>
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                  {!session && (
-                    <>
-                      <SidebarMenuButton
-                        onClick={() =>
-                          signIn("google", {
-                            callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/${currentTeamSlug}/mannschaftsfuehrer/login/validieren`,
-                            redirect: true,
-                          })
-                        }
-                      >
-                        Mannschaftsführer Login
-                      </SidebarMenuButton>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </div>
-      </SidebarFooter>
+      <AppSidebarFooter userClub={userClub} currentTeamSlug={currentTeamSlug} />
     </Sidebar>
   );
 };
