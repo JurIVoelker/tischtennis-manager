@@ -38,20 +38,20 @@ Meine Lösung ist eine Web-App, die diese Probleme gezielt adressiert und den Pl
 
 ```markdown
 tischtennis-manager
-│── app/ # Next.js App Router Pages
-│ ├── [club]/[team]/ # Team-spezifische Seiten
-│ ├── layout.tsx # Hauptlayout
-│ ├── page.tsx # Startseite
-│── prisma/ # Prisma Schema & Migrationen
-│── testing/ # Testdaten für die Datenbank
-│── components/ # Wiederverwendbare UI-Komponenten
-│── middleware.ts # Authentifizierung & Zugriffssteuerung
-│── package.json # Abhängigkeiten & Skripte
-│── prisma/schema.prisma # Datenbankmodell
-│── next.config.mjs # Next.js Konfiguration
-│── tailwind.config.ts # Tailwind-Konfiguration
-│── tsconfig.json # TypeScript Konfiguration
-│── .github/workflows/ # CI/CD Workflows
+│── app/                      # Next.js App Router Pages
+│ ├── [club]/[team]/          # Team-spezifische Seiten
+│ ├── layout.tsx              # Hauptlayout
+│ ├── page.tsx                # Startseite
+│── prisma/                   # Prisma Schema & Migrationen
+│── testing/                  # Testdaten für die Datenbank
+│── components/               # Wiederverwendbare UI-Komponenten
+│── middleware.ts             # Authentifizierung & Zugriffssteuerung
+│── package.json              # Abhängigkeiten & Skripte
+│── prisma/schema.prisma      # Datenbankmodell
+│── next.config.mjs           # Next.js Konfiguration
+│── tailwind.config.ts        # Tailwind-Konfiguration
+│── tsconfig.json             # TypeScript Konfiguration
+│── .github/workflows/        # CI/CD Workflows
 ```
 
 ## Sicherheit
@@ -68,33 +68,41 @@ Um eine hohe Performance zu gewährleisten, werden die meisten Komponenten serve
 
 # Installation und Setup
 
-### Abhängigkeiten installieren
 
 ```bash
 bun i
 ```
-
+Abhängigkeiten installieren
 > Weitere Informationen zur Installation von Bun: [Bun Docs](https://bun.sh/docs/installation)
 
 ```bash
 touch prisma/database.db
 ```
 
+Datenbankdatei erstellen, mit „touch“ oder manuell als Datei
+
 ```bash
 bun db:migrate
 ```
+
+Migration ausführen, um die Datenbankstruktur zu aktualisieren
 
 ```bash
 bun db:setup-test-data
 ```
 
+(Optional) Testdaten importieren
+
 ```bash
 bun dev
 ```
 
+Entwicklungsserver starten
+
 # Deployment
 
 ```bash
+### Build erstellen und starten
 bun run build
 bun start
 ```
