@@ -57,12 +57,12 @@ const SortPlayersTableWrapper: React.FC<SortPlayersTableWrapperProps> = ({
       <div className="flex gap-2">
         <Button variant="outline" asChild className="w-full">
           <Link href="./verwalten">
-            <Cancel01Icon />
+            <Cancel01Icon strokeWidth={2}/>
             Abbrechen
           </Link>
         </Button>
         <Button className="w-full" onClick={onSave}>
-          <Tick01Icon />
+          <Tick01Icon strokeWidth={2}/>
           Speichern
         </Button>
       </div>

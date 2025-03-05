@@ -6,13 +6,13 @@ import {
   SidebarSeparator,
   useSidebar,
 } from "../ui/sidebar";
-import { LogOut, User2Icon } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ConfirmModal } from "../popups/confirm-modal";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
+  import { AddTeamIcon, ShieldUserIcon, UserCircleIcon } from "hugeicons-react";
 
 interface AppSidebarFooterProps {
   userClub: string;
@@ -64,20 +64,20 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
             <>
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  className="h-10"
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "justify-start"
+                  )}
                   onClick={() => setLogoutModalOpen(true)}
                 >
                   {session?.user?.name ? (
                     <>
-                      <span className="flex justify-center items-center rounded-full bg-gray-200 h-6 w-6">
-                        <User2Icon size={16} />
-                      </span>{" "}
+                      <UserCircleIcon strokeWidth={2}/>
                       {session.user.name}
                     </>
                   ) : (
                     "Meine Mannschaften"
                   )}
-                  <LogOut size={32} className="ml-auto" />
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
@@ -90,6 +90,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
                     "justify-start"
                   )}
                 >
+                  <AddTeamIcon strokeWidth={2}/>
                   Mannschaften verwalten
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -103,6 +104,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
                     "justify-start"
                   )}
                 >
+                  <ShieldUserIcon strokeWidth={2}/>
                   Admins verwalten
                 </SidebarMenuButton>
               </SidebarMenuItem>

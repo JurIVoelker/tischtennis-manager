@@ -77,7 +77,7 @@ const ManagePlayersHeader: React.FC<ManagePlayersHeaderProps> = ({
       <div className="flex gap-2 ">
         <Button variant="outline" asChild>
           <Link href="../">
-            <ArrowLeft01Icon />
+            <ArrowLeft01Icon strokeWidth={2}/>
             Zurück
           </Link>
         </Button>
@@ -88,7 +88,7 @@ const ManagePlayersHeader: React.FC<ManagePlayersHeaderProps> = ({
         >
           {inviteToken && (
             <>
-              <Copy01Icon />
+              <Copy01Icon strokeWidth={2}/>
               Einladungslink kopieren
             </>
           )}

@@ -51,7 +51,7 @@ const ManagePlayersPage = async ({
           className={cn(buttonVariants({ variant: "outline" }), "w-full mt-6")}
           href="./hinzufuegen"
         >
-          <PlusSignIcon />
+          <PlusSignIcon strokeWidth={2}/>
           Spieler hinzufügen
         </Link>
       </div>

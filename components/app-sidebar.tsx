@@ -35,7 +35,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown01Icon } from "hugeicons-react";
 
 export const AppSidebar = ({}) => {
   const { toggleSidebar } = useSidebar();
@@ -151,7 +151,7 @@ export const AppSidebar = ({}) => {
                           )}
                         >
                           {category}
-                          <ChevronDown />
+                          <ArrowDown01Icon strokeWidth={2}/>
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
                       <CollapsibleContent>

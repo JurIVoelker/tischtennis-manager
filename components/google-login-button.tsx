@@ -53,7 +53,7 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
               })
             }
           >
-            <GoogleIcon /> Mit Google anmelden
+            <GoogleIcon strokeWidth={2}/> Mit Google anmelden
           </Button>
         </>
       )}

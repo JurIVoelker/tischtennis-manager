@@ -40,7 +40,7 @@ const PlayersCard = ({
         {isOptionsVisible && (
           <Button variant="secondary" size="icon-lg" asChild>
             <Link href={`/${clubSlug}/${teamSlug}/spieler/verwalten`}>
-              <PencilEdit02Icon />
+              <PencilEdit02Icon strokeWidth={2}/>
             </Link>
           </Button>
         )}

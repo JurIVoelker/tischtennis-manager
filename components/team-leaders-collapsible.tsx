@@ -45,7 +45,7 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
             size="icon-lg"
             onClick={() => setDeleteModalOpen(true)}
           >
-            <Delete02Icon />
+            <Delete02Icon strokeWidth={2}/>
           </Button>
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="icon-lg">
@@ -82,7 +82,7 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
           clubSlug={clubSlug}
         >
           <Button variant="outline" className="w-full">
-            <PlusSignIcon />
+            <PlusSignIcon strokeWidth={2}/>
             Hinzufügen
           </Button>
         </AddLeaderModal>

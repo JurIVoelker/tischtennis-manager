@@ -120,7 +120,7 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({
           className={cn(buttonVariants({ variant: "outline" }), "w-full")}
           href={"./verwalten"}
         >
-          <Cancel01Icon />
+          <Cancel01Icon strokeWidth={2}/>
           Abbrechen
         </Link>
         <Button
@@ -128,7 +128,7 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({
           disabled={!(selectedPlayers.length > 0 || customPlayers.length > 0)}
           onClick={onSave}
         >
-          <Tick01Icon />
+          <Tick01Icon strokeWidth={2}/>
           Speichern
         </Button>
       </div>

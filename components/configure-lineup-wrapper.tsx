@@ -166,9 +166,9 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
                 }
               >
                 {getPlayerName(player, remainingMainPlayers)}
-                {availability === "maybe" && <HelpCircleIcon />}
-                {availability === "unavailable" && <Cancel01Icon />}
-                {availability === "available" && <Tick01Icon />}
+                {availability === "maybe" && <HelpCircleIcon strokeWidth={2}/>}
+                {availability === "unavailable" && <Cancel01Icon strokeWidth={2}/>}
+                {availability === "available" && <Tick01Icon strokeWidth={2}/>}
               </Button>
             );
           })}
@@ -187,11 +187,11 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
           className={cn(buttonVariants({ variant: "outline" }), "w-full")}
           href={"../../../"}
         >
-          <Cancel01Icon />
+          <Cancel01Icon strokeWidth={2}/>
           Abbrechen
         </Link>
         <Button className="w-full" onClick={onSave}>
-          <Tick01Icon />
+          <Tick01Icon strokeWidth={2}/>
           Speichern
         </Button>
       </div>

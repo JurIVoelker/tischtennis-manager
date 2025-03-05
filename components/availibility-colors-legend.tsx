@@ -8,17 +8,17 @@ const AvailabilityColorsLegend = () => {
     {
       label: "Verfügbar",
       customClasses: "border-positive-border bg-positive-light",
-      icon: () => <Tick01Icon size={20} className="text-positive-dark" />,
+      icon: () => <Tick01Icon size={20} className="text-positive-dark" strokeWidth={2}/>,
     },
     {
       label: "Nicht Verfügbar",
       customClasses: "bg-negative-light border-negative-border",
-      icon: () => <Cancel01Icon size={20} className="text-negative-dark" />,
+      icon: () => <Cancel01Icon size={20} className="text-negative-dark" strokeWidth={2}/>,
     },
     {
       label: "Vielleicht",
       customClasses: "bg-neutral-light border-neutral-border",
-      icon: () => <HelpCircleIcon size={20} className="text-neutral-dark" />,
+      icon: () => <HelpCircleIcon size={20} className="text-neutral-dark" strokeWidth={2}/>,
     },
     {
       label: "Nicht abgestimmt",

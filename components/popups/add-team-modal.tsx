@@ -61,7 +61,7 @@ export const AddTeamModal: React.FC<AddTeamModalProps> = ({ clubSlug }) => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="h-14 flex w-full">
-          <Add01Icon /> Mannschaft hinzufügen
+          <Add01Icon strokeWidth={2}/> Mannschaft hinzufügen
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

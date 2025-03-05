@@ -88,9 +88,9 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
                       disabled={isPlayerDisabled}
                     >
                       {!isPlayerSelected && !isPlayerDisabled && (
-                        <PlusSignIcon />
+                        <PlusSignIcon strokeWidth={2} />
                       )}
-                      {(isPlayerSelected || isPlayerDisabled) && <Tick01Icon />}
+                      {(isPlayerSelected || isPlayerDisabled) && <Tick01Icon strokeWidth={2}/>}
                       {getPlayerName(player, team.players)}
                     </Button>
                   );

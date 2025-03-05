@@ -311,11 +311,11 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
             className={cn(buttonVariants({ variant: "outline" }), "w-full")}
             href={isCreate ? "../" : "../../"}
           >
-            <Cancel01Icon />
+            <Cancel01Icon strokeWidth={2}/>
             Abbrechen
           </Link>
           <Button type="submit" className="w-full">
-            <Tick01Icon />
+            <Tick01Icon strokeWidth={2}/>
             Speichern
           </Button>
         </div>

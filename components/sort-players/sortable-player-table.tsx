@@ -119,7 +119,7 @@ export const SortablePlayerTable: React.FC<PlayerTableProps> = ({
                                 handleRemovePlayer(playerList.id);
                               }}
                             >
-                              <Cancel01Icon />
+                              <Cancel01Icon strokeWidth={2}/>
                             </Button>
                           )}
                         </Card>

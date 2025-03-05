@@ -150,7 +150,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
               className="text-destructive"
               onClick={onRevokeInviteModalOpen}
             >
-              <Cancel01Icon />
+              <Cancel01Icon strokeWidth={2}/>
             </Button>
           </>
         )}
@@ -164,7 +164,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
               size="icon-lg"
               onClick={onRenewInviteModalOpen}
             >
-              <ArrowReloadHorizontalIcon />
+              <ArrowReloadHorizontalIcon strokeWidth={2}/>
             </Button>
           </>
         )}

@@ -44,7 +44,7 @@ const AdminManagePage = async ({ params }: { params: Promise<ClubParams> }) => {
           ))}
           <AddAdminModal clubSlug={clubSlug}>
             <Button variant="outline" className="w-full">
-              <PlusSignIcon />
+              <PlusSignIcon strokeWidth={2}/>
               Hinzufügen
             </Button>
           </AddAdminModal>
