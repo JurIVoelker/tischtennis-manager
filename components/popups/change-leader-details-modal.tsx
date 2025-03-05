@@ -64,15 +64,15 @@ export function ChangeLeaderDetailsModal({
       if (!isAdmin) {
         await putAPI("/api/leader", {
           leaderId: id,
-          email: newEmail || null,
-          name: newName || null,
+          email: newEmail || currentEmail || null,
+          name: newName || currentName || null,
           clubSlug,
         });
       } else {
         await putAPI("/api/admin", {
           adminId: id,
-          email: newEmail || null,
-          fullName: newName || null,
+          email: newEmail || currentEmail || null,
+          fullName: newName || currentName || null,
           clubSlug,
         });
       }

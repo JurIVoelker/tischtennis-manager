@@ -89,9 +89,10 @@ export const validateLeaderId = async (clubSlug: string, leaderId: string) => {
     },
   })) || { teams: [] };
 
-  const teamLeader = club?.teams[0]?.teamLeader[0];
+  const teamLeaderOk = club?.teams.some((team) =>
+    team.teamLeader.length > 0 ?  team.teamLeader.some((teamLeader) => (teamLeader.id === leaderId)): false)
 
-  if (teamLeader?.id !== leaderId) {
+  if (!teamLeaderOk) {
     return {
       ok: false,
       response: new Response(JSON.stringify({ ok: false }), { status: 404 }),

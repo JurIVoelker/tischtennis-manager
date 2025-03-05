@@ -12,7 +12,7 @@ import { ConfirmModal } from "../popups/confirm-modal";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
-  import { AddTeamIcon, ShieldUserIcon, UserCircleIcon } from "hugeicons-react";
+  import { AddTeamIcon, LoginSquare01Icon, ShieldUserIcon, UserCircleIcon } from "hugeicons-react";
 
 interface AppSidebarFooterProps {
   userClub: string;
@@ -57,6 +57,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
                 "justify-start"
               )}
             >
+              <LoginSquare01Icon strokeWidth={2}/>
               Mannschaftsführer Login
             </SidebarMenuButton>
           )}
