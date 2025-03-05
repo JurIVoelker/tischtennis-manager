@@ -6,6 +6,7 @@ import {
 import { prisma } from "@/lib/prisma/prisma";
 import { validateAdminId, validateRequest } from "@/lib/serversideAPIUtils";
 import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: NextRequest) {
   const { response, body } = await validateRequest(
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
       fullName,
     },
   });
+  revalidatePath(`/${clubSlug}/admin/verwalten`);
   return new Response(JSON.stringify({ ok: true, data: res }), { status: 200 });
 }
 
@@ -53,7 +55,6 @@ export async function PUT(request: NextRequest) {
     email,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any = body;
-
   const isAdminValid = await validateAdminId(clubSlug, adminId);
   if (!isAdminValid.success) {
     return new Response(JSON.stringify({ error: isAdminValid.data }), {
@@ -70,6 +71,7 @@ export async function PUT(request: NextRequest) {
       fullName,
     },
   });
+  revalidatePath(`/${clubSlug}/admin/verwalten`);
   return new Response(JSON.stringify({ ok: true, data: res }), { status: 200 });
 }
 
@@ -100,6 +102,6 @@ export async function DELETE(request: NextRequest) {
       id: adminId,
     },
   });
-
+  revalidatePath(`/${clubSlug}/admin/verwalten`);
   return new Response(JSON.stringify({ ok: true, data: res }), { status: 200 });
 }
