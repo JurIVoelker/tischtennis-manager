@@ -6,7 +6,9 @@ export type permission =
   | "view:players-card-options"
   | "view:add-new-game"
   | "view:add-lineup-in-game-card-body"
-  | "view:game-availability-buttons";
+  | "view:game-availability-buttons"
+  | "view:manage-leaders-button"
+  | "view:manage-admin-button";
 
 interface RoleProps {
   viewer: permission[];
@@ -24,7 +26,7 @@ export const ROLES: RoleProps = {
     "view:add-lineup-in-game-card-body",
     "view:players-card-options",
   ],
-  admin: [],
+  admin: ["view:manage-admin-button", "view:manage-leaders-button"],
 } as const;
 
 export const getRole = (): role[] => {
@@ -37,6 +39,8 @@ export const getRole = (): role[] => {
     (leaderData: { clubName: string; teamName: string }) =>
       leaderData.clubName === clubSlug && leaderData.teamName === teamSlug
   );
+  const isAdmin  = localStorage.getItem("admin") === "true";
+  if (isAdmin) roles.push("admin");
   if (isLeader) roles.push("leader");
   const userData = getUserData();
   if (userData[teamSlug]?.id) roles.push("member");

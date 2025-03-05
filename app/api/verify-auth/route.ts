@@ -1,3 +1,4 @@
+import { asyncLog } from "@/lib/logUtils";
 import { prisma } from "@/lib/prisma/prisma";
 import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
@@ -20,15 +21,16 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+    asyncLog("error",`Error verifying token (teamLeader): ${JSON.stringify(error)}`);
     console.error(error);
-    return new Response("Internal server error", { status: 500 });
   }
 
-  const data: { leaderAt: { clubName: string; teamName: string }[] } = {
+  const data: { leaderAt: { clubName: string; teamName: string }[], admin: boolean } = {
     leaderAt: [],
+    admin: false,
   };
 
-  for (const teamLeader of teamLeaders) {
+  for (const teamLeader of teamLeaders || []) {
     const team = await prisma.team.findFirst({
       where: {
         id: teamLeader.teamId,
@@ -48,6 +50,18 @@ export async function GET(request: NextRequest) {
         clubName: club.slug,
         teamName: team.slug,
       });
+  }
+
+  try {
+    const admin = await prisma.owner.findMany({
+      where: {
+        email,
+      },
+    });
+    if (admin.length > 0) data.admin = true
+  } catch (error) {
+    asyncLog("error",`Error verifying token (admin): ${JSON.stringify(error)}`);
+    console.error(error);
   }
 
   return new Response(JSON.stringify({ data }));

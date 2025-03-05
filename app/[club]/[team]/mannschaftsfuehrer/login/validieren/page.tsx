@@ -11,11 +11,15 @@ const ValidateLeaderLoggedInPage = () => {
   const verifyToken = async () => {
     try {
       const response = await getAPI("/api/verify-auth");
-      const { leaderAt } = response.data || {};
-      localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
+      const { leaderAt, admin } = response.data || {};
+      if (leaderAt) {
+        localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
+      } if (admin) {
+        localStorage.setItem("admin", "true");
+      }
       push("../../");
     } catch (error) {
-      setError("Verifizierung fehlgeschlagen. Bitte versuche es erneut.");
+      setError("Verifizierung fehlgeschlagen. Bitte  versuche es erneut.");
       console.error("Error verifying token:", error);
     }
   };
