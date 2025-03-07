@@ -1,5 +1,6 @@
 import GameCard from "@/components/game-card/game-card";
 import NewGame from "@/components/game-card/new-game-card";
+import Headline from "@/components/headline";
 import TeamLeaderJoinSuggestion from "@/components/leader-no-member-promt";
 import Navbar from "@/components/navbar";
 import PlayersCard from "@/components/players-card";
@@ -70,8 +71,9 @@ const ClubTeamPage = async ({
   return (
     <>
       <div className="w-full">
-        <Navbar title={teamName} />
+        <Navbar />
         <div className="px-6 pb-6 pt-16 ">
+          <Headline>{teamName}</Headline>
           <PlayersCard
             players={players}
             className="mb-8"

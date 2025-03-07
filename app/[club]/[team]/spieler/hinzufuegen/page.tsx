@@ -1,4 +1,5 @@
 import AddPlayersWrapper from "@/components/add-players-wrapper";
+import Headline from "@/components/headline";
 import Navbar from "@/components/navbar";
 import {
   ClubTeamParams,
@@ -36,8 +37,9 @@ const AddPlayersPage = async ({
 
   return (
     <div className="w-full">
-      <Navbar title="Spieler hinzufügen" />
+      <Navbar />
       <div className="px-6 pb-6 pt-16 ">
+        <Headline>Spieler hinzufügen</Headline>
         <AddPlayersWrapper
           teams={teamsWithOrderedPlayers}
           clubSlug={clubSlug}

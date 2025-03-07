@@ -1,3 +1,4 @@
+import Headline from "@/components/headline";
 import Navbar from "@/components/navbar";
 import SortPlayersTableWrapper from "@/components/sort-players-table-wrapper";
 import {
@@ -33,8 +34,9 @@ const SortPlayersPage = async ({
 
   return (
     <div className="w-full">
-      <Navbar title="Spieler sortieren" />
+      <Navbar />
       <div className="px-6 pb-6 pt-16 ">
+        <Headline>Spieler sortieren</Headline>
         <SortPlayersTableWrapper
           defaultPlayers={players}
           clubSlug={clubSlug}

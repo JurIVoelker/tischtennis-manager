@@ -1,3 +1,4 @@
+import Headline from "@/components/headline";
 import Navbar from "@/components/navbar";
 import { AddTeamModal } from "@/components/popups/add-team-modal";
 import TeamLeadersCollapsible from "@/components/team-leaders-collapsible";
@@ -32,8 +33,9 @@ const AdminLeaderPage = async ({ params }: { params: Promise<ClubParams> }) => {
 
   return (
     <div className="w-full">
-      <Navbar title="Mannschaftsführer" />
+      <Navbar />
       <div className="space-y-12 px-6 pb-6 pt-16">
+        <Headline>Mannschaftsführer</Headline>
         <div className="space-y-3">
           {teams.map((team) => (
             <TeamLeadersCollapsible

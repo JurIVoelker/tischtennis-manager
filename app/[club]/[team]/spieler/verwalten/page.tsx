@@ -1,3 +1,4 @@
+import Headline from "@/components/headline";
 import ManagePlayersHeader from "@/components/manage-players/manage-players-header";
 import { PlayerTable } from "@/components/manage-players/player-table";
 import Navbar from "@/components/navbar";
@@ -38,8 +39,9 @@ const ManagePlayersPage = async ({
 
   return (
     <div className="w-full">
-      <Navbar title="Spieler verwalten" />
+      <Navbar />
       <div className="px-6 pb-6 pt-16 ">
+        <Headline>Spieler verwalten</Headline>
         <ManagePlayersHeader clubSlug={clubSlug} teamSlug={teamSlug} />
         <PlayerTable
           className="mt-16"
@@ -51,7 +53,7 @@ const ManagePlayersPage = async ({
           className={cn(buttonVariants({ variant: "outline" }), "w-full mt-6")}
           href="./hinzufuegen"
         >
-          <PlusSignIcon strokeWidth={2}/>
+          <PlusSignIcon strokeWidth={2} />
           Spieler hinzufügen
         </Link>
       </div>
