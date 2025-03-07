@@ -35,7 +35,7 @@ const exec = async () => {
       name: clubName || "",
       owners: {
         create: {
-          email: clubInitialAdminEmail || "",
+          email: clubInitialAdminEmail?.toLowerCase() || "",
           fullName: "INITIAL_ADMIN",
         },
       },

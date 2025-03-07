@@ -17,15 +17,21 @@ export async function GET(request: NextRequest) {
   try {
     teamLeaders = await prisma.teamLeader.findMany({
       where: {
-        email,
+        email: email.toLowerCase(),
       },
     });
   } catch (error) {
-    asyncLog("error",`Error verifying token (teamLeader): ${JSON.stringify(error)}`);
+    asyncLog(
+      "error",
+      `Error verifying token (teamLeader): ${JSON.stringify(error)}`
+    );
     console.error(error);
   }
 
-  const data: { leaderAt: { clubName: string; teamName: string }[], admin: boolean } = {
+  const data: {
+    leaderAt: { clubName: string; teamName: string }[];
+    admin: boolean;
+  } = {
     leaderAt: [],
     admin: false,
   };
@@ -55,12 +61,15 @@ export async function GET(request: NextRequest) {
   try {
     const admin = await prisma.owner.findMany({
       where: {
-        email,
+        email: email.toLowerCase(),
       },
     });
-    if (admin.length > 0) data.admin = true
+    if (admin.length > 0) data.admin = true;
   } catch (error) {
-    asyncLog("error",`Error verifying token (admin): ${JSON.stringify(error)}`);
+    asyncLog(
+      "error",
+      `Error verifying token (admin): ${JSON.stringify(error)}`
+    );
     console.error(error);
   }
 

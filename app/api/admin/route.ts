@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
   const res = await prisma.owner.create({
     data: {
-      email,
+      email: email.toLowerCase(),
       club: {
         connect: {
           slug: clubSlug,
@@ -67,7 +67,7 @@ export async function PUT(request: NextRequest) {
       id: adminId,
     },
     data: {
-      email,
+      email: email.toLowerCase(),
       fullName,
     },
   });

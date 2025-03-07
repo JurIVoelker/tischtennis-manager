@@ -137,6 +137,13 @@ export async function POST(request: NextRequest) {
       club: { connect: { slug: clubSlug } },
       name: teamName,
       slug: teamSlug,
+      teamAuth: {
+        create: {
+          token:
+            Math.random().toString(36).substring(2, 15) +
+            Math.random().toString(36).substring(2, 15),
+        },
+      },
     },
   });
 

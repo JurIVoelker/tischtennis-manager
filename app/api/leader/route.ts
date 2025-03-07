@@ -42,7 +42,7 @@ export async function PUT(request: NextRequest) {
     if (email) {
       await tx.teamLeader.update({
         where: { id: leaderId },
-        data: { email },
+        data: { email: email.toLowerCase() },
       });
     }
     if (name) {
@@ -118,7 +118,9 @@ export async function POST(request: NextRequest) {
   const { ok, response } = await validateTeamId(clubSlug, teamId);
   if (!ok) return response;
 
-  await prisma.teamLeader.create({ data: { email, fullName, teamId } });
+  await prisma.teamLeader.create({
+    data: { email: email.toLowerCase(), fullName, teamId },
+  });
   revalidatePath(`/${clubSlug}/admin/mannschaftsfuehrer`);
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
