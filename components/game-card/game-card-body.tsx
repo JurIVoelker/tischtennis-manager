@@ -18,13 +18,13 @@ const GameCardBody: React.FC<GameCardBodyProps> = ({ match, teamSlug }) => {
 
   return (
     <div>
-      <div className="inline-flex items-center gap-2 mb-2">
+      <div className="flex items-center gap-2 mb-2">
         <Calendar02Icon size={20} stroke="4" className="shrink-0" />
         <Typography variant="p-gray" className="leading-0">
           {dateTimeString}
         </Typography>
       </div>
-      <div className="inline-flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Location01Icon size={20} stroke="4" className="shrink-0" />
         <Typography variant="p-gray" className="leading-0">
           {locationString}
