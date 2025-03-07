@@ -71,7 +71,29 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
 
   const handleSelectPlayer = (playerId: string) => {
     const playerToAdd = mainPlayers.find((player) => player.id === playerId);
-    if (playerToAdd) setSelectedPlayers((prev) => [...prev, playerToAdd]);
+    if (playerToAdd)
+      setSelectedPlayers((prevList) => {
+        if (prevList.length === 0) {
+          return [playerToAdd];
+        }
+
+        const customPlayers = prevList.filter(
+          (player) => !mainPlayers.some((p) => p.id === player.id)
+        );
+        const customPlayerIndicies = customPlayers.map((player) =>
+          prevList.findIndex((p) => p.id === player.id)
+        );
+
+        const listWithNewPlayer = [...prevList, playerToAdd];
+        const newList: Player[] = mainPlayers.filter((player) =>
+          listWithNewPlayer.some((p) => p.id === player.id)
+        );
+
+        customPlayerIndicies.forEach((index, i) => {
+          newList.splice(index, 0, customPlayers[i]);
+        });
+        return newList;
+      });
   };
 
   const handleSelectExistingPlayer = (playerIds: string[]) => {
@@ -166,9 +188,11 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
                 }
               >
                 {getPlayerName(player, remainingMainPlayers)}
-                {availability === "maybe" && <HelpCircleIcon strokeWidth={2}/>}
-                {availability === "unavailable" && <Cancel01Icon strokeWidth={2}/>}
-                {availability === "available" && <Tick01Icon strokeWidth={2}/>}
+                {availability === "maybe" && <HelpCircleIcon strokeWidth={2} />}
+                {availability === "unavailable" && (
+                  <Cancel01Icon strokeWidth={2} />
+                )}
+                {availability === "available" && <Tick01Icon strokeWidth={2} />}
               </Button>
             );
           })}
@@ -187,11 +211,11 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
           className={cn(buttonVariants({ variant: "outline" }), "w-full")}
           href={"../../../"}
         >
-          <Cancel01Icon strokeWidth={2}/>
+          <Cancel01Icon strokeWidth={2} />
           Abbrechen
         </Link>
         <Button className="w-full" onClick={onSave}>
-          <Tick01Icon strokeWidth={2}/>
+          <Tick01Icon strokeWidth={2} />
           Speichern
         </Button>
       </div>
