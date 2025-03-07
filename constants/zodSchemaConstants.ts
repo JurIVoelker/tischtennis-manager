@@ -218,6 +218,17 @@ export const API_POST_PLAYER_SCHEMA = z.object({
   lastName: z.string(),
 });
 
+export const API_POST_PLAYERS_SCHEMA = z.object({
+  clubSlug: validateClubSlug(),
+  teamSlug: validateTeamSlug(),
+  players: z.array(
+    z.object({
+      firstName: z.string(),
+      lastName: z.string(),
+    })
+  ),
+});
+
 export const API_PUT_LINEUP_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamSlug: validateTeamSlug(),
