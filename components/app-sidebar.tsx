@@ -57,6 +57,7 @@ export const AppSidebar = ({}) => {
     LEADER_LOGIN_PAGES_REGEX,
     INDEX_PAGE_REGEX,
   ];
+  console.log({ userLeaderAt });
 
   useEffect(() => {
     const clubSlug = window.location.pathname.split("/")[1];
@@ -110,7 +111,7 @@ export const AppSidebar = ({}) => {
     <Sidebar>
       <SidebarHeader className="h-20" />
       <SidebarContent>
-        {usersTeams.length > 0 && (
+        {(usersTeams.length > 0 || userLeaderAt.length > 0) && (
           <SidebarGroup>
             <SidebarGroupLabel>Meine Mannschaften</SidebarGroupLabel>
             <SidebarMenu>
