@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { GoogleIcon } from "hugeicons-react";
 import { usePathname } from "next/navigation";
 import Typography from "./typography";
+import { asyncLog } from "@/lib/logUtils";
 
 interface GoogleLoginButtonProps {
   callbackUrl?: string;
@@ -46,14 +47,15 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
             </Typography>
           )}
           <Button
-            onClick={() =>
+            onClick={() => {
+              asyncLog("info", URL);
               signIn("google", {
                 callbackUrl: URL,
                 redirect: true,
-              })
-            }
+              });
+            }}
           >
-            <GoogleIcon strokeWidth={2}/> Mit Google anmelden
+            <GoogleIcon strokeWidth={2} /> Mit Google anmelden
           </Button>
         </>
       )}
