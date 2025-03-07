@@ -267,6 +267,7 @@ export async function POST(request: NextRequest) {
 
   revalidatePaths([
     `/${clubSlug}/${teamSlug}`,
+    `/${clubSlug}/${teamSlug}/login`,
     `/${clubSlug}/${teamSlug}/spieler/sortieren`,
     `/${clubSlug}/${teamSlug}/spieler/verwalten`,
     ...addPlayerTeamPaths,
