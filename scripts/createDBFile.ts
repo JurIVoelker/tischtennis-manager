@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 const dbFilePath = path.join(__dirname, "../prisma/database.db");
 
 if (fs.existsSync(dbFilePath)) {
-  throw new Error("database.db already exists");
+  console.log("database.db already exists, skipping creation");
 } else {
   fs.writeFileSync(dbFilePath, "");
   console.log("database.db file created successfully");
