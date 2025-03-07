@@ -98,7 +98,7 @@ const PlayersCard = ({
           ))}
       </div>
       {(inviteToken || userId) && (
-        <div className="flex gap-4 mt-4">
+        <div className="flex flex-col gap-2 md:gap-4 mt-4 md:flex-row">
           {inviteToken && (
             <Button onClick={handleClickCopy} className="w-full">
               <Copy01Icon strokeWidth={2} />
