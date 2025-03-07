@@ -116,7 +116,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
   return (
     <Card
       className={cn(
-        "shadow-none p-2 flex gap-2 items-center justify-between",
+        "shadow-none py-2 pl-4 pr-2 flex gap-2 items-center justify-between",
         className
       )}
       {...props}
@@ -150,7 +150,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
               className="text-destructive"
               onClick={onRevokeInviteModalOpen}
             >
-              <Cancel01Icon strokeWidth={2}/>
+              <Cancel01Icon strokeWidth={2} />
             </Button>
           </>
         )}
@@ -164,7 +164,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
               size="icon-lg"
               onClick={onRenewInviteModalOpen}
             >
-              <ArrowReloadHorizontalIcon strokeWidth={2}/>
+              <ArrowReloadHorizontalIcon strokeWidth={2} />
             </Button>
           </>
         )}

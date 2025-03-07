@@ -32,7 +32,7 @@ const AdminManagePage = async ({ params }: { params: Promise<ClubParams> }) => {
       <Navbar />
       <div className="space-y-12 px-6 pb-6 pt-16">
         <Headline>Admins</Headline>
-        <div className="space-y-3">
+        <div className="space-y-6">
           {admins.map((admin) => (
             <TeamLeaderCard
               variant={"joined"}

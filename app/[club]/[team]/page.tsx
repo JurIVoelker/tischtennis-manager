@@ -82,7 +82,7 @@ const ClubTeamPage = async ({
           />
           <TeamLeaderJoinSuggestion clubSlug={clubSlug} teamSlug={teamSlug} />
           {upcomingMatches && teamName && (
-            <div className="flex flex-col gap-8 md:grid md:grid-cols-2 xl:grid-cols-3">
+            <div className="flex flex-col gap-6 md:grid md:grid-cols-2 xl:grid-cols-3">
               {upcomingMatches.map((match, id) => {
                 const isLineup = Boolean(match.lineups.length);
                 return (
