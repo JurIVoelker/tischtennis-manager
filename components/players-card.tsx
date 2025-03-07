@@ -76,7 +76,7 @@ const PlayersCard = ({
       <div className="flex justify-between mb-4 items-center h-10">
         <Typography variant="h4">Spieler</Typography>
         {isOptionsVisible && (
-          <Button variant="secondary" size="icon-lg" asChild>
+          <Button variant="default" size="icon-lg" asChild>
             <Link href={`/${clubSlug}/${teamSlug}/spieler/verwalten`}>
               <PencilEdit02Icon strokeWidth={2} />
             </Link>

@@ -140,7 +140,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
 
   return (
     <Form {...form}>
-      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="space-y-6 mb-16" onSubmit={form.handleSubmit(onSubmit)}>
         {isCreate && (
           <Card className="p-4 space-y-4">
             <Typography variant="p-gray">Name des Gegnerteams</Typography>
@@ -311,11 +311,11 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
             className={cn(buttonVariants({ variant: "outline" }), "w-full")}
             href={isCreate ? "../" : "../../"}
           >
-            <Cancel01Icon strokeWidth={2}/>
+            <Cancel01Icon strokeWidth={2} />
             Abbrechen
           </Link>
           <Button type="submit" className="w-full">
-            <Tick01Icon strokeWidth={2}/>
+            <Tick01Icon strokeWidth={2} />
             Speichern
           </Button>
         </div>
