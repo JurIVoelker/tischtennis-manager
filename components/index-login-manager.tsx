@@ -17,8 +17,8 @@ const IndexLoginManager = () => {
   const verifyToken = async () => {
     try {
       const response = await getAPI("/api/verify-auth");
-      const { leaderAt } = response.data || {};
-      if (!leaderAt?.length) {
+      const { leaderAt, admin } = response.data || {};
+      if (!leaderAt?.length && !admin) {
         signOut({
           callbackUrl: `${pathName}?error=${ERRORS.INVALID_LOGIN_ERROR}`,
         });

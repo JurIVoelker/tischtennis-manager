@@ -2,7 +2,7 @@
   "name": "Tischtennis Manager",
   "short_name": "TT-Manager",
   "description": "Verwalte deine Tischtennis-Mannschaft und bleibe immer auf dem Laufenden.",
-  "start_url": "/Test-Club/Herren-I/login?inviteToken=test-token",
+  "start_url": "/[clubSlug]",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",

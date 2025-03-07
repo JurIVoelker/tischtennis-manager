@@ -6,7 +6,11 @@ import {
   getAuthCookies as getUserAuthCookie,
 } from "./lib/cookieUtils";
 import { handleUnauthorizedUser } from "./lib/middlewareUtils";
-import { getLeaderData, getValidToken } from "./lib/APIUtils";
+import {
+  getLeaderData,
+  getValidToken,
+  hasAdminPermission,
+} from "./lib/APIUtils";
 import { LOGIN_PAGE_REGEX } from "./constants/regex";
 import { isIgnoredMiddlewarePath } from "./lib/routeUtils";
 import { getToken } from "next-auth/jwt";
@@ -26,6 +30,16 @@ export async function middleware(request: NextRequest) {
   if (urlPath.split("/").length < 3) {
     return NextResponse.redirect(new URL(`/ungueltiger-link`, request.url));
   }
+
+  /*
+   * Check if user is admin of clubslug
+   */
+
+  const { success: isAdmin } = await hasAdminPermission(
+    clubSlug as string,
+    request
+  );
+  if (isAdmin) return NextResponse.next();
 
   /*
    * Get valid token serverside
