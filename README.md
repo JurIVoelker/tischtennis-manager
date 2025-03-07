@@ -76,7 +76,7 @@ Abhängigkeiten installieren
 > Weitere Informationen zur Installation von Bun: [Bun Docs](https://bun.sh/docs/installation)
 
 ```bash
-touch prisma/database.db
+touch prisma/db/database.db
 ```
 
 Datenbankdatei erstellen, mit „touch“ oder manuell als Datei
@@ -112,22 +112,33 @@ Für das Deployment verwende ich self-hosted [Coolify](https://coolify.io/) auf 
 # Umgebungsvariablen
 
 ```
-GOOGLE_APP_CLIENT_ID=...
-GOOGLE_APP_CLIENT_SECRET=...
-NEXTAUTH_SECRET=[random-string]
+# Required for setup
+GOOGLE_APP_CLIENT_ID=yourId 
+GOOGLE_APP_CLIENT_SECRET=yourSecret
+
+# Optional for logging
+TELEGRAM_BOT_TOKEN=yourToken
+TELEGRAM_CHAT_ID=yourId
+
+# Dev defaults
+NEXTAUTH_SECRET=secret
+SERVER_API_TOKEN=secret
 NEXTAUTH_URL=http://localhost:3000
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-SERVER_API_TOKEN=[random-string]
 
-// Optional für Logging
-TELEGRAM_BOT_TOKEN=...
-TELEGRAM_CHAT_ID=...
+# App specific, required for deployment not relevant for local development
+CLUB_SLUG=your-slug
+CLUB_INITIAL_ADMIN_EMAIL=your-email
+CLUB_NAME=Club Name
 ```
 
 # Api
 
 | Pfad                          | Methode | Berechtigungen       |
 | ----------------------------- | ------- | -------------------- |
+| /api/admin                    | POST    | admin                |
+| /api/admin                    | PUT     | admin                |
+| /api/admin                    | DELTE   | admin                |
 | /api/invite-token             | GET     | leader:own           |
 | /api/leader                   | PUT     | admin                |
 | /api/leader                   | DELETE  | admin                |
