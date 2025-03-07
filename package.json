@@ -12,7 +12,7 @@
     "db:migrate": "npx prisma migrate dev",
     "db:setup-test-data": "npx tsx ./testing/databaseTestData.ts",
     "prod:initial-setup": "npm run prod:setup-db && npx tsx ./scripts/setup.ts",
-    "prod:setup-db": "npx tsx ./scripts/createDBFile.ts && bun db:migrate",
+    "prod:setup-db": "npx tsx ./scripts/createDBFile.ts && npm run db:migrate",
     "prod:build": "npm run prod:set-manifest && npm run build",
     "prod:set-manifest": "npx tsx ./scripts/setManifest.ts"
   },
