@@ -3,6 +3,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -35,7 +36,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { ArrowDown01Icon } from "hugeicons-react";
+import { ArrowDown01Icon, CrownIcon, StarIcon } from "hugeicons-react";
+import { Separator } from "./ui/separator";
 
 export const AppSidebar = ({}) => {
   const { toggleSidebar } = useSidebar();
@@ -43,6 +45,7 @@ export const AppSidebar = ({}) => {
   const { push } = useRouter();
   const isMobile = useIsMobile();
   const [usersTeams, setUsersTeams] = useState<string[]>([]);
+  const [userLeaderAt, setUserLeaderAt] = useState<string[]>([]);
   const [userClub, setUserClub] = useState<string>("");
 
   // Hide sidebar on excludedPages
@@ -62,8 +65,19 @@ export const AppSidebar = ({}) => {
       getTeams(clubSlug).then((fetchedTeams: Team[]) => {
         setTeams(fetchedTeams);
       });
+      type LeaderAt = { clubName: string; teamName: string };
+      const userLeaderAtData = JSON.parse(
+        localStorage.getItem("leaderAt") || "[]"
+      )
+        ?.filter((data: LeaderAt) => data.clubName === clubSlug)
+        ?.map((data: LeaderAt) => data.teamName);
+      setUserLeaderAt(userLeaderAtData);
+
       const usersTeamsData = getUserData();
-      setUsersTeams(Object.keys(usersTeamsData));
+      const userTeams = Object.keys(usersTeamsData || {})?.filter(
+        (data: string) => !userLeaderAtData.includes(data)
+      );
+      setUsersTeams(userTeams);
     }
   }, []);
 
@@ -96,11 +110,11 @@ export const AppSidebar = ({}) => {
     <Sidebar>
       <SidebarHeader className="h-20" />
       <SidebarContent>
-        <SidebarGroup>
-          {usersTeams.length > 0 && (
+        {usersTeams.length > 0 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Meine Mannschaften</SidebarGroupLabel>
             <SidebarMenu>
-              <Typography variant="muted">Meine Mannschaften</Typography>
-              <div className="flex flex-col gap-2 pt-1 mb-4">
+              <div className="flex flex-col gap-2">
                 {usersTeams.map((teamSlug) => {
                   const team = teams?.find((t) => t.slug === teamSlug);
                   return (
@@ -113,6 +127,25 @@ export const AppSidebar = ({}) => {
                           handleClickLink(`/${userClub}/${teamSlug}`)
                         }
                       >
+                        <StarIcon strokeWidth={2} />
+                        {team?.name}
+                      </Button>
+                    </SidebarMenuButton>
+                  );
+                })}
+                {userLeaderAt.map((teamSlug) => {
+                  const team = teams?.find((t) => t.slug === teamSlug);
+                  return (
+                    <SidebarMenuButton asChild key={team?.id}>
+                      <Button
+                        className={getButtonStyles(
+                          teamSlug === currentTeamSlug
+                        )}
+                        onClick={() =>
+                          handleClickLink(`/${userClub}/${teamSlug}`)
+                        }
+                      >
+                        <CrownIcon strokeWidth={2} />
                         {team?.name}
                       </Button>
                     </SidebarMenuButton>
@@ -120,12 +153,13 @@ export const AppSidebar = ({}) => {
                 })}
               </div>
             </SidebarMenu>
-          )}
-        </SidebarGroup>
+          </SidebarGroup>
+        )}
+        {usersTeams.length > 0 && <Separator />}
         <SidebarGroup>
           <SidebarMenu>
-            <Typography variant="muted">Alle Mannschaften</Typography>
-            <div className="flex flex-col gap-2 pt-1">
+            <SidebarGroupLabel>Alle Mannschaften</SidebarGroupLabel>
+            <div className="flex flex-col gap-2">
               {sortings.map((category) => {
                 const categoryTeams = teams?.filter((team) =>
                   team.name.includes(category)
@@ -151,7 +185,7 @@ export const AppSidebar = ({}) => {
                           )}
                         >
                           {category}
-                          <ArrowDown01Icon strokeWidth={2}/>
+                          <ArrowDown01Icon strokeWidth={2} />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
                       <CollapsibleContent>
