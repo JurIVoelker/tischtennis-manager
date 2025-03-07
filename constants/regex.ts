@@ -5,3 +5,4 @@ export const LOGIN_PAGE_REGEX = /^\/[^\/]+\/[^\/]+\/login(\?.*)?$/i;
 export const LEADER_LOGIN_PAGES_REGEX =
   /^\/[^\/]+\/[^\/]+\/mannschaftsfuehrer\/login(\/.*)?(\?.*)?$/i;
 export const INVALID_LINK_PAGE_REGEX = /^\/ungueltiger-link$/;
+export const WELCOME_PAGE_REGEX = /^\/[^\/]+\/welcome.*$/;

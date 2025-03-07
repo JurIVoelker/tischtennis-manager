@@ -28,6 +28,7 @@ import {
   LOGIN_PAGE_REGEX,
   LEADER_LOGIN_PAGES_REGEX,
   INDEX_PAGE_REGEX,
+  WELCOME_PAGE_REGEX,
 } from "@/constants/regex";
 import AppSidebarFooter from "./sidebar/sidebar-footer";
 import { getUserData } from "@/lib/localstorageUtils";
@@ -56,6 +57,7 @@ export const AppSidebar = ({}) => {
     LOGIN_PAGE_REGEX,
     LEADER_LOGIN_PAGES_REGEX,
     INDEX_PAGE_REGEX,
+    WELCOME_PAGE_REGEX,
   ];
 
   useEffect(() => {
