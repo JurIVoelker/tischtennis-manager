@@ -2,7 +2,7 @@
   "name": "Tischtennis Manager",
   "short_name": "TT-Manager",
   "description": "Verwalte deine Tischtennis-Mannschaft und bleibe immer auf dem Laufenden.",
-  "start_url": "/[clubSlug]",
+  "start_url": "/ttc",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",

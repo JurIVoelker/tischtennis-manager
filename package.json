@@ -11,10 +11,10 @@
     "deploy-dev:setup": "npx prisma migrate dev --name init && npx tsx ./testing/databaseTestData.ts --force && npm run build",
     "db:migrate": "npx prisma migrate dev --name init",
     "db:setup-test-data": "npx tsx ./testing/databaseTestData.ts",
-    "prod:initial-setup": "npm run prod:setup-db && npx tsx ./scripts/setup.ts",
+    "prod:setup": "npx tsx ./scripts/setup.ts",
     "prod:setup-db": "npx tsx ./scripts/createDBFile.ts && npm run db:migrate",
-    "prod:build": "npm run prod:set-manifest && npm run build",
-    "prod:set-manifest": "npx tsx ./scripts/setManifest.ts"
+    "prod:set-manifest": "npx tsx ./scripts/setManifest.ts",
+    "prod:deploy": "npm run prod:setup && npm run prod:setup-db && npm run prod:set-manifest && npm run build"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",

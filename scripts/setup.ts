@@ -27,7 +27,8 @@ if (!schemaValid.success) {
 const exec = async () => {
   const clubCount = await prisma.club.count();
   if (clubCount > 0) {
-    throw new Error("A club already exists");
+    console.log("A club already exists, skipping creation");
+    return;
   }
   const res = await prisma.club.create({
     data: {
