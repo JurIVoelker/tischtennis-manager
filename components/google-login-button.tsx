@@ -4,7 +4,6 @@ import { Button } from "./ui/button";
 import { GoogleIcon } from "hugeicons-react";
 import { usePathname } from "next/navigation";
 import Typography from "./typography";
-import { asyncLog } from "@/lib/logUtils";
 
 interface GoogleLoginButtonProps {
   callbackUrl?: string;
@@ -48,7 +47,6 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
           )}
           <Button
             onClick={() => {
-              asyncLog("info", URL);
               signIn("google", {
                 callbackUrl: URL,
                 redirect: true,
