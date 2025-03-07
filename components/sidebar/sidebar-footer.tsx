@@ -12,7 +12,12 @@ import { ConfirmModal } from "../popups/confirm-modal";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
-  import { AddTeamIcon, LoginSquare01Icon, ShieldUserIcon, UserCircleIcon } from "hugeicons-react";
+import {
+  AddTeamIcon,
+  LoginSquare01Icon,
+  ShieldUserIcon,
+  UserCircleIcon,
+} from "hugeicons-react";
 import { useIsPermitted } from "@/hooks/use-has-permission";
 
 interface AppSidebarFooterProps {
@@ -28,7 +33,8 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
   const { push } = useRouter();
   const { toggleSidebar, isMobile } = useSidebar();
 
-  const isAdmin = useIsPermitted("view:manage-admin-button");
+  const isAdminButtonVisible = useIsPermitted("view:manage-admin-button");
+  const isLeaderButtonVisible = useIsPermitted("view:manage-leaders-button");
 
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
 
@@ -61,7 +67,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
                 "justify-start"
               )}
             >
-              <LoginSquare01Icon strokeWidth={2}/>
+              <LoginSquare01Icon strokeWidth={2} />
               Mannschaftsführer Login
             </SidebarMenuButton>
           )}
@@ -77,7 +83,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
                 >
                   {session?.user?.name ? (
                     <>
-                      <UserCircleIcon strokeWidth={2}/>
+                      <UserCircleIcon strokeWidth={2} />
                       {session.user.name}
                     </>
                   ) : (
@@ -85,37 +91,38 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
                   )}
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              {isAdmin && 
-                <>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() =>
-                        handleClickLink(`/${userClub}/admin/mannschaftsfuehrer`)
-                      }
-                      className={cn(
-                        buttonVariants({ variant: "ghost" }),
-                        "justify-start"
-                      )}
-                    >
-                      <AddTeamIcon strokeWidth={2}/>
-                      Mannschaften verwalten
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() =>
-                        handleClickLink(`/${userClub}/admin/verwalten`)
-                      }
-                      className={cn(
-                        buttonVariants({ variant: "ghost" }),
-                        "justify-start"
-                      )}
-                    >
-                      <ShieldUserIcon strokeWidth={2}/>
-                      Admins verwalten
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-              </>}
+              {isAdminButtonVisible && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    onClick={() =>
+                      handleClickLink(`/${userClub}/admin/mannschaftsfuehrer`)
+                    }
+                    className={cn(
+                      buttonVariants({ variant: "ghost" }),
+                      "justify-start"
+                    )}
+                  >
+                    <AddTeamIcon strokeWidth={2} />
+                    Mannschaften verwalten
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+              {isLeaderButtonVisible && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    onClick={() =>
+                      handleClickLink(`/${userClub}/admin/verwalten`)
+                    }
+                    className={cn(
+                      buttonVariants({ variant: "ghost" }),
+                      "justify-start"
+                    )}
+                  >
+                    <ShieldUserIcon strokeWidth={2} />
+                    Admins verwalten
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </>
           )}
         </SidebarMenu>
