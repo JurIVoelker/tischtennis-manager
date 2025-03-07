@@ -11,9 +11,9 @@
     "deploy-dev:setup": "npx prisma migrate dev --name init && npx tsx ./testing/databaseTestData.ts --force && npm run build",
     "db:migrate": "npx prisma migrate dev",
     "db:setup-test-data": "npx tsx ./testing/databaseTestData.ts",
-    "prod:initial-setup": "bun prod:setup-db && npx tsx ./scripts/setup.ts",
+    "prod:initial-setup": "npm prod:setup-db && npx tsx ./scripts/setup.ts",
     "prod:setup-db": "npx tsx ./scripts/createDBFile.ts && bun db:migrate",
-    "prod:build": "bun prod:set-manifest && bun run build",
+    "prod:build": "npm run prod:set-manifest && npm run build",
     "prod:set-manifest": "npx tsx ./scripts/setManifest.ts"
   },
   "dependencies": {
