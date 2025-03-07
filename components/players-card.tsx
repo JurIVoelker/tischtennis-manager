@@ -100,13 +100,21 @@ const PlayersCard = ({
       {(inviteToken || userId) && (
         <div className="flex flex-col gap-2 md:gap-4 mt-4 md:flex-row">
           {inviteToken && (
-            <Button onClick={handleClickCopy} className="w-full">
+            <Button
+              onClick={handleClickCopy}
+              className="w-full"
+              variant="secondary"
+            >
               <Copy01Icon strokeWidth={2} />
               Einladungslink kopieren
             </Button>
           )}
           {userId && (
-            <Button className="w-full" onClick={() => setModalOpen(true)}>
+            <Button
+              className="w-full"
+              onClick={() => setModalOpen(true)}
+              variant="secondary"
+            >
               <Logout02Icon strokeWidth={2} />
               Mannschaft verlassen
             </Button>
