@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "tsc --noEmit && next lint",
     "deploy-dev:setup": "npx prisma migrate dev --name init && npx tsx ./testing/databaseTestData.ts --force && npm run build",
-    "db:migrate": "npx prisma migrate dev",
+    "db:migrate": "npx prisma migrate dev --name init",
     "db:setup-test-data": "npx tsx ./testing/databaseTestData.ts",
     "prod:initial-setup": "npm run prod:setup-db && npx tsx ./scripts/setup.ts",
     "prod:setup-db": "npx tsx ./scripts/createDBFile.ts && npm run db:migrate",
