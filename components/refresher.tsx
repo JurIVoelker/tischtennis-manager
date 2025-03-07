@@ -1,5 +1,6 @@
 "use client";
 
+import { getAPI } from "@/lib/APIUtils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -16,6 +17,23 @@ const Refresher = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params, refresh]);
+
+  useEffect(() => {
+    const getAuth = async () => {
+      try {
+        const response = await getAPI("/api/verify-auth");
+        const { leaderAt, admin } = response.data || {};
+        if (leaderAt) {
+          localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
+        }
+        if (admin) {
+          localStorage.setItem("admin", "true");
+        }
+      } catch {}
+    };
+    getAuth();
+  }, []);
+
   return <></>;
 };
 

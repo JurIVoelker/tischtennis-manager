@@ -14,7 +14,8 @@ const ValidateLeaderLoggedInPage = () => {
       const { leaderAt, admin } = response.data || {};
       if (leaderAt) {
         localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
-      } if (admin) {
+      }
+      if (admin) {
         localStorage.setItem("admin", "true");
       }
       push("../../");
