@@ -49,13 +49,18 @@ export const getLeaderData = async (
 };
 
 export const getAdminData = async (clubSlug: string, email: string) => {
-  const res = await axios.get(
-    `${
-      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-    }/api/protected/is-admin?clubSlug=${clubSlug}&email=${email}`,
-    { headers: { Cookie: "server-token=" + process.env.SERVER_API_TOKEN } }
-  );
-  return res?.data;
+  try {
+    const res = await axios.get(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+      }/api/protected/is-admin?clubSlug=${clubSlug}&email=${email}`,
+      { headers: { Cookie: "server-token=" + process.env.SERVER_API_TOKEN } }
+    );
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
 };
 
 export const getAPI = async (

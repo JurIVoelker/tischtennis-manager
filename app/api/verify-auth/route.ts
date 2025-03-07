@@ -31,9 +31,11 @@ export async function GET(request: NextRequest) {
   const data: {
     leaderAt: { clubName: string; teamName: string }[];
     admin: boolean;
+    clubSlug: string;
   } = {
     leaderAt: [],
     admin: false,
+    clubSlug: "",
   };
 
   for (const teamLeader of teamLeaders || []) {
@@ -71,6 +73,36 @@ export async function GET(request: NextRequest) {
       `Error verifying token (admin): ${JSON.stringify(error)}`
     );
     console.error(error);
+  }
+
+  if (data.leaderAt.length > 0) {
+    const club = await prisma.club.findFirst({
+      where: {
+        teams: {
+          some: {
+            teamLeader: {
+              some: {
+                email: email.toLowerCase(),
+              },
+            },
+          },
+        },
+      },
+    });
+    data.clubSlug = club?.slug || "";
+  }
+
+  if (data.admin) {
+    const club = await prisma.club.findFirst({
+      where: {
+        owners: {
+          some: {
+            email: email.toLowerCase(),
+          },
+        },
+      },
+    });
+    data.clubSlug = club?.slug || "";
   }
 
   return new Response(JSON.stringify({ data }));

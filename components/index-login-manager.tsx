@@ -17,11 +17,15 @@ const IndexLoginManager = () => {
   const verifyToken = async () => {
     try {
       const response = await getAPI("/api/verify-auth");
-      const { leaderAt, admin } = response.data || {};
+      const { leaderAt, admin, clubSlug } = response.data || {};
       if (!leaderAt?.length && !admin) {
         signOut({
           callbackUrl: `${pathName}?error=${ERRORS.INVALID_LOGIN_ERROR}`,
         });
+        return;
+      }
+      if (!leaderAt?.length && admin) {
+        push(`/${clubSlug}/admin/verwalten`);
         return;
       }
       localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
