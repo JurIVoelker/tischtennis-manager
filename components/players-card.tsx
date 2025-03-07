@@ -5,12 +5,15 @@ import { Badge } from "./ui/badge";
 import Typography from "./typography";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { PencilEdit02Icon } from "hugeicons-react";
+import { Copy01Icon, Logout02Icon, PencilEdit02Icon } from "hugeicons-react";
 import Link from "next/link";
 import { useIsPermitted } from "@/hooks/use-has-permission";
 import { useEffect, useState } from "react";
-import { getUserData } from "@/lib/localstorageUtils";
+import { getUserData, setUserData } from "@/lib/localstorageUtils";
 import { getPlayerName } from "@/lib/stringUtils";
+import { getAPI } from "@/lib/APIUtils";
+import { toast } from "@/hooks/use-toast";
+import { ConfirmModal } from "./popups/confirm-modal";
 
 interface PlayersCardProps {
   players: Player[] | undefined;
@@ -27,11 +30,46 @@ const PlayersCard = ({
 }: PlayersCardProps) => {
   const isOptionsVisible = useIsPermitted("view:players-card-options");
   const [userId, setUserId] = useState<string>("");
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleLeaveTeam = () => {
+    setUserData({ [teamSlug]: undefined });
+    window.location.reload();
+  };
+
+  const handleClickCopy = () => {
+    if (inviteToken) {
+      const inviteLink = `${window.location.origin}/${clubSlug}/${teamSlug}/login?inviteToken=${inviteToken}`;
+      navigator.clipboard.writeText(inviteLink);
+      toast({
+        title: "Einladungslink kopiert",
+        description: (
+          <div className="mt-2 w-[340px] flex gap-2">
+            <Typography variant="p" className="leading-1">
+              Der Einladungslink wurde erfolgreich in die Zwischenablage
+              kopiert.
+            </Typography>
+          </div>
+        ),
+      });
+    }
+  };
 
   useEffect(() => {
+    const fetchInviteToken = async () => {
+      try {
+        const data = await getAPI("/api/invite-token", {
+          query: { clubSlug, teamSlug },
+        });
+        const { token } = data || {};
+        if (token) setInviteToken(token);
+      } catch {}
+    };
     const teamUserId = getUserData()[teamSlug]?.id;
     if (teamUserId) setUserId(teamUserId);
-  }, [teamSlug]);
+    fetchInviteToken();
+  }, [teamSlug, clubSlug]);
 
   return (
     <Card className={cn("p-6", className)}>
@@ -40,7 +78,7 @@ const PlayersCard = ({
         {isOptionsVisible && (
           <Button variant="secondary" size="icon-lg" asChild>
             <Link href={`/${clubSlug}/${teamSlug}/spieler/verwalten`}>
-              <PencilEdit02Icon strokeWidth={2}/>
+              <PencilEdit02Icon strokeWidth={2} />
             </Link>
           </Button>
         )}
@@ -59,6 +97,29 @@ const PlayersCard = ({
             }`}</Badge>
           ))}
       </div>
+      {(inviteToken || userId) && (
+        <div className="flex gap-4 mt-4">
+          {inviteToken && (
+            <Button onClick={handleClickCopy} className="w-full">
+              <Copy01Icon strokeWidth={2} />
+              Einladungslink kopieren
+            </Button>
+          )}
+          {userId && (
+            <Button className="w-full" onClick={() => setModalOpen(true)}>
+              <Logout02Icon strokeWidth={2} />
+              Mannschaft verlassen
+            </Button>
+          )}
+        </div>
+      )}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleLeaveTeam}
+        title="Mannschaft verlassen"
+        description="Bist du sicher, dass du die Mannschaft verlassen möchtest?"
+      />
     </Card>
   );
 };

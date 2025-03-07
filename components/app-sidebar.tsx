@@ -57,7 +57,6 @@ export const AppSidebar = ({}) => {
     LEADER_LOGIN_PAGES_REGEX,
     INDEX_PAGE_REGEX,
   ];
-  console.log({ userLeaderAt });
 
   useEffect(() => {
     const clubSlug = window.location.pathname.split("/")[1];
