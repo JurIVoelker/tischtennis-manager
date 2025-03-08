@@ -32,9 +32,12 @@ const PlayersCard = ({
   const [inviteToken, setInviteToken] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const { leaveTeam, joinedTeams } = useUserStore();
-  // @ts-expect-error this is the expected type
-  const userId = joinedTeams[teamSlug]?.playerId;
+  const { leaveTeam, joinedTeams, leaderAt } = useUserStore();
+  const userId = joinedTeams?.find(
+    (team) => team.teamSlug === teamSlug
+  )?.playerId;
+
+  const isLeader = leaderAt?.some((team) => team.teamSlug === teamSlug);
 
   const handleLeaveTeam = () => {
     leaveTeam(teamSlug);
@@ -69,8 +72,8 @@ const PlayersCard = ({
         if (token) setInviteToken(token);
       } catch {}
     };
-    fetchInviteToken();
-  }, [teamSlug, clubSlug]);
+    if (isLeader) fetchInviteToken();
+  }, [teamSlug, clubSlug, isLeader]);
 
   return (
     <Card className={cn("p-6", className)}>

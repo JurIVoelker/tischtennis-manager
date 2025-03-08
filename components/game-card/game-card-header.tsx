@@ -168,7 +168,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
                                 id: match.id,
                               });
                             }}
-                            className="flex items-center gap-2 p-2"
+                            className="flex items-center gap-2 p-2 text-destructive"
                             disabled={isDisabled}
                           >
                             <IconComponent />
