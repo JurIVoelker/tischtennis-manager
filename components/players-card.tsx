@@ -9,11 +9,11 @@ import { Copy01Icon, Logout02Icon, PencilEdit02Icon } from "hugeicons-react";
 import Link from "next/link";
 import { useIsPermitted } from "@/hooks/use-has-permission";
 import { useEffect, useState } from "react";
-import { getUserData, setUserData } from "@/lib/localstorageUtils";
 import { getPlayerName } from "@/lib/stringUtils";
 import { getAPI } from "@/lib/APIUtils";
 import { toast } from "@/hooks/use-toast";
 import { ConfirmModal } from "./popups/confirm-modal";
+import { useUserStore } from "@/store/store";
 
 interface PlayersCardProps {
   players: Player[] | undefined;
@@ -29,12 +29,15 @@ const PlayersCard = ({
   teamSlug,
 }: PlayersCardProps) => {
   const isOptionsVisible = useIsPermitted("view:players-card-options");
-  const [userId, setUserId] = useState<string>("");
   const [inviteToken, setInviteToken] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const { leaveTeam, joinedTeams } = useUserStore();
+  // @ts-expect-error this is the expected type
+  const userId = joinedTeams[teamSlug]?.playerId;
+
   const handleLeaveTeam = () => {
-    setUserData({ [teamSlug]: undefined });
+    leaveTeam(teamSlug);
     window.location.reload();
   };
 
@@ -66,8 +69,6 @@ const PlayersCard = ({
         if (token) setInviteToken(token);
       } catch {}
     };
-    const teamUserId = getUserData()[teamSlug]?.id;
-    if (teamUserId) setUserId(teamUserId);
     fetchInviteToken();
   }, [teamSlug, clubSlug]);
 

@@ -44,6 +44,15 @@ export const hasServersidePermission = async (
       if (success) return true;
     }
 
+    if (permission === "leader:all" && slugsValid(permission)) {
+      const { someLeader } = await hasLeaderPermission(
+        clubSlug as string,
+        teamSlug as string,
+        request
+      );
+      if (someLeader) return true;
+    }
+
     if (permission === "server") {
       const token = request.cookies.get("server-token");
       const envToken = process?.env?.SERVER_API_TOKEN;

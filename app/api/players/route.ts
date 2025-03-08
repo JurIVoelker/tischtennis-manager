@@ -51,8 +51,6 @@ export async function POST(request: NextRequest) {
         ),
       });
 
-      console.log("createdPlayers", createdPlayers);
-
       let playerTeamPositionCount = await tx.playerTeamPosition.count({
         where: { teamId },
       });

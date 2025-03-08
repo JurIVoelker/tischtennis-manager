@@ -1,12 +1,12 @@
 "use client";
 import { getPlayerName } from "@/lib/stringUtils";
 import PositonIndicator from "../position-indicator";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { LineupWithPlayers } from "@/types/prismaTypes";
-import { getUserData } from "@/lib/localstorageUtils";
 import Typography from "../typography";
 import { useIsPermitted } from "@/hooks/use-has-permission";
 import Link from "next/link";
+import { useUserStore } from "@/store/store";
 
 interface LineupChildProps {
   lineups: LineupWithPlayers[];
@@ -19,15 +19,13 @@ const LineupChild: React.FC<LineupChildProps> = ({
   teamSlug,
   matchId,
 }) => {
-  const [userId, setUserId] = useState<string>("");
   const isAddLineupLinkVisible = useIsPermitted(
     "view:add-lineup-in-game-card-body"
   );
 
-  useEffect(() => {
-    const teamUserId = getUserData()[teamSlug]?.id;
-    if (teamUserId) setUserId(teamUserId);
-  }, [teamSlug]);
+  const { joinedTeams } = useUserStore();
+  // @ts-expect-error this is the expected type
+  const userId = joinedTeams[teamSlug]?.playerId;
 
   if (!lineups || !lineups.length)
     return (
