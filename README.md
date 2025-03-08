@@ -158,4 +158,4 @@ CLUB_NAME=Club Name
 | /api/team                     | DELETE  | admin                |
 | /api/teams/[clubSlug]         | GET     | -                    |
 | /api/verify-auth              | GET     | leader:own           |
-| /api/vote                     | POST    | user:own, leader:own |
+| /api/vote                     | POST    | user:own, leader:all |
