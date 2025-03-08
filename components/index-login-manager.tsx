@@ -7,12 +7,15 @@ import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Typography from "./typography";
 import { ERRORS } from "@/constants/prismaErrors";
+import { useUserStore } from "@/store/store";
 
 const IndexLoginManager = () => {
   const pathName = usePathname();
   const { push } = useRouter();
   const [error, setError] = useState("");
   const { data: session } = useSession();
+
+  const { joinedTeams, clubSlug } = useUserStore();
 
   const verifyToken = async () => {
     try {
@@ -37,6 +40,7 @@ const IndexLoginManager = () => {
   };
 
   useEffect(() => {
+    if (joinedTeams.length > 0) push(`/${clubSlug}/${joinedTeams[0].teamSlug}`);
     if (session) verifyToken();
     const urlParams = new URLSearchParams(window.location.search);
     const errorParam = urlParams.get("error");

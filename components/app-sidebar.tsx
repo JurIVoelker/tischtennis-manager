@@ -31,7 +31,6 @@ import {
   WELCOME_PAGE_REGEX,
 } from "@/constants/regex";
 import AppSidebarFooter from "./sidebar/sidebar-footer";
-import { getUserData } from "@/lib/localstorageUtils";
 import {
   Collapsible,
   CollapsibleContent,
@@ -39,18 +38,25 @@ import {
 } from "./ui/collapsible";
 import { ArrowDown01Icon, CrownIcon, StarIcon } from "hugeicons-react";
 import { Separator } from "./ui/separator";
+import { useUserStore } from "@/store/store";
 
 export const AppSidebar = ({}) => {
   const { toggleSidebar } = useSidebar();
-  const [teams, setTeams] = useState<Team[] | null>(null);
+  const { clubSlug, teamSlug, joinedTeams, leaderAt } = useUserStore();
   const { push } = useRouter();
   const isMobile = useIsMobile();
-  const [usersTeams, setUsersTeams] = useState<string[]>([]);
-  const [userLeaderAt, setUserLeaderAt] = useState<string[]>([]);
-  const [userClub, setUserClub] = useState<string>("");
-
-  // Hide sidebar on excludedPages
   const pathname = usePathname();
+
+  const [teams, setTeams] = useState<Team[] | null>(null);
+
+  useEffect(() => {
+    if (clubSlug) {
+      getTeams(clubSlug).then((fetchedTeams: Team[]) => {
+        setTeams(fetchedTeams);
+      });
+    }
+  }, [clubSlug]);
+
   const excludedRoutes = [
     ADMIN_PAGE_REGEX,
     INVALID_LINK_PAGE_REGEX,
@@ -60,31 +66,24 @@ export const AppSidebar = ({}) => {
     WELCOME_PAGE_REGEX,
   ];
 
-  useEffect(() => {
-    const clubSlug = window.location.pathname.split("/")[1];
-    setUserClub(clubSlug);
-    if (clubSlug) {
-      getTeams(clubSlug).then((fetchedTeams: Team[]) => {
-        setTeams(fetchedTeams);
-      });
-      type LeaderAt = { clubName: string; teamName: string };
-      const userLeaderAtData = JSON.parse(
-        localStorage.getItem("leaderAt") || "[]"
-      )
-        ?.filter((data: LeaderAt) => data.clubName === clubSlug)
-        ?.map((data: LeaderAt) => data.teamName);
-      setUserLeaderAt(userLeaderAtData);
+  if (excludedRoutes.some((regex) => regex.test(pathname))) {
+    return <></>;
+  }
 
-      const usersTeamsData = getUserData();
-      const userTeams = Object.keys(usersTeamsData || {})?.filter(
-        (data: string) => !userLeaderAtData.includes(data)
-      );
-      setUsersTeams(userTeams);
-    }
-  }, []);
+  const teamsLeaderAt =
+    leaderAt?.length <= 0
+      ? []
+      : leaderAt
+          ?.map((l) => teams?.find((t) => t.slug === l.teamSlug))
+          .filter(Boolean);
 
-  // Handle click on team
-  const currentTeamSlug = pathname.split("/")[2];
+  const teamsJoined =
+    joinedTeams?.length <= 0
+      ? []
+      : joinedTeams
+          ?.map((j) => teams?.find((t) => t.slug === j.teamSlug))
+          .filter(Boolean)
+          .filter((t) => !teamsLeaderAt?.some((l) => l?.slug === t?.slug));
 
   const handleClickLink = (path: string) => {
     push(path);
@@ -102,62 +101,48 @@ export const AppSidebar = ({}) => {
     return cn(buttonStyles, customButtonStyles, "justify-start");
   };
 
-  if (excludedRoutes.some((regex) => regex.test(pathname))) {
-    return <></>;
-  }
-
   const sortings = ["Herren", "Damen", "Jungen", "Mädchen"];
 
   return (
     <Sidebar>
-      <SidebarHeader className="h-20" />
+      <SidebarHeader className="h-20"></SidebarHeader>
       <SidebarContent>
-        {(usersTeams.length > 0 || userLeaderAt.length > 0) && (
+        {(joinedTeams?.length > 0 || leaderAt?.length > 0) && (
           <SidebarGroup>
             <SidebarGroupLabel>Meine Mannschaften</SidebarGroupLabel>
             <SidebarMenu>
               <div className="flex flex-col gap-2">
-                {usersTeams.map((teamSlug) => {
-                  const team = teams?.find((t) => t.slug === teamSlug);
-                  return (
-                    <SidebarMenuButton asChild key={team?.id}>
-                      <Button
-                        className={getButtonStyles(
-                          teamSlug === currentTeamSlug
-                        )}
-                        onClick={() =>
-                          handleClickLink(`/${userClub}/${teamSlug}`)
-                        }
-                      >
-                        <StarIcon strokeWidth={2} />
-                        {team?.name}
-                      </Button>
-                    </SidebarMenuButton>
-                  );
-                })}
-                {userLeaderAt.map((teamSlug) => {
-                  const team = teams?.find((t) => t.slug === teamSlug);
-                  return (
-                    <SidebarMenuButton asChild key={team?.id}>
-                      <Button
-                        className={getButtonStyles(
-                          teamSlug === currentTeamSlug
-                        )}
-                        onClick={() =>
-                          handleClickLink(`/${userClub}/${teamSlug}`)
-                        }
-                      >
-                        <CrownIcon strokeWidth={2} />
-                        {team?.name}
-                      </Button>
-                    </SidebarMenuButton>
-                  );
-                })}
+                {teamsLeaderAt?.map((team, key) => (
+                  <SidebarMenuButton asChild key={key}>
+                    <Button
+                      className={getButtonStyles(team?.slug === teamSlug)}
+                      onClick={() =>
+                        handleClickLink(`/${clubSlug}/${team?.slug}`)
+                      }
+                    >
+                      <CrownIcon strokeWidth={2} />
+                      {team?.name}
+                    </Button>
+                  </SidebarMenuButton>
+                ))}
+                {teamsJoined?.map((team, key) => (
+                  <SidebarMenuButton asChild key={key}>
+                    <Button
+                      className={getButtonStyles(team?.slug === teamSlug)}
+                      onClick={() =>
+                        handleClickLink(`/${clubSlug}/${team?.slug}`)
+                      }
+                    >
+                      <StarIcon strokeWidth={2} />
+                      {team?.name}
+                    </Button>
+                  </SidebarMenuButton>
+                ))}
               </div>
             </SidebarMenu>
           </SidebarGroup>
         )}
-        {usersTeams.length > 0 && <Separator />}
+        {joinedTeams.length > 0 && <Separator />}
         <SidebarGroup>
           <SidebarMenu>
             <SidebarGroupLabel>Alle Mannschaften</SidebarGroupLabel>
@@ -198,13 +183,11 @@ export const AppSidebar = ({}) => {
                               <SidebarMenuSubItem key={team.id}>
                                 <Button
                                   className={cn(
-                                    getButtonStyles(
-                                      team.slug === currentTeamSlug
-                                    ),
+                                    getButtonStyles(team.slug === teamSlug),
                                     "w-full"
                                   )}
                                   onClick={() =>
-                                    handleClickLink(`/${userClub}/${team.slug}`)
+                                    handleClickLink(`/${clubSlug}/${team.slug}`)
                                   }
                                 >
                                   {team.name}
@@ -225,9 +208,9 @@ export const AppSidebar = ({}) => {
                 .map((team) => (
                   <SidebarMenuButton asChild key={team.id}>
                     <Button
-                      className={getButtonStyles(team.slug === currentTeamSlug)}
+                      className={getButtonStyles(team.slug === teamSlug)}
                       onClick={() =>
-                        handleClickLink(`/${userClub}/${team.slug}`)
+                        handleClickLink(`/${clubSlug}/${team.slug}`)
                       }
                     >
                       {team.name}
@@ -248,7 +231,7 @@ export const AppSidebar = ({}) => {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <AppSidebarFooter userClub={userClub} currentTeamSlug={currentTeamSlug} />
+      <AppSidebarFooter userClub={clubSlug} currentTeamSlug={teamSlug} />
     </Sidebar>
   );
 };

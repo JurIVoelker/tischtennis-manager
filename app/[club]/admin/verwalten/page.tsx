@@ -1,3 +1,4 @@
+import Headline from "@/components/headline";
 import Navbar from "@/components/navbar";
 import AddAdminModal from "@/components/popups/add-admin-modal";
 import TeamLeaderCard from "@/components/team-leader-card";
@@ -28,9 +29,10 @@ const AdminManagePage = async ({ params }: { params: Promise<ClubParams> }) => {
 
   return (
     <div className="w-full">
-      <Navbar title="Admins" />
+      <Navbar />
       <div className="space-y-12 px-6 pb-6 pt-16">
-        <div className="space-y-3">
+        <Headline>Admins</Headline>
+        <div className="space-y-6">
           {admins.map((admin) => (
             <TeamLeaderCard
               variant={"joined"}
@@ -44,7 +46,7 @@ const AdminManagePage = async ({ params }: { params: Promise<ClubParams> }) => {
           ))}
           <AddAdminModal clubSlug={clubSlug}>
             <Button variant="outline" className="w-full">
-              <PlusSignIcon strokeWidth={2}/>
+              <PlusSignIcon strokeWidth={2} />
               Hinzufügen
             </Button>
           </AddAdminModal>

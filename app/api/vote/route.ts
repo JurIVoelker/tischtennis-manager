@@ -13,7 +13,7 @@ import { NextRequest } from "next/server";
 export async function POST(request: NextRequest) {
   const { response, body } = await validateRequest(
     request,
-    ["user:own", "leader:own"],
+    ["user:own", "leader:all"],
     API_VOTE_SCHEMA
   );
 

@@ -1,4 +1,5 @@
 import EditMatchForm from "@/components/edit-match/edit-match-form";
+import Headline from "@/components/headline";
 import Navbar from "@/components/navbar";
 import Typography from "@/components/typography";
 import {
@@ -33,8 +34,9 @@ const EditMatchPage = async ({
   return (
     <>
       <div className="w-full">
-        <Navbar title={"Spiel bearbeiten"} />
+        <Navbar />
         <div className="px-6 pb-6 pt-16 space-y-6">
+          <Headline>Spiel bearbeiten</Headline>
           <Typography variant="h3">{match?.enemyClubName}</Typography>
           <EditMatchForm
             match={match}

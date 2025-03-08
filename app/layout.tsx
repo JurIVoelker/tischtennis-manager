@@ -13,13 +13,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "PWA NextJS",
-  description: "It's a simple progressive web application made with NextJS",
+  title: "Tischtennis Manager",
+  description:
+    "Verwalte deine Tischtennis-Mannschaft und bleibe immer auf dem Laufenden.",
   generator: "Next.js",
   manifest: "/manifest.json",
   icons: [
-    { rel: "apple-touch-icon", url: "icons/ttm-lg.png" },
-    { rel: "icon", url: "icons/ttm-lg.png" },
+    { rel: "apple-touch-icon", url: "/icons/ttm-sm.png" },
+    { rel: "icon", url: "/icons/ttm-sm.png" },
   ],
 };
 

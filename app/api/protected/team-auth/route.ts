@@ -44,20 +44,36 @@ export async function GET(request: NextRequest) {
     handlePrismaError(error);
   }
 
+  let allTokens: string[] = [];
+  try {
+    allTokens = (
+      await prisma.teamAuth.findMany({
+        where: {
+          team: {
+            club: {
+              slug: clubSlug,
+            },
+          },
+        },
+      })
+    ).map((teamAuth) => teamAuth.token);
+  } catch (error) {
+    handlePrismaError(error);
+  }
+
   if (!club)
     return new Response("not found", {
       status: 404,
     });
 
   let teamAuthToken = null;
-  const allTokens: AllTokensType = [];
   club.teams.forEach((team) => {
     if (team.slug === teamSlug && team.teamAuth) {
       teamAuthToken = team.teamAuth?.token;
-      allTokens.push(team.teamAuth?.token);
     }
   });
-  if (!teamAuthToken && !allTokens.length)
+
+  if (!teamAuthToken && !allTokens?.length)
     return new Response("team has no token", {
       status: 404,
     });

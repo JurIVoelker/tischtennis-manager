@@ -32,9 +32,9 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
       {...props}
       open={isOpen}
       onOpenChange={setOpen}
-      className="space-y-3"
+      className="space-y-2"
     >
-      <Card className="flex items-center justify-between p-2 shadow-none">
+      <Card className="flex items-center justify-between py-2 pl-4 pr-2 shadow-none">
         <Typography variant="p" className="font-medium">
           {team.name}
         </Typography>
@@ -45,7 +45,7 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
             size="icon-lg"
             onClick={() => setDeleteModalOpen(true)}
           >
-            <Delete02Icon strokeWidth={2}/>
+            <Delete02Icon strokeWidth={2} />
           </Button>
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="icon-lg">
@@ -56,7 +56,7 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
           </CollapsibleTrigger>
         </div>
       </Card>
-      <CollapsibleContent className="space-y-3">
+      <CollapsibleContent className="space-y-2">
         {team?.teamLeader.map((teamLeader) => (
           <TeamLeaderCard
             name={teamLeader.fullName}
@@ -82,7 +82,7 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
           clubSlug={clubSlug}
         >
           <Button variant="outline" className="w-full">
-            <PlusSignIcon strokeWidth={2}/>
+            <PlusSignIcon strokeWidth={2} />
             Hinzufügen
           </Button>
         </AddLeaderModal>

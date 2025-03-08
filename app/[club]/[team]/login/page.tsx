@@ -1,3 +1,4 @@
+import Headline from "@/components/headline";
 import Navbar from "@/components/navbar";
 import Typography from "@/components/typography";
 import UserLoginForm from "@/components/user-login-form";
@@ -31,8 +32,9 @@ const ClubUserLoginPage = async ({
 
   return (
     <div className="w-full">
-      <Navbar title="Login" />
+      <Navbar />
       <div className="space-y-12 px-6 pb-6 pt-16">
+        <Headline>Login</Headline>
         {teamName && Boolean(players?.length) && (
           <>
             <div className="space-y-2">

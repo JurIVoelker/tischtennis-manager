@@ -1,0 +1,38 @@
+meta {
+  name: players
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{url}}/players
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: server-token={{server-secret}}
+}
+
+body:json {
+  {
+    "clubSlug": "ttc",
+    "teamSlug": "test",
+    "players": [
+      {"firstName": "test3", "lastName": "test1"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test2", "lastName": "test2"},
+      {"firstName": "test1", "lastName": "test3"}
+    ]
+  }
+}

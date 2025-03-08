@@ -1,4 +1,5 @@
 import ConfigureLineupWrapper from "@/components/configure-lineup-wrapper";
+import Headline from "@/components/headline";
 import Navbar from "@/components/navbar";
 import {
   decodeMatchPageParams,
@@ -71,8 +72,9 @@ const ManageLineup = async ({
 
   return (
     <div className="w-full">
-      <Navbar title="Aufstellung anpassen" />
+      <Navbar />
       <div className="px-6 pb-6 pt-16 space-y-6">
+        <Headline>Aufstellung anpassen</Headline>
         <ConfigureLineupWrapper
           defaultLineup={lineups}
           matchAvailablilityVotes={matchAvailablilityVotes}

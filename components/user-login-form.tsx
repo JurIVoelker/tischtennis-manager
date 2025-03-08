@@ -17,12 +17,12 @@ import { Button } from "@/components/ui/button";
 import { Player } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 import { RadioGroupItem } from "./ui/radio-group";
-import { getUserData, setUserData } from "@/lib/localstorageUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import Typography from "./typography";
 import { Loader2 } from "lucide-react";
 import { getPlayerName } from "@/lib/stringUtils";
+import { useUserStore } from "@/store/store";
 
 interface UserLoginFormProps {
   players: Player[] | undefined;
@@ -37,25 +37,25 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   teamSlug,
 }) => {
   const playersSchema = players?.map((player) => player.id) || [""];
-
+  const { leaveTeam, joinTeam, joinedTeams } = useUserStore();
+  const userId = joinedTeams?.find(
+    (team) => team.teamSlug === teamSlug
+  )?.playerId;
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userData = getUserData();
-    const teamData = userData[teamSlug];
-    if (teamData) {
-      const { id } = teamData;
-      if (id && players?.some((player) => player.id === id)) {
+    if (userId) {
+      if (userId && players?.some((player) => player.id === userId)) {
         push(`/${clubSlug}/${teamSlug}`);
       } else {
-        setUserData({ [teamSlug]: {} });
+        leaveTeam(teamSlug);
         setLoading(false);
       }
     } else {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clubSlug, players, teamSlug]);
+  }, [clubSlug, players, teamSlug, joinedTeams]);
 
   const FormSchema = z.object({
     playerId: z.enum(
@@ -77,7 +77,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
     const { playerId } = data;
-    setUserData({ [teamSlug]: { id: playerId } });
+    joinTeam(teamSlug, playerId);
     toast({
       title: "Login erfolgreich",
       description: (

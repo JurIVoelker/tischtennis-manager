@@ -71,21 +71,15 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({
   };
 
   const onSave = async () => {
-    const postPromises = selectedPlayers.map((player) =>
-      postAPI("/api/player", {
-        clubSlug,
-        teamSlug,
+    const res = await postAPI("/api/players", {
+      clubSlug,
+      teamSlug,
+      players: [...selectedPlayers, ...customPlayers].map((player) => ({
         firstName: player.firstName,
         lastName: player.lastName,
-      })
-    );
-    postPromises.push(
-      ...customPlayers.map((player) =>
-        postAPI("/api/player", { ...player, clubSlug, teamSlug })
-      )
-    );
-    const res = await Promise.all(postPromises);
-    if (!res.every((r) => r.ok)) {
+      })),
+    });
+    if (!res.ok) {
       setUnknownErrorToastMessage();
     } else {
       toast({ title: "Spieler erfolgreich hinzugefügt" });
@@ -120,7 +114,7 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({
           className={cn(buttonVariants({ variant: "outline" }), "w-full")}
           href={"./verwalten"}
         >
-          <Cancel01Icon strokeWidth={2}/>
+          <Cancel01Icon strokeWidth={2} />
           Abbrechen
         </Link>
         <Button
@@ -128,7 +122,7 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({
           disabled={!(selectedPlayers.length > 0 || customPlayers.length > 0)}
           onClick={onSave}
         >
-          <Tick01Icon strokeWidth={2}/>
+          <Tick01Icon strokeWidth={2} />
           Speichern
         </Button>
       </div>

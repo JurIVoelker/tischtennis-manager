@@ -150,6 +150,7 @@ CLUB_NAME=Club Name
 | /api/player                   | POST    | leader:own           |
 | /api/player                   | DELETE  | leader:own           |
 | /api/player/position          | POST    | leader:own           |
+| /api/players                  | POST    | leader:own           |
 | /api/protected/is-admin       | GET     | server               |
 | /api/protected/is-team-leader | GET     | server               |
 | /api/protected/team-auth      | GET     | server               |
@@ -157,4 +158,4 @@ CLUB_NAME=Club Name
 | /api/team                     | DELETE  | admin                |
 | /api/teams/[clubSlug]         | GET     | -                    |
 | /api/verify-auth              | GET     | leader:own           |
-| /api/vote                     | POST    | user:own, leader:own |
+| /api/vote                     | POST    | user:own, leader:all |

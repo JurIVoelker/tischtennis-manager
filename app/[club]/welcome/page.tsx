@@ -1,3 +1,4 @@
+import Headline from "@/components/headline";
 import IndexLoginManager from "@/components/index-login-manager";
 import Navbar from "@/components/navbar";
 import Typography from "@/components/typography";
@@ -6,11 +7,9 @@ import { Separator } from "@/components/ui/separator";
 const IndexPage = () => {
   return (
     <div className="w-full">
-      <Navbar title="Mannschaftsführer" />
+      <Navbar />
       <div className="px-6 pb-6 pt-16">
-        <Typography variant="h3" className="mb-2">
-          Tischtennis Manager
-        </Typography>
+        <Headline>Tischtennis Manager</Headline>
         <Typography variant="p">
           Willkommen beim TT-Manager. Um einer Mannschaft beizutreten, musst du
           den Einladungslink, den du von deinem Mannschaftsführer bekommen hast

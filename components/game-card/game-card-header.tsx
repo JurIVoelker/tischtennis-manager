@@ -136,13 +136,13 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
       <div className="flex justify-between mb-6 gap-4 h-10 items-center">
         <Typography variant="h4">{match.enemyClubName}</Typography>
         <div className="inline-flex gap-2 flex-wrap items-center">
-          <Badge variant="secondary" className="h-fit">
+          <Badge variant="default" className="h-fit">
             {match.isHomeGame ? "Heim" : "Auswärts"}
           </Badge>
           {isGameCardOptionsVisible && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="icon-lg">
+                <Button variant="default" size="icon-lg">
                   <MoreHorizontal />
                 </Button>
               </DropdownMenuTrigger>
@@ -168,7 +168,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
                                 id: match.id,
                               });
                             }}
-                            className="flex items-center gap-2 p-2"
+                            className="flex items-center gap-2 p-2 text-destructive"
                             disabled={isDisabled}
                           >
                             <IconComponent />

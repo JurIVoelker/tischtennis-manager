@@ -1,4 +1,5 @@
 import EditMatchForm from "@/components/edit-match/edit-match-form";
+import Headline from "@/components/headline";
 import Navbar from "@/components/navbar";
 import {
   ClubTeamParams,
@@ -14,8 +15,9 @@ const CreateNewGame = async ({
   const { clubSlug, teamSlug } = await decodeClubTeamParams(params);
   return (
     <div className="w-full">
-      <Navbar title="Neues Spiel" />
+      <Navbar />
       <div className="px-6 pb-6 pt-16 ">
+        <Headline>Neues Spiel</Headline>
         <EditMatchForm
           isCreate
           clubSlug={clubSlug}

@@ -1,4 +1,4 @@
-import { getUserData } from "./localstorageUtils";
+import { useUserStore } from "@/store/store";
 
 type role = "member" | "leader" | "admin" | "viewer";
 export type permission =
@@ -39,11 +39,16 @@ export const getRole = (): role[] => {
     (leaderData: { clubName: string; teamName: string }) =>
       leaderData.clubName === clubSlug && leaderData.teamName === teamSlug
   );
-  const isAdmin  = localStorage.getItem("admin") === "true";
+  const isAdmin = useUserStore.getState().admin;
   if (isAdmin) roles.push("admin");
   if (isLeader) roles.push("leader");
-  const userData = getUserData();
-  if (userData[teamSlug]?.id) roles.push("member");
+
+  const joinedTeams = useUserStore.getState().joinedTeams;
+  const userId = joinedTeams?.find(
+    (team) => team.teamSlug === teamSlug
+  )?.playerId;
+
+  if (userId) roles.push("member");
   return roles;
 };
 

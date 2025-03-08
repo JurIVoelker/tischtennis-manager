@@ -164,7 +164,12 @@ export const hasLeaderPermission = async (
   clubSlug: string,
   teamSlug: string,
   request: NextRequest
-): Promise<{ success: boolean; responseReturnValue?: Response }> => {
+): Promise<{
+  success: boolean;
+  responseReturnValue?: Response;
+  someLeader?: boolean;
+}> => {
+  let someLeader = false;
   const loggedinUserData = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
@@ -173,11 +178,12 @@ export const hasLeaderPermission = async (
   const { email } = loggedinUserData || {};
   let isTeamLeader = false;
   if (email) {
-    isTeamLeader = (await getLeaderData(clubSlug, teamSlug, email))
-      .isTeamLeader;
+    const res = await getLeaderData(clubSlug, teamSlug, email);
+    isTeamLeader = res.isTeamLeader;
+    someLeader = res.isSomeLeader;
   }
 
-  if (!isTeamLeader) {
+  if (!isTeamLeader && !someLeader) {
     return {
       success: false,
       responseReturnValue: new Response(
@@ -186,7 +192,7 @@ export const hasLeaderPermission = async (
       ),
     };
   }
-  return { success: true };
+  return { success: true, someLeader };
 };
 
 export const hasAdminPermission = async (

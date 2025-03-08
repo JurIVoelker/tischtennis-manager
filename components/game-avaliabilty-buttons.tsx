@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Typography from "./typography";
 import { useIsPermitted } from "@/hooks/use-has-permission";
-import { getUserData } from "@/lib/localstorageUtils";
 import {
   AvailabilityVoteWithPlayer,
   MatchAvailablilites,
@@ -12,6 +11,7 @@ import { postAPI } from "@/lib/APIUtils";
 import { useRouter } from "next/navigation";
 import { PLAYER_NOT_FOUND_ERROR } from "@/constants/APIError";
 import { handlePostRequestError } from "@/lib/apiResponseUtils";
+import { useUserStore } from "@/store/store";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -39,10 +39,14 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     defaultSelectedValue || null
   );
 
+  const { joinedTeams } = useUserStore();
+  const userId = joinedTeams?.find(
+    (team) => team.teamSlug === teamSlug
+  )?.playerId;
+
   const { push, refresh } = useRouter();
 
   useEffect(() => {
-    const userId = getUserData()[teamSlug]?.id;
     if (userId) {
       // @ts-expect-error this is the expected type
       const availabilityAnswer: MatchAvailablilites | undefined =
@@ -60,7 +64,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
         }
       }
     }
-  }, [matchAvailabilityVotes, teamSlug]);
+  }, [matchAvailabilityVotes, teamSlug, userId]);
 
   const isButtonsVisible = useIsPermitted("view:game-availability-buttons");
 
@@ -84,7 +88,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
       clubSlug,
       teamSlug,
       matchId,
-      playerId: getUserData()[teamSlug]?.id || "",
+      playerId: userId || "",
     });
     if ((!res.data && !res.ok) || res?.error) {
       handlePostRequestError(res, [

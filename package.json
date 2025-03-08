@@ -59,7 +59,8 @@
     "vaul": "^1.1.1",
     "winston": "3",
     "winston-telegram": "2",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "typescript": "^5",

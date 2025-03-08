@@ -9,11 +9,11 @@ import { Copy01Icon, Logout02Icon, PencilEdit02Icon } from "hugeicons-react";
 import Link from "next/link";
 import { useIsPermitted } from "@/hooks/use-has-permission";
 import { useEffect, useState } from "react";
-import { getUserData, setUserData } from "@/lib/localstorageUtils";
 import { getPlayerName } from "@/lib/stringUtils";
 import { getAPI } from "@/lib/APIUtils";
 import { toast } from "@/hooks/use-toast";
 import { ConfirmModal } from "./popups/confirm-modal";
+import { useUserStore } from "@/store/store";
 
 interface PlayersCardProps {
   players: Player[] | undefined;
@@ -29,12 +29,18 @@ const PlayersCard = ({
   teamSlug,
 }: PlayersCardProps) => {
   const isOptionsVisible = useIsPermitted("view:players-card-options");
-  const [userId, setUserId] = useState<string>("");
   const [inviteToken, setInviteToken] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const { leaveTeam, joinedTeams, leaderAt } = useUserStore();
+  const userId = joinedTeams?.find(
+    (team) => team.teamSlug === teamSlug
+  )?.playerId;
+
+  const isLeader = leaderAt?.some((team) => team.teamSlug === teamSlug);
+
   const handleLeaveTeam = () => {
-    setUserData({ [teamSlug]: undefined });
+    leaveTeam(teamSlug);
     window.location.reload();
   };
 
@@ -66,17 +72,15 @@ const PlayersCard = ({
         if (token) setInviteToken(token);
       } catch {}
     };
-    const teamUserId = getUserData()[teamSlug]?.id;
-    if (teamUserId) setUserId(teamUserId);
-    fetchInviteToken();
-  }, [teamSlug, clubSlug]);
+    if (isLeader) fetchInviteToken();
+  }, [teamSlug, clubSlug, isLeader]);
 
   return (
     <Card className={cn("p-6", className)}>
       <div className="flex justify-between mb-4 items-center h-10">
         <Typography variant="h4">Spieler</Typography>
         {isOptionsVisible && (
-          <Button variant="secondary" size="icon-lg" asChild>
+          <Button variant="default" size="icon-lg" asChild>
             <Link href={`/${clubSlug}/${teamSlug}/spieler/verwalten`}>
               <PencilEdit02Icon strokeWidth={2} />
             </Link>
