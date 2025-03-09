@@ -39,7 +39,7 @@ export const getRole = (): role[] => {
     admin: isAdmin,
   } = useUserStore.getState() || {};
 
-  const isLeader = leaderAt.find(
+  const isLeader = leaderAt?.find(
     (item) => item.teamSlug === teamSlug && item.clubSlug === clubSlug
   );
   if (isLeader) roles.push("leader");

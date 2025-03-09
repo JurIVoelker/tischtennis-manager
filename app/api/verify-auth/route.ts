@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
     console.error(error);
   }
 
-  if (data.leaderAt.length > 0) {
+  if (data.leaderAt?.length > 0) {
     const club = await prisma.club.findFirst({
       where: {
         teams: {
