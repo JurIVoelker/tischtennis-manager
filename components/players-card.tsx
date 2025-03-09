@@ -101,13 +101,15 @@ const PlayersCard = ({
             }`}</Badge>
           ))}
       </div>
-      {(inviteToken || userId) && (
+      {(inviteToken || userId || isLeader) && (
         <div className="flex flex-col gap-2 md:gap-4 mt-4 md:flex-row">
-          {inviteToken && (
+          {(inviteToken || isLeader) && (
             <Button
               onClick={handleClickCopy}
               className="w-full"
               variant="secondary"
+              disabled={!inviteToken}
+              isLoading={!inviteToken}
             >
               <Copy01Icon strokeWidth={2} />
               Einladungslink kopieren

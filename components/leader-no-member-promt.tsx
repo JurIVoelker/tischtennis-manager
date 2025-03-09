@@ -5,6 +5,7 @@ import { Card } from "./ui/card";
 import Typography from "./typography";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useUserStore } from "@/store/store";
 
 interface TeamLeaderJoinSuggestionProps {
   clubSlug: string;
@@ -16,10 +17,14 @@ const TeamLeaderJoinSuggestion: React.FC<TeamLeaderJoinSuggestionProps> = ({
   teamSlug,
 }) => {
   const [isSuggestionVisible, setSuggestionVisible] = useState<boolean>(false);
+  const { declineJoin, declinedJoins } = useUserStore();
+
   useEffect(() => {
     const roleData = getRole();
-    const isPromtHidden = localStorage.getItem(
-      `${clubSlug}-${teamSlug}_isTeamLeaderJoinSuggestionVisible`
+    const isPromtHidden = Boolean(
+      declinedJoins.find(
+        (item) => item.teamSlug === teamSlug && item.clubSlug === clubSlug
+      )?.joinDeclined
     );
 
     if (
@@ -28,14 +33,14 @@ const TeamLeaderJoinSuggestion: React.FC<TeamLeaderJoinSuggestionProps> = ({
       !roleData.includes("member")
     ) {
       setSuggestionVisible(true);
+    } else {
+      setSuggestionVisible(false);
     }
-  }, [clubSlug, teamSlug]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clubSlug, teamSlug, declinedJoins]);
 
   const handleDecline = () => {
-    localStorage.setItem(
-      `${clubSlug}-${teamSlug}_isTeamLeaderJoinSuggestionVisible`,
-      "false"
-    );
+    declineJoin(clubSlug, teamSlug);
     setSuggestionVisible(false);
   };
 

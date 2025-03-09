@@ -87,15 +87,12 @@ export async function middleware(request: NextRequest) {
     Array.isArray(allUserTokens) &&
     allUserTokens.some((userToken) => allTokens?.includes(userToken))
   ) {
-    console.log("t1");
     return NextResponse.next();
   } else if (LOGIN_PAGE_REGEX.test(urlPath) && token === pageUserToken) {
-    console.log("t2");
     const response = NextResponse.next();
     setTeamTokenCookie(request, response, clubSlug, teamSlug, token);
     return response;
   } else if (!LOGIN_PAGE_REGEX.test(urlPath) && pageUserToken) {
-    console.log("t3");
     const response = NextResponse.redirect(
       new URL(`/${clubSlug}/welcome`, request.url)
     );

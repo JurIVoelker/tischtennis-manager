@@ -31,19 +31,20 @@ export const ROLES: RoleProps = {
 
 export const getRole = (): role[] => {
   const roles: role[] = ["viewer"];
-  const clubSlug = window.location.pathname.split("/")[1];
-  const teamSlug = window.location.pathname.split("/")[2];
+  const {
+    joinedTeams,
+    leaderAt,
+    teamSlug,
+    clubSlug,
+    admin: isAdmin,
+  } = useUserStore.getState() || {};
 
-  const leaderAt = JSON.parse(localStorage.getItem("leaderAt") || "[]");
-  const isLeader = leaderAt.some(
-    (leaderData: { clubName: string; teamName: string }) =>
-      leaderData.clubName === clubSlug && leaderData.teamName === teamSlug
+  const isLeader = leaderAt.find(
+    (item) => item.teamSlug === teamSlug && item.clubSlug === clubSlug
   );
-  const isAdmin = useUserStore.getState().admin;
-  if (isAdmin) roles.push("admin");
   if (isLeader) roles.push("leader");
+  if (isAdmin) roles.push("admin");
 
-  const joinedTeams = useUserStore.getState().joinedTeams;
   const userId = joinedTeams?.find(
     (team) => team.teamSlug === teamSlug
   )?.playerId;

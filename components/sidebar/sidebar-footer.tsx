@@ -19,6 +19,7 @@ import {
   UserCircleIcon,
 } from "hugeicons-react";
 import { useIsPermitted } from "@/hooks/use-has-permission";
+import { useUserStore } from "@/store/store";
 
 interface AppSidebarFooterProps {
   userClub: string;
@@ -32,6 +33,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
   const { data: session } = useSession();
   const { push } = useRouter();
   const { toggleSidebar, isMobile } = useSidebar();
+  const { clear } = useUserStore();
 
   const isAdminButtonVisible = useIsPermitted("view:manage-admin-button");
   const isLeaderButtonVisible = useIsPermitted("view:manage-leaders-button");
@@ -44,8 +46,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem("admin");
-    localStorage.removeItem("leaderAt");
+    clear();
     signOut();
   };
 

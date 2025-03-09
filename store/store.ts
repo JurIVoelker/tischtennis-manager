@@ -11,6 +11,12 @@ type JoinableTeam = {
   playerId: string;
 };
 
+type DeclinedJoins = {
+  clubSlug: string;
+  teamSlug: string;
+  joinDeclined: boolean;
+};
+
 type Store = {
   clubSlug: string;
   setClubSlug: (clubSlug: string) => void;
@@ -27,6 +33,9 @@ type Store = {
   removeLeaderAt: (leaderAt: LeaderAt) => void;
   leaveTeam: (teamSlug: string) => void;
   joinTeam: (teamSlug: string, playerId: string) => void;
+  declinedJoins: DeclinedJoins[];
+  declineJoin: (clubSlug: string, teamSlug: string) => void;
+  clear: () => void;
 };
 
 export const useUserStore = create<Store>()(
@@ -67,6 +76,29 @@ export const useUserStore = create<Store>()(
               item.clubSlug !== leaderAt.clubSlug &&
               item.teamSlug !== leaderAt.teamSlug
           ),
+        }),
+
+      // Decline join
+      declinedJoins: [],
+      declineJoin: (clubSlug, teamSlug) => {
+        set({
+          declinedJoins: [
+            ...get().declinedJoins.filter(
+              (item) => item.teamSlug !== teamSlug && item.clubSlug !== clubSlug
+            ),
+            { clubSlug, teamSlug, joinDeclined: true },
+          ],
+        });
+      },
+
+      clear: () =>
+        set({
+          clubSlug: "",
+          teamSlug: "",
+          admin: false,
+          joinedTeams: [],
+          leaderAt: [],
+          declinedJoins: [],
         }),
     }),
     {
