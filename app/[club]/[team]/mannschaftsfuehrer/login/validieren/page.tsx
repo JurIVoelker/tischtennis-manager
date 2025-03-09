@@ -1,6 +1,7 @@
 "use client";
 import Typography from "@/components/typography";
 import { getAPI } from "@/lib/APIUtils";
+import { useUserStore } from "@/store/store";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -8,15 +9,16 @@ import { useEffect, useState } from "react";
 const ValidateLeaderLoggedInPage = () => {
   const [error, setError] = useState<string | null>(null);
   const { push } = useRouter();
+  const { setLeaderAt, setAdmin } = useUserStore();
   const verifyToken = async () => {
     try {
       const response = await getAPI("/api/verify-auth");
       const { leaderAt, admin } = response.data || {};
       if (leaderAt) {
-        localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
+        setLeaderAt(leaderAt);
       }
       if (admin) {
-        localStorage.setItem("admin", "true");
+        setAdmin(true);
       }
       push("../../");
     } catch (error) {

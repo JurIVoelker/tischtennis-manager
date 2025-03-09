@@ -24,8 +24,9 @@ const LineupChild: React.FC<LineupChildProps> = ({
   );
 
   const { joinedTeams } = useUserStore();
-  // @ts-expect-error this is the expected type
-  const userId = joinedTeams[teamSlug]?.playerId;
+  const userId = joinedTeams.find(
+    (team) => team.teamSlug === teamSlug
+  )?.playerId;
 
   if (!lineups || !lineups.length)
     return (

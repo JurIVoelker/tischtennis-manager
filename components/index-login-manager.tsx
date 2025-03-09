@@ -15,7 +15,7 @@ const IndexLoginManager = () => {
   const [error, setError] = useState("");
   const { data: session } = useSession();
 
-  const { joinedTeams, clubSlug } = useUserStore();
+  const { joinedTeams, clubSlug, setLeaderAt } = useUserStore();
 
   const verifyToken = async () => {
     try {
@@ -31,7 +31,7 @@ const IndexLoginManager = () => {
         push(`/${clubSlug}/admin/verwalten`);
         return;
       }
-      localStorage.setItem("leaderAt", JSON.stringify(leaderAt));
+      setLeaderAt(leaderAt);
       const pushTarget = leaderAt[0];
       push(`/${pushTarget.clubName}/${pushTarget.teamName}`);
     } catch {
