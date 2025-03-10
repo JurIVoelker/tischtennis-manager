@@ -220,6 +220,13 @@ const saveInDB = async (games: GameDataWithHall[]) => {
                 slug: clubSlug,
               },
             },
+            teamAuth: {
+              create: {
+                token:
+                  Math.random().toString(36).substring(7) +
+                  Math.random().toString(36).substring(7),
+              },
+            },
             name: game.ownTeamName,
             slug: teamSlug,
           },
@@ -229,6 +236,7 @@ const saveInDB = async (games: GameDataWithHall[]) => {
       const [day, month, year] = game.date.split(".");
       const [hours, minutes] = game.time.split(":");
       const date = new Date(`20${year}-${month}-${day}T${hours}:${minutes}:00`);
+      date.setHours(date.getHours() - 1);
 
       const match = await prisma.match.create({
         data: {

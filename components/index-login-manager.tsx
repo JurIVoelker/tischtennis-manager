@@ -15,7 +15,7 @@ const IndexLoginManager = () => {
   const [error, setError] = useState("");
   const { data: session } = useSession();
 
-  const { joinedTeams, clubSlug, setLeaderAt } = useUserStore();
+  const { joinedTeams, clubSlug, setLeaderAt, setAdmin } = useUserStore();
 
   const verifyToken = async () => {
     try {
@@ -31,7 +31,15 @@ const IndexLoginManager = () => {
         push(`/${clubSlug}/admin/verwalten`);
         return;
       }
-      setLeaderAt(leaderAt);
+      if (leaderAt?.length) {
+        setLeaderAt(
+          leaderAt.map((l: { clubName: string; teamName: string }) => ({
+            clubSlug: l.clubName,
+            teamSlug: l.teamName,
+          }))
+        );
+      }
+      if (admin) setAdmin(true);
       const pushTarget = leaderAt[0];
       push(`/${pushTarget.clubName}/${pushTarget.teamName}`);
     } catch {
