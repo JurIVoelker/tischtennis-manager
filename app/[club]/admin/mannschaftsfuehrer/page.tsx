@@ -12,24 +12,26 @@ import { prisma } from "@/lib/prisma/prisma";
 const AdminLeaderPage = async ({ params }: { params: Promise<ClubParams> }) => {
   const { clubSlug } = await decodeClubParams(params);
 
-  const teams = await prisma.team.findMany({
-    where: {
-      club: {
-        slug: clubSlug,
-      },
-    },
-    include: {
-      teamLeader: true,
-      teamLeaderInvite: {
-        select: {
-          id: true,
-          expiresAt: true,
-          email: true,
-          fullName: true,
+  const teams = (
+    await prisma.team.findMany({
+      where: {
+        club: {
+          slug: clubSlug,
         },
       },
-    },
-  });
+      include: {
+        teamLeader: true,
+        teamLeaderInvite: {
+          select: {
+            id: true,
+            expiresAt: true,
+            email: true,
+            fullName: true,
+          },
+        },
+      },
+    })
+  ).sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="w-full">
