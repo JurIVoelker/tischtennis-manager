@@ -220,6 +220,13 @@ const saveInDB = async (games: GameDataWithHall[]) => {
                 slug: clubSlug,
               },
             },
+            teamAuth: {
+              create: {
+                token:
+                  Math.random().toString(36).substring(7) +
+                  Math.random().toString(36).substring(7),
+              },
+            },
             name: game.ownTeamName,
             slug: teamSlug,
           },
