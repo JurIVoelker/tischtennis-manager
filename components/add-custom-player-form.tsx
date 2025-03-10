@@ -40,13 +40,13 @@ const AddCustomPlayerForm: React.FC<AddCustomPlayerFormProps> = ({
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div className={cn(className, "space-y-3")}>
           <FormField
-            name="lastName"
+            name="firstName"
             control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Input
-                    placeholder="Nachname..."
+                    placeholder="Vorname..."
                     value={field.value}
                     onChange={(event) => {
                       field.onChange(event.target.value);
@@ -58,13 +58,13 @@ const AddCustomPlayerForm: React.FC<AddCustomPlayerFormProps> = ({
             )}
           />
           <FormField
-            name="firstName"
+            name="lastName"
             control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Input
-                    placeholder="Vorname..."
+                    placeholder="Nachname..."
                     value={field.value}
                     onChange={(event) => {
                       field.onChange(event.target.value);

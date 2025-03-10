@@ -113,13 +113,13 @@ export const SortablePlayerTable: React.FC<PlayerTableProps> = ({
                           {isRemovable && (
                             <Button
                               variant="destructive"
-                              className="h-7 w-7 z-50"
+                              className="h-7 w-7 z-10"
                               size="icon"
                               onClick={() => {
                                 handleRemovePlayer(playerList.id);
                               }}
                             >
-                              <Cancel01Icon strokeWidth={2}/>
+                              <Cancel01Icon strokeWidth={2} />
                             </Button>
                           )}
                         </Card>

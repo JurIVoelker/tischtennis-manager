@@ -63,7 +63,7 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
           </DrawerTitle>
           <DrawerDescription className="text-left">
             {isExchangePlayers
-              ? "Wähle Ersatzspieler aus. Bitte beachte dabei, dass du keine Spieler aus höheren Mannschaften, als deiner eigenen auswählen kannst."
+              ? "Wähle Ersatzspieler aus. Bitte beachte dabei, dass du keine Spieler aus höheren Mannschaften, als deiner eigenen auswählen darfst."
               : "Füge bestehende Spieler aus anderen Mannschaften hinzu."}
           </DrawerDescription>
         </DrawerHeader>
@@ -90,7 +90,9 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
                       {!isPlayerSelected && !isPlayerDisabled && (
                         <PlusSignIcon strokeWidth={2} />
                       )}
-                      {(isPlayerSelected || isPlayerDisabled) && <Tick01Icon strokeWidth={2}/>}
+                      {(isPlayerSelected || isPlayerDisabled) && (
+                        <Tick01Icon strokeWidth={2} />
+                      )}
                       {getPlayerName(player, team.players)}
                     </Button>
                   );

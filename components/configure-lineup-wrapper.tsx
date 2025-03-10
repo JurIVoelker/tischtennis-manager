@@ -130,31 +130,6 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
 
   return (
     <>
-      <Card className="p-4">
-        {selectedPlayers.length > 0 && (
-          <>
-            <Typography variant="p-gray" className="mb-4">
-              Ausgewählte Spieler
-            </Typography>
-            <SortablePlayerTable
-              players={selectedPlayers.map((player) => ({
-                player,
-                id: player.id,
-              }))}
-              disabledPlayerIds={disabledPlayerIds}
-              isRemovable
-              handleRemovePlayer={handleRemovePlayer}
-              handleOnChange={handleSortItems}
-            />
-          </>
-        )}
-
-        {selectedPlayers.length === 0 && (
-          <Typography variant="p-gray">
-            Wähle Spieler aus, um sie zu der Aufstellung hinzuzufügen
-          </Typography>
-        )}
-      </Card>
       {remainingMainPlayers.length > 0 && (
         <Card className="space-y-2 p-4">
           <Typography variant="p-gray">Stammspieler</Typography>
@@ -205,16 +180,41 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
         onChange={handleSelectExistingPlayer}
         isExchangePlayers
       />
+      <Card className="p-4">
+        {selectedPlayers.length > 0 && (
+          <>
+            <Typography variant="p-gray" className="mb-4">
+              Ausgewählte Spieler
+            </Typography>
+            <SortablePlayerTable
+              players={selectedPlayers.map((player) => ({
+                player,
+                id: player.id,
+              }))}
+              disabledPlayerIds={disabledPlayerIds}
+              isRemovable
+              handleRemovePlayer={handleRemovePlayer}
+              handleOnChange={handleSortItems}
+            />
+          </>
+        )}
+
+        {selectedPlayers.length === 0 && (
+          <Typography variant="p-gray">
+            Klicke auf die Spieler, um sie zu der Aufstellung hinzuzufügen.
+          </Typography>
+        )}
+      </Card>
       <div className="h-20" />
-      <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent">
+      <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent z-20">
         <Link
-          className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+          className={cn(buttonVariants({ variant: "outline" }), "w-full z-20")}
           href={"../../../"}
         >
           <Cancel01Icon strokeWidth={2} />
           Abbrechen
         </Link>
-        <Button className="w-full" onClick={onSave}>
+        <Button className="w-full z-20" onClick={onSave}>
           <Tick01Icon strokeWidth={2} />
           Speichern
         </Button>

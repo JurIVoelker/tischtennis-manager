@@ -32,7 +32,7 @@ const ClubUserLoginPage = async ({
 
   return (
     <div className="w-full">
-      <Navbar />
+      <Navbar menuHidden />
       <div className="space-y-12 px-6 pb-6 pt-16">
         <Headline>Login</Headline>
         {teamName && Boolean(players?.length) && (
