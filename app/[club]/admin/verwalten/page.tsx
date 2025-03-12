@@ -11,6 +11,8 @@ import {
 import { prisma } from "@/lib/prisma/prisma";
 import { PlusSignIcon } from "hugeicons-react";
 
+export const revalidate = 600;
+
 const AdminManagePage = async ({ params }: { params: Promise<ClubParams> }) => {
   const { clubSlug } = await decodeClubParams(params);
 

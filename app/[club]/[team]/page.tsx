@@ -15,6 +15,8 @@ import { prisma } from "@/lib/prisma/prisma";
 import { getOrderedPlayers } from "@/lib/prismaUtils";
 import { notFound } from "next/navigation";
 
+export const revalidate = 600;
+
 const ClubTeamPage = async ({
   params,
 }: {

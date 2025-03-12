@@ -9,6 +9,8 @@ import {
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
 
+export const revalidate = 600;
+
 const AdminLeaderPage = async ({ params }: { params: Promise<ClubParams> }) => {
   const { clubSlug } = await decodeClubParams(params);
 

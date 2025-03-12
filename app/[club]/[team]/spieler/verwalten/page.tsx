@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 import { PlusSignIcon } from "hugeicons-react";
 import Link from "next/link";
 
+export const revalidate = 600;
+
 const ManagePlayersPage = async ({
   params,
 }: {
