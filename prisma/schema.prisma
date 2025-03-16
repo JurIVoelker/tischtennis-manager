@@ -132,3 +132,18 @@ model UserCredentials {
   email         String @unique
   passwordHash  String
 }
+
+model PasswordReset {
+  id        String @id @default(cuid())
+  token     String
+  email     String
+  expiresAt DateTime
+}
+
+model EmailsSent {
+  id       String @id @default(cuid())
+  createdAt DateTime @default(now())
+  email     String
+  subject   String
+  body      String
+}

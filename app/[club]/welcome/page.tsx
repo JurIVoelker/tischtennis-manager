@@ -1,12 +1,10 @@
 import Headline from "@/components/headline";
 import IndexLoginManager from "@/components/index-login-manager";
+import LoginLink from "@/components/login-link";
 import Navbar from "@/components/navbar";
 import Typography from "@/components/typography";
-import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 const IndexPage = () => {
   return (
@@ -38,15 +36,7 @@ const IndexPage = () => {
               </Typography>
 
               <div className="flex justify-start pt-2">
-                <Link
-                  href="/ttc/mannschaftsfuehrer/login"
-                  className={cn(
-                    buttonVariants({ variant: "default" }),
-                    "w-full"
-                  )}
-                >
-                  Login
-                </Link>
+                <LoginLink />
               </div>
             </div>
           </CardContent>

@@ -176,6 +176,11 @@ export const API_POST_LEADER_REGISTER_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
 });
 
+export const API_POST_PASSWORD_RESET_SCHEMA = z.object({
+  email: z.string().email(),
+  clubSlug: z.string(),
+});
+
 export const API_POST_GAME_DATA_SCHEMA = z.object({
   city: z.string(),
   date: z

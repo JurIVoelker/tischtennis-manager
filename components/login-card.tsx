@@ -103,7 +103,7 @@ export default function LoginCard() {
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Passwort</Label>
               <Link
-                href="/forgot-password"
+                href="./passwort-vergessen"
                 className="text-sm text-primary hover:underline"
               >
                 Passwort vergessen?
