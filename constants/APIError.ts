@@ -18,4 +18,4 @@ export const TEAM_SLUG_ALREADY_EXISTS_ERROR =
 export const TEAM_LEADER_ALREADY_EXISTS_ERROR =
   "Ein Mannschaftsführer mit dieser E-Mail-Adresse ist bereits registriert. Setze dein Passwort zurück, falls du es vergessen hast.";
 export const TOO_MANY_EMAILS_SENT_ERROR =
-  "Zu viele E-Mails wurden heute bereits gesendet";
+  "Zu viele E-Mails wurden heute bereits gesendet. Bitte versuche es morgen erneut.";

@@ -55,8 +55,7 @@ export async function POST(request: NextRequest) {
 
   if (unfinishedResets.length > 2) {
     console.error("Too many unfinished resets for email", email);
-    // ! TODO: uncomment before merge
-    // return new Response(JSON.stringify({ ok: true }), { status: 200 });
+    return new Response(JSON.stringify({ ok: true }), { status: 200 });
   }
 
   const token = crypto.randomBytes(32).toString("hex");
@@ -70,7 +69,7 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  if (emailsSentToday >= 100) {
+  if (emailsSentToday >= 90) {
     return new Response(
       JSON.stringify({ ok: false, error: TOO_MANY_EMAILS_SENT_ERROR }),
       { status: 403 }

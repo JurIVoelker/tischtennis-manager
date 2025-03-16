@@ -15,6 +15,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail01Icon } from "hugeicons-react";
+import { postAPI } from "@/lib/APIUtils";
+import { useUserStore } from "@/store/store";
+import {
+  TOO_MANY_EMAILS_SENT_ERROR,
+  UNKNOWN_ERROR,
+} from "@/constants/APIError";
 
 // Zod-Schema für die Formularvalidierung
 const formSchema = z.object({
@@ -29,6 +35,8 @@ export default function PasswortVergessen() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
+
+  const { clubSlug } = useUserStore();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -48,6 +56,22 @@ export default function PasswortVergessen() {
 
     setIsLoading(true);
 
+    const res = await postAPI("/api/leader/password-reset", {
+      email,
+      clubSlug,
+    });
+    if (res.ok) {
+      setSuccess(
+        "Falls die E-Mail-Adresse in unserer Datenbank existiert, haben wir dir einen Link zum Zurücksetzen deines Passworts zugesendet."
+      );
+    } else if (!res.ok) {
+      // @ts-expect-error error property is not defined on Response
+      if (res?.error?.error === TOO_MANY_EMAILS_SENT_ERROR) {
+        setError(TOO_MANY_EMAILS_SENT_ERROR);
+      } else {
+        setError(UNKNOWN_ERROR);
+      }
+    }
     setIsLoading(false);
   }
 
@@ -101,7 +125,7 @@ export default function PasswortVergessen() {
               </div>
             )}
           </CardContent>
-          {!success && (
+          {!success && !error && (
             <CardFooter>
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading

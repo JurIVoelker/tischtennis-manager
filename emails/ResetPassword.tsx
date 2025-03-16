@@ -13,6 +13,7 @@ import EmailLayout from "./EmailLayout";
 interface PasswordResetEmailProps {
   username?: string;
   token?: string;
+  email?: string;
   expiryHours?: number;
   companyName?: string;
   clubSlug?: string;
@@ -20,6 +21,7 @@ interface PasswordResetEmailProps {
 
 export function PasswordResetEmail({
   username = "User",
+  email = "",
   token = "token",
   expiryHours = 24,
   companyName = "Company Name",
@@ -27,13 +29,10 @@ export function PasswordResetEmail({
 }: PasswordResetEmailProps) {
   const previewText = `Setzen Sie Ihr ${companyName} Passwort zurück`;
 
-  const resetLink =
+  const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL ||
-    "https://tt-manager.ttc-klingenmuenster.de" +
-      "/" +
-      clubSlug +
-      "/mannschaftsfuehrer/passwort-reset?token=" +
-      token;
+    "https://tt-manager.ttc-klingenmuenster.de";
+  const resetLink = `${baseUrl}/${clubSlug}/mannschaftsfuehrer/passwort-reset?token=${token}&email=${email}`;
 
   return (
     <EmailLayout>
