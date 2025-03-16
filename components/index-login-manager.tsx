@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import Typography from "./typography";
 import { useUserStore } from "@/store/store";
 import Link from "next/link";
@@ -11,7 +10,6 @@ import { Separator } from "./ui/separator";
 
 const IndexLoginManager = () => {
   const [error, setError] = useState("");
-  const { data: session } = useSession();
 
   const { joinedTeams, leaderAt, clubSlug, admin } = useUserStore();
 
@@ -22,7 +20,7 @@ const IndexLoginManager = () => {
       setError(errorParam);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  }, []);
 
   const redirectLink =
     joinedTeams?.length > 0

@@ -7,14 +7,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 const Refresher = () => {
-  const {
-    clubSlug,
-    teamSlug,
-    setClubSlug,
-    setTeamSlug,
-    setLeaderAt,
-    setAdmin,
-  } = useUserStore();
+  const { clubSlug, setClubSlug, setTeamSlug, setLeaderAt, setAdmin, clear } =
+    useUserStore();
   const pathname = usePathname();
 
   const { refresh } = useRouter();
@@ -57,10 +51,12 @@ const Refresher = () => {
     };
     if (session.status === "authenticated") {
       getAuth();
+    } else if (session.status === "unauthenticated") {
+      clear();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clubSlug, teamSlug, session]);
+  }, [clubSlug, session]);
 
   return <></>;
 };
