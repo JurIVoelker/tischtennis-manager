@@ -75,6 +75,8 @@ export const hasServersidePermission = async (
       const { success } = await hasAdminPermission(clubSlug as string, request);
       if (success) return true;
     }
+
+    if (permission === "user:all") return true;
   }
   return false;
 };

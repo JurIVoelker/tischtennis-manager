@@ -55,7 +55,7 @@ export const AppSidebar = ({}) => {
         setTeams(fetchedTeams);
       });
     }
-  }, [clubSlug]);
+  }, [clubSlug, leaderAt]);
 
   const excludedRoutes = [
     ADMIN_PAGE_REGEX,

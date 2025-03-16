@@ -1,4 +1,5 @@
 import { useUserStore } from "@/store/store";
+import bcryptjs from "bcryptjs";
 
 type role = "member" | "leader" | "admin" | "viewer";
 export type permission =
@@ -57,3 +58,8 @@ export function hasPermission(permission: permission, role?: role) {
   const roles: role[] = role ? [role] : getRole();
   return roles.some((role) => ROLES[role].includes(permission));
 }
+
+export const hashPassword = (password: string) => {
+  const passwordHash = bcryptjs.hashSync(password, 10);
+  return passwordHash;
+};

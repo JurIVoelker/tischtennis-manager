@@ -33,6 +33,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
   const { data: session } = useSession();
   const { push } = useRouter();
   const { toggleSidebar, isMobile } = useSidebar();
+
   const { clear } = useUserStore();
 
   const isAdminButtonVisible = useIsPermitted("view:manage-admin-button");
@@ -48,6 +49,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
   const handleSignOut = () => {
     clear();
     signOut();
+    clear();
   };
 
   return (
@@ -82,13 +84,13 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
                   )}
                   onClick={() => setLogoutModalOpen(true)}
                 >
-                  {session?.user?.name ? (
+                  {session?.user?.name || session?.user?.email ? (
                     <>
                       <UserCircleIcon strokeWidth={2} />
-                      {session.user.name}
+                      {session?.user?.name || session?.user?.email}
                     </>
                   ) : (
-                    "Meine Mannschaften"
+                    "Abmelden"
                   )}
                 </SidebarMenuButton>
               </SidebarMenuItem>

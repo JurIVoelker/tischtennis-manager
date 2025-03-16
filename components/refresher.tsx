@@ -2,13 +2,14 @@
 
 import { getAPI } from "@/lib/APIUtils";
 import { useUserStore } from "@/store/store";
+import { useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 const Refresher = () => {
   const {
     clubSlug,
-    setJoinedTeams,
+    teamSlug,
     setClubSlug,
     setTeamSlug,
     setLeaderAt,
@@ -18,6 +19,8 @@ const Refresher = () => {
 
   const { refresh } = useRouter();
   const params = useSearchParams();
+  const session = useSession();
+
   useEffect(() => {
     const isRefresh = params.get("refresh");
     if (isRefresh) {
@@ -49,11 +52,15 @@ const Refresher = () => {
             teamSlug: l.teamName,
           }))
         );
-        if (admin) setAdmin(true);
+        if (admin === true) setAdmin(true);
       } catch {}
     };
-    getAuth();
-  }, [clubSlug, setAdmin, setJoinedTeams, setLeaderAt]);
+    if (session.status === "authenticated") {
+      getAuth();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clubSlug, teamSlug, session]);
 
   return <></>;
 };

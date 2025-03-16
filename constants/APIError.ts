@@ -11,5 +11,9 @@ export const BODY_NOT_JSON_ERROR =
 export const UNKNOWN_ERROR = "Es ist ein unbekannter Fehler aufgetreten";
 export const TEAM_NOT_FOUND_ERROR = "Team nicht gefunden";
 export const TEAM_LEADER_INVITE_NOT_FOUND_ERROR = "Einladung nicht gefunden";
+export const LEADER_IS_NOT_EXISTING =
+  "Die E-Mail-Adresse ist nicht registriert";
 export const TEAM_SLUG_ALREADY_EXISTS_ERROR =
   "Eine Mannschaft mit diesem Namen existiert bereits";
+export const TEAM_LEADER_ALREADY_EXISTS_ERROR =
+  "Ein Mannschaftsführer mit dieser E-Mail-Adresse ist bereits registriert. Setze dein Passwort zurück, falls du es vergessen hast.";
