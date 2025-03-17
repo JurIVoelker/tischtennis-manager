@@ -48,7 +48,9 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
 
   const handleSignOut = () => {
     clear();
-    signOut();
+    signOut({
+      callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/`,
+    });
     clear();
   };
 
