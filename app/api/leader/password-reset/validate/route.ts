@@ -17,15 +17,21 @@ export async function POST(request: NextRequest) {
 
   if (response) return response;
 
-  const { email, password, token } = body as {
+  const {
+    email: e,
+    password,
+    token,
+  } = body as {
     email: string;
     password: string;
     token: string;
   };
 
+  const email = e.toLowerCase();
+
   const credentials = await prisma.userCredentials.findFirst({
     where: {
-      email: email,
+      email,
     },
   });
 

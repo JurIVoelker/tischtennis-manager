@@ -18,10 +18,12 @@ export async function POST(request: NextRequest) {
 
   if (response) return response;
 
-  const { email, clubSlug } = body as {
+  const { email: e, clubSlug } = body as {
     email: string;
     clubSlug: string;
   };
+
+  const email = e.toLowerCase();
 
   const credentials = await prisma.userCredentials.findFirst({
     where: {
