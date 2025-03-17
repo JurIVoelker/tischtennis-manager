@@ -19,3 +19,7 @@ export const TEAM_LEADER_ALREADY_EXISTS_ERROR =
   "Ein Mannschaftsführer mit dieser E-Mail-Adresse ist bereits registriert. Setze dein Passwort zurück, falls du es vergessen hast.";
 export const TOO_MANY_EMAILS_SENT_ERROR =
   "Zu viele E-Mails wurden heute bereits gesendet. Bitte versuche es morgen erneut.";
+export const PASSWORD_RESET_NOT_FOUND_ERROR =
+  "Bei dem Zurücksetzen deines Passworts ist etwas schief gelaufen. Klicke den Link aus der E-Mail an und versuche es erneut.";
+export const PASSWORD_RESET_EXPIRED_ERROR =
+  "Passwort-Zurücksetzung abgelaufen. Bitte fordere einen neuen Link an.";
