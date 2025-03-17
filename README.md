@@ -38,20 +38,20 @@ Meine Lösung ist eine Web-App, die diese Probleme gezielt adressiert und den Pl
 
 ```markdown
 tischtennis-manager
-│── app/                      # Next.js App Router Pages
-│ ├── [club]/[team]/          # Team-spezifische Seiten
-│ ├── layout.tsx              # Hauptlayout
-│ ├── page.tsx                # Startseite
-│── prisma/                   # Prisma Schema & Migrationen
-│── testing/                  # Testdaten für die Datenbank
-│── components/               # Wiederverwendbare UI-Komponenten
-│── middleware.ts             # Authentifizierung & Zugriffssteuerung
-│── package.json              # Abhängigkeiten & Skripte
-│── prisma/schema.prisma      # Datenbankmodell
-│── next.config.mjs           # Next.js Konfiguration
-│── tailwind.config.ts        # Tailwind-Konfiguration
-│── tsconfig.json             # TypeScript Konfiguration
-│── .github/workflows/        # CI/CD Workflows
+│── app/ # Next.js App Router Pages
+│ ├── [club]/[team]/ # Team-spezifische Seiten
+│ ├── layout.tsx # Hauptlayout
+│ ├── page.tsx # Startseite
+│── prisma/ # Prisma Schema & Migrationen
+│── testing/ # Testdaten für die Datenbank
+│── components/ # Wiederverwendbare UI-Komponenten
+│── middleware.ts # Authentifizierung & Zugriffssteuerung
+│── package.json # Abhängigkeiten & Skripte
+│── prisma/schema.prisma # Datenbankmodell
+│── next.config.mjs # Next.js Konfiguration
+│── tailwind.config.ts # Tailwind-Konfiguration
+│── tsconfig.json # TypeScript Konfiguration
+│── .github/workflows/ # CI/CD Workflows
 ```
 
 ## Sicherheit
@@ -68,11 +68,12 @@ Um eine hohe Performance zu gewährleisten, werden die meisten Komponenten serve
 
 # Installation und Setup
 
-
 ```bash
 bun i
 ```
+
 Abhängigkeiten installieren
+
 > Weitere Informationen zur Installation von Bun: [Bun Docs](https://bun.sh/docs/installation)
 
 ```bash
@@ -113,7 +114,7 @@ Für das Deployment verwende ich self-hosted [Coolify](https://coolify.io/) auf 
 
 ```
 # Required for setup
-GOOGLE_APP_CLIENT_ID=yourId 
+GOOGLE_APP_CLIENT_ID=yourId
 GOOGLE_APP_CLIENT_SECRET=yourSecret
 
 # Optional for logging
@@ -130,32 +131,38 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 CLUB_SLUG=your-slug
 CLUB_INITIAL_ADMIN_EMAIL=your-email
 CLUB_NAME=Club Name
+
+# For email sending
+RESEND_API_KEY=yourKey
+RESEND_EMAIL_FROM=your-email
 ```
 
 # Api
 
-| Pfad                          | Methode | Berechtigungen       |
-| ----------------------------- | ------- | -------------------- |
-| /api/admin                    | POST    | admin                |
-| /api/admin                    | PUT     | admin                |
-| /api/admin                    | DELTE   | admin                |
-| /api/invite-token             | GET     | leader:own           |
-| /api/leader                   | PUT     | admin                |
-| /api/leader                   | DELETE  | admin                |
-| /api/leader                   | POST    | admin                |
-| /api/lineup                   | PUT     | leader:own           |
-| /api/match                    | PUT     | leader:own           |
-| /api/match                    | POST    | leader:own           |
-| /api/match                    | DELETE  | leader:own           |
-| /api/player                   | POST    | leader:own           |
-| /api/player                   | DELETE  | leader:own           |
-| /api/player/position          | POST    | leader:own           |
-| /api/players                  | POST    | leader:own           |
-| /api/protected/is-admin       | GET     | server               |
-| /api/protected/is-team-leader | GET     | server               |
-| /api/protected/team-auth      | GET     | server               |
-| /api/team                     | POST    | admin                |
-| /api/team                     | DELETE  | admin                |
-| /api/teams/[clubSlug]         | GET     | -                    |
-| /api/verify-auth              | GET     | leader:own           |
-| /api/vote                     | POST    | user:own, leader:all |
+| Pfad                                | Methode | Berechtigungen       |
+| ----------------------------------- | ------- | -------------------- |
+| /api/admin                          | POST    | admin                |
+| /api/admin                          | PUT     | admin                |
+| /api/admin                          | DELTE   | admin                |
+| /api/invite-token                   | GET     | leader:own           |
+| /api/leader                         | PUT     | admin                |
+| /api/leader/password-reset          | POST    | user:all             |
+| /api/leader/password-reset/validate | POST    | user:all             |
+| /api/leader                         | DELETE  | admin                |
+| /api/leader                         | POST    | admin                |
+| /api/lineup                         | PUT     | leader:own           |
+| /api/match                          | PUT     | leader:own           |
+| /api/match                          | POST    | leader:own           |
+| /api/match                          | DELETE  | leader:own           |
+| /api/player                         | POST    | leader:own           |
+| /api/player                         | DELETE  | leader:own           |
+| /api/player/position                | POST    | leader:own           |
+| /api/players                        | POST    | leader:own           |
+| /api/protected/is-admin             | GET     | server               |
+| /api/protected/is-team-leader       | GET     | server               |
+| /api/protected/team-auth            | GET     | server               |
+| /api/team                           | POST    | admin                |
+| /api/team                           | DELETE  | admin                |
+| /api/teams/[clubSlug]               | GET     | -                    |
+| /api/verify-auth                    | GET     | leader:own           |
+| /api/vote                           | POST    | user:own, leader:all |

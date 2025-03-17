@@ -126,3 +126,24 @@ model Lineup {
   match    Match  @relation(fields: [matchId], references: [id])
   player   Player @relation(fields: [playerId], references: [id])
 }
+
+model UserCredentials {
+  id            String @id @default(cuid())
+  email         String @unique
+  passwordHash  String
+}
+
+model PasswordReset {
+  id        String @id @default(cuid())
+  token     String
+  email     String
+  expiresAt DateTime
+}
+
+model EmailsSent {
+  id       String @id @default(cuid())
+  createdAt DateTime @default(now())
+  email     String
+  subject   String
+  body      String
+}

@@ -170,6 +170,23 @@ export const API_PUT_GAME_DATA_SCHEMA = z.object({
   matchId: validateMatchId(),
 });
 
+export const API_POST_LEADER_REGISTER_SCHEMA = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  clubSlug: validateClubSlug(),
+});
+
+export const API_POST_PASSWORD_RESET_SCHEMA = z.object({
+  email: z.string().email(),
+  clubSlug: z.string(),
+});
+
+export const API_POST_PASSWORD_RESET_VALIDATE_SCHEMA = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  token: z.string(),
+});
+
 export const API_POST_GAME_DATA_SCHEMA = z.object({
   city: z.string(),
   date: z
