@@ -231,7 +231,7 @@ export const AppSidebar = ({}) => {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <AppSidebarFooter userClub={clubSlug} currentTeamSlug={teamSlug} />
+      <AppSidebarFooter userClub={clubSlug} />
     </Sidebar>
   );
 };
