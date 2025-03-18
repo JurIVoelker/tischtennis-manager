@@ -46,7 +46,7 @@ const Refresher = () => {
             teamSlug: l.teamName,
           }))
         );
-        if (admin === true) setAdmin(true);
+        setAdmin(Boolean(admin));
       } catch {}
     };
     if (session.status === "authenticated") {

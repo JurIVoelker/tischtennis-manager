@@ -1,7 +1,6 @@
 import Headline from "@/components/headline";
 import IndexLoginManager from "@/components/index-login-manager";
 import LoginLink from "@/components/login-link";
-import Navbar from "@/components/navbar";
 import Typography from "@/components/typography";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -9,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 const IndexPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 w-full">
-      <Navbar menuHidden />
       <div className="flex-1 flex items-center justify-center px-4 py-12 w-full">
         <Card className="w-full max-w-2xl shadow-lg">
           <CardHeader className="pb-0">

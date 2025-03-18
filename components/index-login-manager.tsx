@@ -25,15 +25,14 @@ const IndexLoginManager = () => {
   const redirectLink =
     joinedTeams?.length > 0
       ? `/${clubSlug}/${joinedTeams[0].teamSlug}`
-      : admin === true
-        ? `/${clubSlug}/admin/verwalten`
-        : leaderAt?.length > 0
-          ? `/${leaderAt[0].clubSlug}/${leaderAt[0].teamSlug}`
+      : leaderAt?.length > 0
+        ? `/${leaderAt[0].clubSlug}/${leaderAt[0].teamSlug}`
+        : admin === true
+          ? `/${clubSlug}/admin/verwalten`
           : null;
 
   return (
     <>
-      {redirectLink}
       {redirectLink && (
         <>
           <Separator className="my-8" />
