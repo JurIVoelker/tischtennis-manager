@@ -9,6 +9,8 @@ import {
 import { prisma } from "@/lib/prisma/prisma";
 import { getOrderedPlayers } from "@/lib/prismaUtils";
 
+export const revalidate = 600;
+
 const SortPlayersPage = async ({
   params,
 }: {

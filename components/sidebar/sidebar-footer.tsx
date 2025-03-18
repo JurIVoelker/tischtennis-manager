@@ -6,7 +6,7 @@ import {
   SidebarSeparator,
   useSidebar,
 } from "../ui/sidebar";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ConfirmModal } from "../popups/confirm-modal";
 import { useState } from "react";
@@ -20,19 +20,17 @@ import {
 } from "hugeicons-react";
 import { useIsPermitted } from "@/hooks/use-has-permission";
 import { useUserStore } from "@/store/store";
+import Link from "next/link";
 
 interface AppSidebarFooterProps {
   userClub: string;
-  currentTeamSlug: string;
 }
 
-const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
-  userClub,
-  currentTeamSlug,
-}) => {
+const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({ userClub }) => {
   const { data: session } = useSession();
   const { push } = useRouter();
   const { toggleSidebar, isMobile } = useSidebar();
+
   const { clear } = useUserStore();
 
   const isAdminButtonVisible = useIsPermitted("view:manage-admin-button");
@@ -47,7 +45,10 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
 
   const handleSignOut = () => {
     clear();
-    signOut();
+    signOut({
+      callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/`,
+    });
+    clear();
   };
 
   return (
@@ -57,19 +58,16 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
         <SidebarMenu>
           {!session && (
             <SidebarMenuButton
-              onClick={() =>
-                signIn("google", {
-                  callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/${currentTeamSlug}/mannschaftsfuehrer/login/validieren`,
-                  redirect: true,
-                })
-              }
               className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "justify-start"
               )}
+              asChild
             >
-              <LoginSquare01Icon strokeWidth={2} />
-              Mannschaftsführer Login
+              <Link href={`/${userClub}/mannschaftsfuehrer/login`}>
+                <LoginSquare01Icon strokeWidth={2} />
+                Mannschaftsführer Login
+              </Link>
             </SidebarMenuButton>
           )}
           {session && (
@@ -82,13 +80,13 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({
                   )}
                   onClick={() => setLogoutModalOpen(true)}
                 >
-                  {session?.user?.name ? (
+                  {session?.user?.name || session?.user?.email ? (
                     <>
                       <UserCircleIcon strokeWidth={2} />
-                      {session.user.name}
+                      {session?.user?.name || session?.user?.email}
                     </>
                   ) : (
-                    "Meine Mannschaften"
+                    "Abmelden"
                   )}
                 </SidebarMenuButton>
               </SidebarMenuItem>

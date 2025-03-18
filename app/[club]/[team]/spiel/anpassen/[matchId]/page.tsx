@@ -11,6 +11,8 @@ import { prisma } from "@/lib/prisma/prisma";
 import { MatchWithLocation } from "@/types/prismaTypes";
 import { notFound } from "next/navigation";
 
+export const revalidate = 600;
+
 const EditMatchPage = async ({
   params,
 }: {

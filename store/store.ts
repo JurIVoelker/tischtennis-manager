@@ -93,8 +93,6 @@ export const useUserStore = create<Store>()(
 
       clear: () =>
         set({
-          clubSlug: "",
-          teamSlug: "",
           admin: false,
           joinedTeams: [],
           leaderAt: [],

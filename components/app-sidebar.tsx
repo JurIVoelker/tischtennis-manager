@@ -55,7 +55,7 @@ export const AppSidebar = ({}) => {
         setTeams(fetchedTeams);
       });
     }
-  }, [clubSlug]);
+  }, [clubSlug, leaderAt]);
 
   const excludedRoutes = [
     ADMIN_PAGE_REGEX,
@@ -231,7 +231,7 @@ export const AppSidebar = ({}) => {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <AppSidebarFooter userClub={clubSlug} currentTeamSlug={teamSlug} />
+      <AppSidebarFooter userClub={clubSlug} />
     </Sidebar>
   );
 };
