@@ -66,9 +66,17 @@ const ClubTeamPage = async ({
   const { matches, name: teamName } =
     club?.teams?.find((team) => team.slug === teamSlug) || {};
 
-  const upcomingMatches = matches?.filter(
-    (match) => new Date(match.matchDateTime) >= new Date()
-  );
+  const upcomingMatches = matches
+    ?.filter((match) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return new Date(match.matchDateTime) >= today;
+    })
+    .sort(
+      (a, b) =>
+        new Date(a.matchDateTime).getTime() -
+        new Date(b.matchDateTime).getTime()
+    );
 
   return (
     <>
