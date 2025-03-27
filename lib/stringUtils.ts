@@ -45,7 +45,7 @@ export const getInfoTextString = (match: MatchWithLineupAndLocation) => {
   };
 
   return `${textBeginning} Uhr findet das ${
-    match.isHomeGame ? "Heimspiel" : "Auswährtsspiel"
+    match.isHomeGame ? "Heimspiel" : "Auswärtsspiel"
   } gegen ${
     match.enemyClubName
   } statt. Wir spielen mit folgender Aufstellung: \n${sortedMatch.lineups
