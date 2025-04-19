@@ -8,6 +8,7 @@ import {
   generateClubParams,
 } from "@/lib/nextUtils";
 import { prisma } from "@/lib/prisma/prisma";
+import { TeamLeader } from "@prisma/client";
 
 export const revalidate = 600;
 
@@ -35,6 +36,14 @@ const AdminLeaderPage = async ({ params }: { params: Promise<ClubParams> }) => {
     })
   ).sort((a, b) => a.name.localeCompare(b.name));
 
+  const registeredUsers: TeamLeader[] = [];
+  teams.forEach((t) => {
+    t.teamLeader.forEach((l) => {
+      if (registeredUsers.some((u) => u.email === l.email)) return;
+      registeredUsers.push(l);
+    });
+  });
+
   return (
     <div className="w-full">
       <Navbar />
@@ -46,6 +55,10 @@ const AdminLeaderPage = async ({ params }: { params: Promise<ClubParams> }) => {
               team={team}
               key={team.id}
               clubSlug={clubSlug}
+              registeredUsers={registeredUsers.map((u) => ({
+                name: u.fullName,
+                email: u.email,
+              }))}
             />
           ))}
           <AddTeamModal clubSlug={clubSlug} />

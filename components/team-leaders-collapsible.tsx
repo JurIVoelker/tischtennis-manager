@@ -17,11 +17,13 @@ import { DeleteTeamDialog } from "./popups/delete-team-modal";
 interface TeamLeadersCollapsibleProps {
   team: TeamWithTeamLeadersAndTeamLeaderInvites;
   clubSlug: string;
+  registeredUsers: { email: string; name: string }[];
 }
 
 const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
   team,
   clubSlug,
+  registeredUsers,
   ...props
 }) => {
   const [isOpen, setOpen] = useState(false);
@@ -80,6 +82,7 @@ const TeamLeadersCollapsible: React.FC<TeamLeadersCollapsibleProps> = ({
           teamId={team.id}
           teamName={team.name}
           clubSlug={clubSlug}
+          registeredUsers={registeredUsers}
         >
           <Button variant="outline" className="w-full">
             <PlusSignIcon strokeWidth={2} />

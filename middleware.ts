@@ -17,6 +17,11 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
   const urlPath = request.url.replace(/^https?:\/\/[^/]+/, "");
+  if ((urlPath === "/" || urlPath === "") && process.env.CLUB_SLUG) {
+    return NextResponse.redirect(
+      new URL(`/${process.env.CLUB_SLUG}/welcome`, request.url)
+    );
+  }
   if (isIgnoredMiddlewarePath(urlPath)) return NextResponse.next();
 
   const splitUrl = urlPath.split("/");
