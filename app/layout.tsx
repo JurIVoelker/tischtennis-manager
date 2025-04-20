@@ -6,6 +6,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { NextAuthProvider } from "@/components/next-auth-provider";
 import Refresher from "@/components/refresher";
+import { ThemeProvider } from "../components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,18 +31,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" className={inter.className}>
+    <html lang="de" className={inter.className} suppressHydrationWarning>
       <body>
-        <div>
-          <NextAuthProvider>
-            <SidebarProvider>
-              <Toaster />
-              <AppSidebar />
-              <Refresher />
-              {children}
-            </SidebarProvider>
-          </NextAuthProvider>
-        </div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div>
+            <NextAuthProvider>
+              <SidebarProvider>
+                <Toaster />
+                <AppSidebar />
+                <Refresher />
+                {children}
+              </SidebarProvider>
+            </NextAuthProvider>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

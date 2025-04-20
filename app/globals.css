@@ -86,6 +86,15 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --positive-dark: #b7eaa0;
+    --positive-light: #8ccf6d25;
+    --positive-border: #8ccf6d4f;
+    --negative-dark: #dd717a;
+    --negative-light: #d45d6725;
+    --negative-border: #d45d674f;
+    --neutral-dark: #d6af78;
+    --neutral-light: #d6af7825;
+    --neutral-border: #d6af784f;
   }
 }
 

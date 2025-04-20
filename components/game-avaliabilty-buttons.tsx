@@ -80,8 +80,8 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
       option === "Ja"
         ? "available"
         : option === "Nein"
-        ? "unavailable"
-        : "maybe";
+          ? "unavailable"
+          : "maybe";
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const res: any = await postAPI("/api/vote", {
       vote,
@@ -112,7 +112,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
   if (!isButtonsVisible) return <></>;
 
   return (
-    <div className=" mt-8 space-y-2">
+    <div className="mt-8 space-y-2">
       <Typography variant="h5">Hast du Zeit zu spielen?</Typography>
       <div className="flex gap-2">
         {selectableOptions.map((option) => (
