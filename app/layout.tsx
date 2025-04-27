@@ -32,10 +32,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" className={inter.className} suppressHydrationWarning>
+      <head>
+        <script
+          defer
+          src="https://umami.jurivoelker.de/script.js"
+          data-website-id="c0f1a013-df2a-4a07-b743-d64117e33f69"
+        />
+      </head>
       <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
