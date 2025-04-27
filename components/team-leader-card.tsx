@@ -122,7 +122,7 @@ const TeamLeaderCard: React.FC<TeamLeaderCardProps> = ({
       {...props}
     >
       <div className="flex items-center gap-2 width-full overflow-hidden">
-        <div className="h-8 w-8 rounded-full flex items-center justify-center bg-gray-200 shrink-0">
+        <div className="h-8 w-8 rounded-full flex items-center justify-center bg-secondary shrink-0">
           <User2Icon size={20} />
         </div>
         <span className="flex flex-col shrink overflow-hidden text-ellipsis">

@@ -317,8 +317,9 @@ const exec = async () => {
   }));
 
   const games = connectHallsToGames(transformedData, halls);
+  console.log({ game: games[0] });
   // @ts-expect-error ts confuses me and I have no idea how to fix it
-  await saveInDB(games);
+  // await saveInDB(games);
 };
 
 exec();

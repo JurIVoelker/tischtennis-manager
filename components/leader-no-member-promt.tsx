@@ -11,6 +11,7 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useUserStore } from "@/store/store";
+import Typography from "./typography";
 
 interface TeamLeaderJoinSuggestionProps {
   clubSlug: string;
@@ -54,7 +55,9 @@ const TeamLeaderJoinSuggestion: React.FC<TeamLeaderJoinSuggestionProps> = ({
     return (
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Du bist kein Mitglied</CardTitle>
+          <CardTitle>
+            <Typography variant="h4">Du bist kein Mitglied</Typography>
+          </CardTitle>
           <CardDescription>
             Du bist Mannschaftsführer, aber kein Mitglied der Mannschaft.
             Deshalb kannst du bei den Spielen nicht abstimmen, ob du Zeit hast.
