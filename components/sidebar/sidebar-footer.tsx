@@ -55,12 +55,11 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({ userClub }) => {
   return (
     <SidebarFooter>
       <div className="pb-4 space-y-4">
-        <SidebarSeparator />
         <SidebarMenu>
-          <SidebarSeparator className="my-2" />
           <SidebarMenuItem>
             <ThemeToggle />
           </SidebarMenuItem>
+          <SidebarSeparator className="my-2" />
           {!session && (
             <SidebarMenuButton
               className={cn(
