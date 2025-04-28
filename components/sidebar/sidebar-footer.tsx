@@ -21,6 +21,7 @@ import {
 import { useIsPermitted } from "@/hooks/use-has-permission";
 import { useUserStore } from "@/store/store";
 import Link from "next/link";
+import ThemeToggle from "../theme-toggle";
 
 interface AppSidebarFooterProps {
   userClub: string;
@@ -56,6 +57,10 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({ userClub }) => {
       <div className="pb-4 space-y-4">
         <SidebarSeparator />
         <SidebarMenu>
+          <SidebarSeparator className="my-2" />
+          <SidebarMenuItem>
+            <ThemeToggle />
+          </SidebarMenuItem>
           {!session && (
             <SidebarMenuButton
               className={cn(
