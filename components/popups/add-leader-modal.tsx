@@ -111,7 +111,7 @@ export default function AddLeaderModal({
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger asChild>
             {/* @ts-expect-error recommended usage of shadcn */}
-            <Button variant="outline" role="combobox" aria-expanded={open}>
+            <Button variant="outline" role="combobox" aria-expanded={popoverOpen}>
               Bestehende Person auswählen
             </Button>
           </PopoverTrigger>
