@@ -14,7 +14,9 @@ const PositonIndicator: React.FC<PositonIndicatorProps> = ({
   variant = "light",
 }) => {
   const variantClasses =
-    variant === "black" ? "bg-primary text-white" : "bg-secondary text-black";
+    variant === "black"
+      ? "bg-primary text-primary-foreground"
+      : "bg-secondary text-primary";
 
   return (
     <div className={`flex ${className || ""}`}>

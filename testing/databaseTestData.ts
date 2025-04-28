@@ -183,7 +183,7 @@ const createFullTeamSetup = async (
 };
 
 const executeDatabaseScripts = async () => {
-  const clubName = "Test Club";
+  const clubName = "ttc";
   const club = await createClub(clubName);
   const clubId = club.id;
   const enemyTeamNames = ["EnemyClub I", "Other Enemy II"];

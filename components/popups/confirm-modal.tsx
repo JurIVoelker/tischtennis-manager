@@ -36,7 +36,7 @@ export function ConfirmModal({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className="gap-2 md:gap-0">
           <Button variant="outline" onClick={onClose}>
             Abbrechen
           </Button>

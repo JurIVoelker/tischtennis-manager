@@ -34,6 +34,7 @@ import {
 import { useState } from "react";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { deleteAPI } from "@/lib/APIUtils";
+import { CardHeader, CardTitle } from "../ui/card";
 
 interface GameCardHeaderProps {
   match: MatchWithLineupAndLocation;
@@ -133,83 +134,85 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
 
   return (
     <AlertDialog>
-      <div className="flex justify-between mb-6 gap-4 h-10 items-center">
-        <Typography variant="h4">{match.enemyClubName}</Typography>
-        <div className="inline-flex gap-2 flex-wrap items-center">
-          <Badge variant="default" className="h-fit">
-            {match.isHomeGame ? "Heim" : "Auswärts"}
-          </Badge>
-          {isGameCardOptionsVisible && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="default" size="icon-lg">
-                  <MoreHorizontal />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-60 p-2">
-                {dropdownOptions.map(
-                  (
-                    {
-                      name,
-                      IconComponent,
-                      handler,
-                      isDisabled,
-                      isDeleteMatch = false,
-                    },
-                    id
-                  ) => (
-                    <div key={id}>
-                      {isDeleteMatch && (
-                        <AlertDialogTrigger asChild>
+      <CardHeader>
+        <CardTitle className="flex justify-between gap-4 h-10 items-center">
+          <Typography variant="h4">{match.enemyClubName}</Typography>
+          <div className="inline-flex gap-2 flex-wrap items-center">
+            <Badge variant="default" className="h-fit">
+              {match.isHomeGame ? "Heim" : "Auswärts"}
+            </Badge>
+            {isGameCardOptionsVisible && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="default" size="icon-lg">
+                    <MoreHorizontal />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-60 p-2">
+                  {dropdownOptions.map(
+                    (
+                      {
+                        name,
+                        IconComponent,
+                        handler,
+                        isDisabled,
+                        isDeleteMatch = false,
+                      },
+                      id
+                    ) => (
+                      <div key={id}>
+                        {isDeleteMatch && (
+                          <AlertDialogTrigger asChild>
+                            <DropdownMenuItem
+                              onSelect={() => {
+                                setMatchToDelete({
+                                  name: match.enemyClubName,
+                                  id: match.id,
+                                });
+                              }}
+                              className="flex items-center gap-2 p-2 text-destructive"
+                              disabled={isDisabled}
+                            >
+                              <IconComponent />
+                              {name}
+                            </DropdownMenuItem>
+                          </AlertDialogTrigger>
+                        )}
+                        {!isDeleteMatch && (
                           <DropdownMenuItem
-                            onSelect={() => {
-                              setMatchToDelete({
-                                name: match.enemyClubName,
-                                id: match.id,
-                              });
-                            }}
-                            className="flex items-center gap-2 p-2 text-destructive"
+                            onSelect={handler}
+                            className="flex items-center gap-2 p-2"
                             disabled={isDisabled}
                           >
                             <IconComponent />
                             {name}
                           </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                      )}
-                      {!isDeleteMatch && (
-                        <DropdownMenuItem
-                          onSelect={handler}
-                          className="flex items-center gap-2 p-2"
-                          disabled={isDisabled}
-                        >
-                          <IconComponent />
-                          {name}
-                        </DropdownMenuItem>
-                      )}
-                    </div>
-                  )
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                Spiel gegen {matchToDelete?.name} löschen
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Bist du dir sicher, dass du das Spiel löschen möchtest?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-              <AlertDialogAction onClick={onDeleteMatch}>
-                Spiel löschen
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </div>
-      </div>
+                        )}
+                      </div>
+                    )
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Spiel gegen {matchToDelete?.name} löschen
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Bist du dir sicher, dass du das Spiel löschen möchtest?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                <AlertDialogAction onClick={onDeleteMatch}>
+                  Spiel löschen
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </div>
+        </CardTitle>
+      </CardHeader>
     </AlertDialog>
   );
 };

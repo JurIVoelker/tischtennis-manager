@@ -24,16 +24,18 @@ const GameCard: React.FC<GameCardProps> = async ({
   clubSlug,
 }) => {
   return (
-    <Card className="p-6 space-y-6">
+    <Card>
       <GameCardHeader match={match} teamSlug={teamSlug} clubSlug={clubSlug} />
       <GameCardBody match={match} teamSlug={teamSlug} />
       {!isLineup && (
-        <AvailabiltyButtons
-          matchId={match.id}
-          matchAvailabilityVotes={matchAvailabilityVotes}
-          teamSlug={teamSlug}
-          clubSlug={clubSlug}
-        />
+        <div className="p-6 pt-0">
+          <AvailabiltyButtons
+            matchId={match.id}
+            matchAvailabilityVotes={matchAvailabilityVotes}
+            teamSlug={teamSlug}
+            clubSlug={clubSlug}
+          />
+        </div>
       )}
     </Card>
   );

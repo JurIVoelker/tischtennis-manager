@@ -18,12 +18,22 @@ import { Cancel01Icon } from "hugeicons-react";
 import { postAPI } from "@/lib/APIUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
 
 interface AddLeaderModalProps {
   teamName: string;
   children: React.ReactNode;
   teamId: string;
   clubSlug: string;
+  registeredUsers: { name: string; email: string }[];
 }
 
 export default function AddLeaderModal({
@@ -31,12 +41,14 @@ export default function AddLeaderModal({
   teamName,
   children,
   clubSlug,
+  registeredUsers,
 }: AddLeaderModalProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isOpen, setOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const { refresh } = useRouter();
 
@@ -66,6 +78,12 @@ export default function AddLeaderModal({
     }
   };
 
+  const handleSelectExistingUser = (user: { name: string; email: string }) => {
+    setEmail(user.email);
+    setName(user.name);
+    setPopoverOpen(false);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
@@ -90,6 +108,42 @@ export default function AddLeaderModal({
             {teamName} hinzuzufügen.
           </DialogDescription>
         </DialogHeader>
+        <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={popoverOpen}
+            >
+              Bestehende Person auswählen
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80 p-0">
+            <Command>
+              <CommandInput placeholder="Person suchen..." className="h-9" />
+              <CommandList>
+                <CommandEmpty>
+                  Keine Person entspricht deiner Suche.
+                </CommandEmpty>
+                <CommandGroup>
+                  {registeredUsers.map((user, key) => (
+                    <CommandItem
+                      key={key}
+                      value={user.name}
+                      onSelect={() => handleSelectExistingUser(user)}
+                      className="flex flex-col items-start gap-0"
+                    >
+                      <div className="font-medium">{user.name}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {user.email}
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">

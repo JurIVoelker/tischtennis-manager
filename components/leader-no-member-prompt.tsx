@@ -1,11 +1,17 @@
 "use client";
 import { getRole } from "@/lib/auth";
 import { useEffect, useState } from "react";
-import { Card } from "./ui/card";
-import Typography from "./typography";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useUserStore } from "@/store/store";
+import Typography from "./typography";
 
 interface TeamLeaderJoinSuggestionProps {
   clubSlug: string;
@@ -47,21 +53,25 @@ const TeamLeaderJoinSuggestion: React.FC<TeamLeaderJoinSuggestionProps> = ({
   if (!isSuggestionVisible) return <></>;
   if (isSuggestionVisible)
     return (
-      <Card className="p-6 mb-8 space-y-4">
-        <Typography variant="h4">Du bist kein Mitglied</Typography>
-        <Typography variant="p-gray">
-          Du bist Mannschaftsführer, aber kein Mitglied der Mannschaft. Deshalb
-          kannst du bei den Spielen nicht abstimmen, ob du Zeit hast. Möchtest
-          du der Mannschaft beitreten?
-        </Typography>
-        <div className="flex gap-2">
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>
+            <Typography variant="h4">Du bist kein Mitglied</Typography>
+          </CardTitle>
+          <CardDescription>
+            Du bist Mannschaftsführer, aber kein Mitglied der Mannschaft.
+            Deshalb kannst du bei den Spielen nicht abstimmen, ob du Zeit hast.
+            Möchtest du der Mannschaft beitreten?
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col md:flex-row gap-4">
           <Button className="w-full" variant="outline" onClick={handleDecline}>
             Nein
           </Button>
           <Button className="w-full" asChild>
             <Link href={`./${teamSlug}/login`}>Beitreten</Link>
           </Button>
-        </div>
+        </CardContent>
       </Card>
     );
 };

@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 
 const IndexPage = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 w-full">
+    <div className="min-h-screen flex flex-col w-full">
       <div className="flex-1 flex items-center justify-center px-4 py-12 w-full">
         <Card className="w-full max-w-2xl shadow-lg">
           <CardHeader className="pb-0">
