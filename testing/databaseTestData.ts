@@ -140,8 +140,7 @@ const createFullTeamSetup = async (
 
   if (isAddTeamLeader) addTeamLeader(teamId);
 
-  const teamAuth = await addTeamAuth(teamId);
-  console.log(teamAuth);
+  await addTeamAuth(teamId);
 
   const playerIds = [];
   for (const player of players) {
@@ -160,6 +159,14 @@ const createFullTeamSetup = async (
 
   for (const enemyTeamName of enemyTeamNames) {
     const match = await createMatch(teamId, enemyTeamName);
+    await createMatch(teamId, enemyTeamName);
+    await createMatch(teamId, enemyTeamName);
+    await createMatch(teamId, enemyTeamName);
+    await createMatch(teamId, enemyTeamName);
+    await createMatch(teamId, enemyTeamName);
+    await createMatch(teamId, enemyTeamName);
+    await createMatch(teamId, enemyTeamName);
+    await createMatch(teamId, enemyTeamName);
     const matchId = match.id;
 
     if (Math.random() > 0.66) {
@@ -248,6 +255,7 @@ const executeDatabaseScripts = async () => {
 };
 
 const runScripts = async () => {
+  console.log("Adding test data...");
   const models = [
     "lineup",
     "location",
@@ -266,6 +274,7 @@ const runScripts = async () => {
     await prisma[model].deleteMany();
   }
   await executeDatabaseScripts();
+  console.log("Test data added successfully.");
 };
 
 runScripts().then(() => {

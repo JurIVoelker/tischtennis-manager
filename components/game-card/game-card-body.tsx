@@ -31,7 +31,7 @@ const GameCardBody: React.FC<GameCardBodyProps> = ({ match, teamSlug }) => {
           {locationString}
         </Typography>
       </div>
-      <Typography variant="h5" className="mb-2">
+      <Typography variant="h5" className="mb-1 mt-4">
         Aufstellung
       </Typography>
       <Lineup matchId={match.id} teamSlug={teamSlug} />

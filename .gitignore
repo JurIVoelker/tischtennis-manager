@@ -40,7 +40,6 @@ bun.lockb
 
 # database
 *.db
-prisma/migrations/*
 *.db-journal
 .env
 **/public/sw.js
