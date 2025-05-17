@@ -3,19 +3,25 @@
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 
 import { Button } from "./ui/button";
-import { useThemeStore } from "@/store/themeStore";
-import { useEffect } from "react";
 import { useTheme } from "next-themes";
 
 export type Theme = "light" | "dark" | "system";
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme } = useThemeStore();
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme() as {
+    setTheme: (theme: Theme) => void;
+    theme: Theme;
+  };
 
-  useEffect(() => {
-    setTheme(theme);
-  }, [theme, setTheme]);
+  const toggleTheme = () => {
+    if (theme === "dark") {
+      setTheme("light");
+    } else if (theme === "light") {
+      setTheme("system");
+    } else {
+      setTheme("dark");
+    }
+  };
 
   const labels: Record<Theme, string> = {
     light: "Hell",
@@ -30,7 +36,9 @@ export default function ThemeToggle() {
         variant="ghost"
         className="relative w-full flex justify-between"
       >
-        <span className="left-11 absolute"> Design: {labels[theme]}</span>
+        <span className="left-11 absolute">
+          Design: {theme && labels[theme]}
+        </span>
         <MoonIcon
           size={16}
           className={`absolute transition-all left-4 ${
