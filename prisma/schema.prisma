@@ -7,10 +7,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./db/database.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
-
 
 model Club {
   id     String  @id @default(cuid())
@@ -29,17 +28,17 @@ model Owner {
 }
 
 model Team {
-  id           String               @id @default(cuid())
-  slug         String               @unique
-  clubId       String
-  name         String
-  club         Club                 @relation(fields: [clubId], references: [id])
-  players      Player[]
-  matches      Match[]
-  teamAuth     TeamAuth?
-  teamLeader   TeamLeader[]
-  teamLeaderInvite   TeamLeaderInvite[]
-  teamPosition PlayerTeamPosition[]
+  id               String               @id @default(cuid())
+  slug             String               @unique
+  clubId           String
+  name             String
+  club             Club                 @relation(fields: [clubId], references: [id])
+  players          Player[]
+  matches          Match[]
+  teamAuth         TeamAuth?
+  teamLeader       TeamLeader[]
+  teamLeaderInvite TeamLeaderInvite[]
+  teamPosition     PlayerTeamPosition[]
 }
 
 model PlayerTeamPosition {
@@ -60,53 +59,53 @@ model TeamAuth {
 }
 
 model TeamLeader {
-  id         String @id @default(cuid())
-  teamId     String
-  email      String
-  fullName   String
-  team       Team @relation(fields: [teamId], references: [id])
+  id       String @id @default(cuid())
+  teamId   String
+  email    String
+  fullName String
+  team     Team   @relation(fields: [teamId], references: [id])
 }
 
 model TeamLeaderInvite {
-  id         String @id @default(cuid())
-  teamId     String
-  email      String
-  fullName   String
-  expiresAt  DateTime
-  token      String
-  team       Team @relation(fields: [teamId], references: [id])
+  id        String   @id @default(cuid())
+  teamId    String
+  email     String
+  fullName  String
+  expiresAt DateTime
+  token     String
+  team      Team     @relation(fields: [teamId], references: [id])
 }
 
 model Player {
-  id           String               @id @default(cuid())
-  teamId       String
-  firstName    String
-  lastName     String
-  team         Team                 @relation(fields: [teamId], references: [id])
-  lineups      Lineup[]
-  teamPosition PlayerTeamPosition[]
+  id                     String                  @id @default(cuid())
+  teamId                 String
+  firstName              String
+  lastName               String
+  team                   Team                    @relation(fields: [teamId], references: [id])
+  lineups                Lineup[]
+  teamPosition           PlayerTeamPosition[]
   matchAvailabilityVotes MatchAvailabilityVote[]
 }
 
 model Match {
-  id            String    @id @default(cuid())
-  teamId        String
-  matchDateTime DateTime
-  team          Team      @relation(fields: [teamId], references: [id])
-  enemyClubName String
-  isHomeGame    Boolean
-  location      Location?
-  lineups       Lineup[]
+  id                     String                  @id @default(cuid())
+  teamId                 String
+  matchDateTime          DateTime
+  team                   Team                    @relation(fields: [teamId], references: [id])
+  enemyClubName          String
+  isHomeGame             Boolean
+  location               Location?
+  lineups                Lineup[]
   matchAvailabilityVotes MatchAvailabilityVote[]
 }
 
 model MatchAvailabilityVote {
-  id       String @id @default(cuid())
-  matchId  String
-  playerId String
-  availability String @default("unknown") 
-  match    Match  @relation(fields: [matchId], references: [id])
-  player   Player @relation(fields: [playerId], references: [id])
+  id           String @id @default(cuid())
+  matchId      String
+  playerId     String
+  availability String @default("unknown")
+  match        Match  @relation(fields: [matchId], references: [id])
+  player       Player @relation(fields: [playerId], references: [id])
 }
 
 model Location {
@@ -128,20 +127,20 @@ model Lineup {
 }
 
 model UserCredentials {
-  id            String @id @default(cuid())
-  email         String @unique
-  passwordHash  String
+  id           String @id @default(cuid())
+  email        String @unique
+  passwordHash String
 }
 
 model PasswordReset {
-  id        String @id @default(cuid())
+  id        String   @id @default(cuid())
   token     String
   email     String
   expiresAt DateTime
 }
 
 model EmailsSent {
-  id       String @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   email     String
   subject   String
