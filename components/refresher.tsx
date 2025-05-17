@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 const Refresher = () => {
-  const { clubSlug, setClubSlug, setTeamSlug, setLeaderAt, setAdmin, clear } =
+  const { clubSlug, setClubSlug, setTeamSlug, setLeaderAt, setAdmin } =
     useUserStore();
   const pathname = usePathname();
 
