@@ -68,6 +68,10 @@ Um eine hohe Performance zu gewährleisten, werden die meisten Komponenten serve
 
 # Installation und Setup
 
+Davor: Postgres Image herunterladen (Docker Desktop) 
+
+---
+
 ```bash
 bun i
 ```
@@ -77,28 +81,9 @@ Abhängigkeiten installieren
 > Weitere Informationen zur Installation von Bun: [Bun Docs](https://bun.sh/docs/installation)
 
 ```bash
-touch prisma/db/database.db
-```
-
-Datenbankdatei erstellen, mit „touch“ oder manuell als Datei
-
-```bash
-bun db:migrate
-```
-
-Migration ausführen, um die Datenbankstruktur zu aktualisieren
-
-```bash
-bun db:setup-test-data
-```
-
-(Optional) Testdaten importieren
-
-```bash
 bun dev
 ```
-
-Entwicklungsserver starten
+Entwicklungsserver und Datenbank starten
 
 # Deployment
 
@@ -135,6 +120,9 @@ CLUB_NAME=Club Name
 # For email sending
 RESEND_API_KEY=yourKey
 RESEND_EMAIL_FROM=your-email
+
+# Database
+DATABASE_URL=postgresql://postgres:password@localhost:5432/devdb
 ```
 
 # Api
