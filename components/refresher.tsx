@@ -51,8 +51,6 @@ const Refresher = () => {
     };
     if (session.status === "authenticated") {
       getAuth();
-    } else if (session.status === "unauthenticated") {
-      clear();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
