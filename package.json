@@ -16,7 +16,7 @@
     "db:migrate-deploy": "npx prisma migrate deploy",
     "db:setup-test-data": "npx tsx ./testing/databaseTestData.ts",
     "1": "--------------------[dev]---------------------",
-    "dev:deploy": "npx tsx ./testing/databaseTestData.ts --force && npm run build",
+    "dev:deploy": "npm run db:migrate-deploy && npx tsx ./testing/databaseTestData.ts --force && npm run build",
     "2": "-------------------[prod]---------------------",
     "prod:setup": "npx tsx ./scripts/setup.ts",
     "prod:set-manifest": "npx tsx ./scripts/setManifest.ts",
