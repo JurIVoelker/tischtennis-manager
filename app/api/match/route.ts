@@ -71,7 +71,7 @@ export async function PUT(request: NextRequest) {
           },
         },
         data: {
-          matchDateTime,
+          matchDateTime: toUtcDate(matchDateTime),
           isHomeGame,
           location: {
             update: {
@@ -101,6 +101,13 @@ export async function PUT(request: NextRequest) {
 
   return new Response("success", { status: 200 });
 }
+
+const toUtcDate = (date: Date): string => {
+  const isSummertime = date.getTimezoneOffset() < -60;
+  const hours = date.getHours() - (isSummertime ? 2 : 1);
+  const newDate = new Date(date.setHours(hours));
+  return newDate.toISOString();
+};
 
 export async function POST(request: NextRequest) {
   const { response, body } = await validateRequest(
@@ -147,7 +154,7 @@ export async function POST(request: NextRequest) {
         data: {
           enemyClubName,
           teamId,
-          matchDateTime,
+          matchDateTime: toUtcDate(matchDateTime),
           isHomeGame,
           location: {
             create: {
