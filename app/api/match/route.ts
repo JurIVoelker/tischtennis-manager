@@ -42,7 +42,7 @@ export async function PUT(request: NextRequest) {
   const transactionResult = await prisma
     .$transaction(async (tx) => {
       matchDateTime.setHours(time.hour, time.minute, time.second);
-      matchDateTime.setDate(matchDateTime.getDate());
+      matchDateTime.setDate(matchDateTime.getDate() + 1);
       const location = await tx.location.findFirst({
         where: {
           matchId,
