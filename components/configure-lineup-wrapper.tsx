@@ -156,10 +156,10 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
                   availability === "available"
                     ? "positive"
                     : availability === "unavailable"
-                    ? "negative"
-                    : availability === "maybe"
-                    ? "neutral"
-                    : "secondary"
+                      ? "negative"
+                      : availability === "maybe"
+                        ? "neutral"
+                        : "secondary"
                 }
               >
                 {getPlayerName(player, remainingMainPlayers)}
@@ -206,7 +206,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
         )}
       </Card>
       <div className="h-20" />
-      <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-white to-white/0 p-6 fixed | md:static md:p-0 | md:bg-transparent z-20">
+      <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-background to-background/0 p-6 fixed | md:static md:p-0 | md:bg-transparent z-20">
         <Link
           className={cn(buttonVariants({ variant: "outline" }), "w-full z-20")}
           href={"../../../"}
