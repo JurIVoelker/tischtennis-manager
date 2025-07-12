@@ -102,8 +102,22 @@ export async function PUT(request: NextRequest) {
   return new Response("success", { status: 200 });
 }
 
+function isSummerTime(date: Date): boolean {
+  const year = date.getFullYear();
+
+  // Letzter Sonntag im März
+  const start = new Date(year, 2, 31); // 31. März
+  start.setDate(start.getDate() - start.getDay()); // Rückrechnen auf letzten Sonntag
+
+  // Letzter Sonntag im Oktober
+  const end = new Date(year, 9, 31); // 31. Oktober
+  end.setDate(end.getDate() - end.getDay()); // Rückrechnen auf letzten Sonntag
+
+  return date >= start && date < end;
+}
+
 const toUtcDate = (date: Date): string => {
-  const isSummertime = date.getTimezoneOffset() < -60;
+  const isSummertime = isSummerTime(date);
   const hours = date.getHours() - (isSummertime ? 2 : 1);
   const newDate = new Date(date.setHours(hours));
   return newDate.toISOString();
