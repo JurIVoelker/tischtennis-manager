@@ -5,7 +5,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "../ui/form";
 import { useEffect, useState } from "react";
@@ -27,6 +26,7 @@ import { postAPI, putAPI } from "@/lib/APIUtils";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import { Label } from "../ui/label";
 
 export type Time = {
   hour: number;
@@ -279,25 +279,19 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
                     className="flex gap-2"
                   >
                     {locationOptions?.map((option, id) => (
-                      <Card
-                        className="flex gap-2 h-10 w-full items-center px-3 justify-center shadow-none"
-                        key={option}
+                      <div
+                        key={`${id}-${option}`}
+                        className="w-full flex justify-center border-input has-data-[state=checked]:border-primary/50 relative gap-4 rounded-md border p-3 shadow-xs outline-none"
                       >
-                        <FormItem
-                          key={id}
-                          className="flex items-center space-x-2 space-y-0"
-                        >
-                          <FormControl>
-                            <RadioGroupItem value={option} id={option} />
-                          </FormControl>
-                          <FormLabel
-                            className="font-normal inline"
-                            htmlFor={option}
-                          >
-                            {option}
-                          </FormLabel>
-                        </FormItem>
-                      </Card>
+                        <div className="flex items-center gap-2">
+                          <RadioGroupItem
+                            id={`${id}-${option}`}
+                            value={option}
+                            className="after:absolute after:inset-0"
+                          />
+                          <Label htmlFor={`${id}-${option}`}>{option}</Label>
+                        </div>
+                      </div>
                     ))}
                   </RadioGroup>
                 </FormControl>

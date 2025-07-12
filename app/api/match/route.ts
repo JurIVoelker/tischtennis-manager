@@ -41,7 +41,7 @@ export async function PUT(request: NextRequest) {
 
   const transactionResult = await prisma
     .$transaction(async (tx) => {
-      matchDateTime.setHours(time.hour - 1, time.minute, time.second);
+      matchDateTime.setHours(time.hour, time.minute, time.second);
       matchDateTime.setDate(matchDateTime.getDate() + 1);
       const location = await tx.location.findFirst({
         where: {
@@ -71,7 +71,7 @@ export async function PUT(request: NextRequest) {
           },
         },
         data: {
-          matchDateTime,
+          matchDateTime: toUtcDate(matchDateTime),
           isHomeGame,
           location: {
             update: {
@@ -90,15 +90,38 @@ export async function PUT(request: NextRequest) {
       }
       return new Response(UNKNOWN_ERROR, { status: 500 });
     });
-  if (transactionResult instanceof Response) {
-    return transactionResult;
-  }
   revalidatePaths([
     `/${clubSlug}/${teamSlug}`,
     `/${clubSlug}/${teamSlug}/spiel/anpassen/${matchId}`,
   ]);
+
+  if (transactionResult instanceof Response) {
+    return transactionResult;
+  }
+
   return new Response("success", { status: 200 });
 }
+
+function isSummerTime(date: Date): boolean {
+  const year = date.getFullYear();
+
+  // Letzter Sonntag im März
+  const start = new Date(year, 2, 31); // 31. März
+  start.setDate(start.getDate() - start.getDay()); // Rückrechnen auf letzten Sonntag
+
+  // Letzter Sonntag im Oktober
+  const end = new Date(year, 9, 31); // 31. Oktober
+  end.setDate(end.getDate() - end.getDay()); // Rückrechnen auf letzten Sonntag
+
+  return date >= start && date < end;
+}
+
+const toUtcDate = (date: Date): string => {
+  const isSummertime = isSummerTime(date);
+  const hours = date.getHours() - (isSummertime ? 2 : 1);
+  const newDate = new Date(date.setHours(hours));
+  return newDate.toISOString();
+};
 
 export async function POST(request: NextRequest) {
   const { response, body } = await validateRequest(
@@ -126,7 +149,7 @@ export async function POST(request: NextRequest) {
 
   const transactionResult = await prisma
     .$transaction(async (tx) => {
-      matchDateTime.setHours(time.hour - 1, time.minute, time.second);
+      matchDateTime.setHours(time.hour, time.minute, time.second);
       matchDateTime.setDate(matchDateTime.getDate() + 1);
       const teamId = (
         await tx.team.findUnique({
@@ -145,7 +168,7 @@ export async function POST(request: NextRequest) {
         data: {
           enemyClubName,
           teamId,
-          matchDateTime,
+          matchDateTime: toUtcDate(matchDateTime),
           isHomeGame,
           location: {
             create: {
