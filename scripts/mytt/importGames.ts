@@ -51,7 +51,7 @@ type TTApiMatchesReturnType = {
 };
 
 (async () => {
-  const matches = await fetch(
+  const matchesPromise = await fetch(
     "https://tt-api.ttc-klingenmuenster.de/api/v1/matches",
     {
       headers: {
@@ -61,7 +61,7 @@ type TTApiMatchesReturnType = {
     }
   );
 
-  const matchesJson = (await matches.json()) as TTApiMatchesReturnType;
+  const matchData = (await matchesPromise.json()) as TTApiMatchesReturnType;
 
   const clubId =
     (
@@ -76,9 +76,8 @@ type TTApiMatchesReturnType = {
     throw new Error("No club found in the database");
   }
 
-  for (const match of matchesJson.matches) {
+  for (const match of matchData.matches) {
     const { street, city, zip } = match.location.address;
-    const streetAddress = street + " " + city + " " + zip;
 
     const teamName = match.isHomeGame
       ? match.teams.home.name
@@ -111,10 +110,9 @@ type TTApiMatchesReturnType = {
             id: match.location.id,
           },
           create: {
-            id: match.location.id,
-            city,
+            city: city + " " + zip,
             hallName: match.location.name,
-            streetAddress,
+            streetAddress: street,
           },
         },
       },
