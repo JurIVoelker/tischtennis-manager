@@ -90,13 +90,15 @@ export async function PUT(request: NextRequest) {
       }
       return new Response(UNKNOWN_ERROR, { status: 500 });
     });
-  if (transactionResult instanceof Response) {
-    return transactionResult;
-  }
   revalidatePaths([
     `/${clubSlug}/${teamSlug}`,
     `/${clubSlug}/${teamSlug}/spiel/anpassen/${matchId}`,
   ]);
+
+  if (transactionResult instanceof Response) {
+    return transactionResult;
+  }
+
   return new Response("success", { status: 200 });
 }
 
@@ -126,7 +128,7 @@ export async function POST(request: NextRequest) {
 
   const transactionResult = await prisma
     .$transaction(async (tx) => {
-      matchDateTime.setHours(time.hour - 1, time.minute, time.second);
+      matchDateTime.setHours(time.hour, time.minute, time.second);
       matchDateTime.setDate(matchDateTime.getDate() + 1);
       const teamId = (
         await tx.team.findUnique({
