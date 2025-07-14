@@ -23,7 +23,8 @@ const LineupChild: React.FC<LineupChildProps> = ({
     "view:add-lineup-in-game-card-body"
   );
 
-  const { joinedTeams } = useUserStore();
+  const joinedTeams = useUserStore((state) => state.joinedTeams);
+
   const userId = joinedTeams.find(
     (team) => team.teamSlug === teamSlug
   )?.playerId;

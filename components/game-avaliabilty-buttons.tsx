@@ -39,7 +39,8 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
     defaultSelectedValue || null
   );
 
-  const { joinedTeams } = useUserStore();
+  const joinedTeams = useUserStore((state) => state.joinedTeams);
+
   const userId = joinedTeams?.find(
     (team) => team.teamSlug === teamSlug
   )?.playerId;

@@ -23,6 +23,7 @@
     "prod:deploy": "npm run db:migrate-deploy && npm run prod:setup && npm run build",
     "3": "-------------------[other]--------------------",
     "import-games": "npx tsx ./scripts/mytt/importGames.ts",
+    "import-players": "npx tsx ./scripts/mytt/import-players.ts",
     "email:dev": "email dev",
     "email:test": "npx tsx ./scripts/test.ts"
   },

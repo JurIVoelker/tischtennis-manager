@@ -5,7 +5,7 @@ import { Button, buttonVariants } from "./ui/button";
 import { useUserStore } from "@/store/store";
 
 const LoginLink = () => {
-  const { clubSlug } = useUserStore();
+  const clubSlug = useUserStore((state) => state.clubSlug);
   return (
     <>
       {clubSlug && (

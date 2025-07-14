@@ -125,12 +125,19 @@ type TTApiMatchesReturnType = {
             name: teamName,
             slug: slugify(teamName),
             clubId,
+            teamAuth: {
+              create: {
+                token:
+                  Math.random().toString(36).substring(2, 15) +
+                  Math.random().toString(36).substring(2, 15),
+              },
+            },
           },
         },
       },
     };
 
-    await prisma.match.upsert({
+    const upsertedMatch = await prisma.match.upsert({
       where: {
         id: match.id,
       },
@@ -140,5 +147,8 @@ type TTApiMatchesReturnType = {
       },
       create: matchData,
     });
+    console.log(
+      `Upserted match: ${upsertedMatch.enemyClubName} (${upsertedMatch.matchDateTime.toLocaleDateString()})`
+    );
   }
 })();

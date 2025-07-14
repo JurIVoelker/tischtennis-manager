@@ -23,7 +23,6 @@ type Store = {
   teamSlug: string;
   setTeamSlug: (teamSlug: string) => void;
   joinedTeams: JoinableTeam[];
-  setJoinedTeams: (joinedTeams: JoinableTeam[]) => void;
   leaderAt: LeaderAt[];
   setLeaderAt: (leaderAt: LeaderAt[]) => void;
   admin: boolean;
@@ -51,7 +50,6 @@ export const useUserStore = create<Store>()(
       setAdmin: (admin) => set({ admin }),
 
       joinedTeams: [],
-      setJoinedTeams: (joinedTeams) => set({ joinedTeams }),
       leaveTeam: (teamSlug) =>
         set({
           joinedTeams: get().joinedTeams.filter(
@@ -101,6 +99,14 @@ export const useUserStore = create<Store>()(
     }),
     {
       name: "main-storage", // name of the item in the storage (must be unique)
+      partialize: (state) => ({
+        clubSlug: state.clubSlug,
+        teamSlug: state.teamSlug,
+        admin: state.admin,
+        joinedTeams: state.joinedTeams,
+        leaderAt: state.leaderAt,
+        declinedJoins: state.declinedJoins,
+      }),
     }
   )
 );

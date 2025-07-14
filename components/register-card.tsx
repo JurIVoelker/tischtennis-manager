@@ -55,7 +55,7 @@ export const RegisterCard = () => {
 
   const { push } = useRouter();
 
-  const { clubSlug } = useUserStore();
+  const clubSlug = useUserStore((state) => state.clubSlug);
 
   // Initialize the form
   const form = useForm<FormValues>({

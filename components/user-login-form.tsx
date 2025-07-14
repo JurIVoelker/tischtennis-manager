@@ -37,7 +37,10 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   teamSlug,
 }) => {
   const playersSchema = players?.map((player) => player.id) || [""];
-  const { leaveTeam, joinTeam, joinedTeams } = useUserStore();
+  const leaveTeam = useUserStore((state) => state.leaveTeam);
+  const joinTeam = useUserStore((state) => state.joinTeam);
+  const joinedTeams = useUserStore((state) => state.joinedTeams);
+
   const userId = joinedTeams?.find(
     (team) => team.teamSlug === teamSlug
   )?.playerId;
@@ -48,6 +51,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
       if (userId && players?.some((player) => player.id === userId)) {
         push(`/${clubSlug}/${teamSlug}`);
       } else {
+        console.log("LEAVE TEAM", teamSlug);
         leaveTeam(teamSlug);
         setLoading(false);
       }
