@@ -125,6 +125,13 @@ type TTApiMatchesReturnType = {
             name: teamName,
             slug: slugify(teamName),
             clubId,
+            teamAuth: {
+              create: {
+                token:
+                  Math.random().toString(36).substring(2, 15) +
+                  Math.random().toString(36).substring(2, 15),
+              },
+            },
           },
         },
       },
