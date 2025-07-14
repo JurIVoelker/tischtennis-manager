@@ -14,6 +14,6 @@ jobs:
         with:
           node-version: "20"
       - run: npm install --force
-      - run: npx semantic-release
+      - run: npx semantic-release -r https://github.com/JurIVoelker/tischtennis-manager.git
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GH_TOKEN }}
