@@ -36,7 +36,7 @@ export default function PasswortVergessen() {
   const [success, setSuccess] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const { clubSlug } = useUserStore();
+  const clubSlug = useUserStore((state) => state.clubSlug);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

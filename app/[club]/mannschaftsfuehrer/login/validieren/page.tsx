@@ -9,7 +9,9 @@ import { useEffect } from "react";
 
 const ValidateLeaderLoggedInPage = () => {
   const { push } = useRouter();
-  const { leaderAt, admin, clubSlug } = useUserStore();
+  const leaderAt = useUserStore((state) => state.leaderAt);
+  const admin = useUserStore((state) => state.admin);
+  const clubSlug = useUserStore((state) => state.clubSlug);
   const session = useSession();
 
   useEffect(() => {

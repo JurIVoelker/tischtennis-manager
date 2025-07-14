@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { NextAuthProvider } from "@/components/next-auth-provider";
 import Refresher from "@/components/refresher";
 import { ThemeProvider } from "../components/theme-provider";
+import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -47,8 +48,12 @@ export default function RootLayout({
             <NextAuthProvider>
               <SidebarProvider>
                 <Toaster />
-                <AppSidebar />
-                <Refresher />
+                <Suspense fallback={<div className="h-full" />}>
+                  <AppSidebar />
+                </Suspense>
+                <Suspense>
+                  <Refresher />
+                </Suspense>
                 {children}
               </SidebarProvider>
             </NextAuthProvider>

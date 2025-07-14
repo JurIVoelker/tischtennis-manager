@@ -137,7 +137,7 @@ type TTApiMatchesReturnType = {
       },
     };
 
-    await prisma.match.upsert({
+    const upsertedMatch = await prisma.match.upsert({
       where: {
         id: match.id,
       },
@@ -147,5 +147,8 @@ type TTApiMatchesReturnType = {
       },
       create: matchData,
     });
+    console.log(
+      `Upserted match: ${upsertedMatch.enemyClubName} (${upsertedMatch.matchDateTime.toLocaleDateString()})`
+    );
   }
 })();

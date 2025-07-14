@@ -42,7 +42,11 @@ import { useUserStore } from "@/store/store";
 
 export const AppSidebar = ({}) => {
   const { toggleSidebar } = useSidebar();
-  const { clubSlug, teamSlug, joinedTeams, leaderAt } = useUserStore();
+  const clubSlug = useUserStore((state) => state.clubSlug);
+  const teamSlug = useUserStore((state) => state.teamSlug);
+  const joinedTeams = useUserStore((state) => state.joinedTeams);
+  const leaderAt = useUserStore((state) => state.leaderAt);
+
   const { push } = useRouter();
   const isMobile = useIsMobile();
   const pathname = usePathname();

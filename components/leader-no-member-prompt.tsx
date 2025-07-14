@@ -23,7 +23,8 @@ const TeamLeaderJoinSuggestion: React.FC<TeamLeaderJoinSuggestionProps> = ({
   teamSlug,
 }) => {
   const [isSuggestionVisible, setSuggestionVisible] = useState<boolean>(false);
-  const { declineJoin, declinedJoins } = useUserStore();
+  const declinedJoins = useUserStore((state) => state.declinedJoins);
+  const declineJoin = useUserStore((state) => state.declineJoin);
 
   useEffect(() => {
     const roleData = getRole();

@@ -32,7 +32,10 @@ const PlayersCard = ({
   const [inviteToken, setInviteToken] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const { leaveTeam, joinedTeams, leaderAt } = useUserStore();
+  const leaveTeam = useUserStore((state) => state.leaveTeam);
+  const joinedTeams = useUserStore((state) => state.joinedTeams);
+  const leaderAt = useUserStore((state) => state.leaderAt);
+
   const userId = joinedTeams?.find(
     (team) => team.teamSlug === teamSlug
   )?.playerId;
@@ -40,6 +43,7 @@ const PlayersCard = ({
   const isLeader = leaderAt?.some((team) => team.teamSlug === teamSlug);
 
   const handleLeaveTeam = () => {
+    console.log("Leaving team:", teamSlug);
     leaveTeam(teamSlug);
     window.location.reload();
   };

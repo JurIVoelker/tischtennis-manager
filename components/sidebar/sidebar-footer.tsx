@@ -32,7 +32,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({ userClub }) => {
   const { push } = useRouter();
   const { toggleSidebar, isMobile } = useSidebar();
 
-  const { clear } = useUserStore();
+  const clear = useUserStore((state) => state.clear);
 
   const isAdminButtonVisible = useIsPermitted("view:manage-admin-button");
   const isLeaderButtonVisible = useIsPermitted("view:manage-leaders-button");

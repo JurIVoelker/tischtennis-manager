@@ -11,7 +11,10 @@ import { Separator } from "./ui/separator";
 const IndexLoginManager = () => {
   const [error, setError] = useState("");
 
-  const { joinedTeams, leaderAt, clubSlug, admin } = useUserStore();
+  const joinedTeams = useUserStore((state) => state.joinedTeams);
+  const leaderAt = useUserStore((state) => state.leaderAt);
+  const clubSlug = useUserStore((state) => state.clubSlug);
+  const admin = useUserStore((state) => state.admin);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
