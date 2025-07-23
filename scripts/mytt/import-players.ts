@@ -6,8 +6,7 @@ import slugify from "slugify";
     "https://tt-api.ttc-klingenmuenster.de/api/v1/players",
     {
       headers: {
-        Authorization:
-          "1q257dhx6gkfancjl7tk5giw2x9vl378e27jg4qfwu9y6mq9libf65k8vg68kgpc",
+        Authorization: process.env.TT_API_KEY || "",
       },
     }
   );
@@ -86,7 +85,7 @@ import slugify from "slugify";
       })),
     });
 
-    console.log(
+    console.info(
       `Added ${players.length} players to team ${fetchedTeam.teamName}`
     );
 

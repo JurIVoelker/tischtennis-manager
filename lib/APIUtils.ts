@@ -58,7 +58,7 @@ export const getAdminData = async (clubSlug: string, email: string) => {
     );
     return res?.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return {};
   }
 };

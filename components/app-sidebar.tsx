@@ -105,7 +105,14 @@ export const AppSidebar = ({}) => {
     return cn(buttonStyles, customButtonStyles, "justify-start");
   };
 
-  const sortings = ["Herren", "Damen", "Jungen", "Mädchen"];
+  const sortings = [
+    "Herren",
+    "Damen",
+    "Jungen",
+    "Mädchen",
+    "Erwachsene",
+    "Jugend",
+  ];
 
   return (
     <Sidebar>

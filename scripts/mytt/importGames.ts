@@ -147,7 +147,7 @@ type TTApiMatchesReturnType = {
       },
       create: matchData,
     });
-    console.log(
+    console.info(
       `Upserted match: ${upsertedMatch.enemyClubName} (${upsertedMatch.matchDateTime.toLocaleDateString()})`
     );
   }

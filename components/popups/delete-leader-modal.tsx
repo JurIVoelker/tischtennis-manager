@@ -39,7 +39,7 @@ export function DeleteLeaderDialog({
     if (!isAdmin) {
       const { error } = await deleteAPI("/api/leader", { leaderId, clubSlug });
       if (error) {
-        console.log(error);
+        console.error(error);
       }
     } else {
       // TODO+

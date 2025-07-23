@@ -16,7 +16,7 @@ import { isIgnoredMiddlewarePath } from "./lib/routeUtils";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
-  const urlPath = request.url.replace(/^https?:\/\/[^/]+/, "");
+  let urlPath = request.url.replace(/^https?:\/\/[^/]+/, "") || "";
   if ((urlPath === "/" || urlPath === "") && process.env.CLUB_SLUG) {
     return NextResponse.redirect(
       new URL(`/${process.env.CLUB_SLUG}/welcome`, request.url)
@@ -24,6 +24,7 @@ export async function middleware(request: NextRequest) {
   }
   if (isIgnoredMiddlewarePath(urlPath)) return NextResponse.next();
 
+  urlPath = urlPath.split("?")[0];
   const splitUrl = urlPath.split("/");
   const clubSlug = splitUrl.length > 0 ? splitUrl[1] : "";
   const teamSlug = splitUrl.length > 1 ? splitUrl[2] : "";

@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     // @ts-expect-error error is not typed
     if (error?.code === "P2002") {
       return new Response(

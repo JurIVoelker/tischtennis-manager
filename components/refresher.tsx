@@ -12,7 +12,6 @@ const Refresher = () => {
   const setTeamSlug = useUserStore((state) => state.setTeamSlug);
   const setLeaderAt = useUserStore((state) => state.setLeaderAt);
   const setAdmin = useUserStore((state) => state.setAdmin);
-  const joinedTeams = useUserStore((state) => state.joinedTeams);
 
   const pathname = usePathname();
 
@@ -39,10 +38,6 @@ const Refresher = () => {
       setTeamSlug(currentTeamSlug);
     }
   }, [setClubSlug, setTeamSlug, pathname]);
-
-  useEffect(() => {
-    console.log({ joinedTeams });
-  }, [joinedTeams]);
 
   useEffect(() => {
     const getAuth = async () => {

@@ -6,4 +6,4 @@ sendEmail({
   to: "mail@jurivoelker.de",
   subject: "Passwort zurücksetzen",
   data: {},
-}).then(() => console.log("Email sent!"));
+}).then(() => console.info("Email sent!"));

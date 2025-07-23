@@ -37,7 +37,7 @@ const EditMatchPage = async ({
     <>
       <div className="w-full">
         <Navbar />
-        <div className="px-6 pb-6 pt-16 space-y-6">
+        <div className="px-6 pt-16 space-y-6 pb-20">
           <Headline>Spiel bearbeiten</Headline>
           <Typography variant="h3">{match?.enemyClubName}</Typography>
           <EditMatchForm

@@ -84,7 +84,7 @@ export async function PUT(request: NextRequest) {
       });
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       if (error.message) {
         asyncLog("error", `Error while putting match match: ${error?.message}`);
       }

@@ -27,7 +27,7 @@ if (!schemaValid.success) {
 const exec = async () => {
   const clubCount = await prisma.club.count();
   if (clubCount > 0) {
-    console.log("A club already exists, skipping creation");
+    console.info("A club already exists, skipping creation");
     return;
   }
   const res = await prisma.club.create({
@@ -42,8 +42,8 @@ const exec = async () => {
       },
     },
   });
-  console.log("Created initial Club: " + JSON.stringify(res));
-  console.log(
+  console.info("Created initial Club: " + JSON.stringify(res));
+  console.info(
     `Visit page: ${process.env.NEXT_PUBLIC_BASE_URL || "url"}/${clubSlug}`
   );
 };
