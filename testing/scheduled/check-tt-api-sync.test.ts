@@ -95,7 +95,8 @@ export const checkTTApiSync = async () => {
       unequalLocationMatches.push(fetchedMatch);
     }
   }
-  let message = `## Sync report ${new Date().toLocaleDateString()}:`;
+  const defaultMessage = `## Sync report ${new Date().toLocaleDateString()}:`;
+  let message = defaultMessage;
 
   if (missingMatches.length > 0) {
     message += getMessageString(`Missing Matches`, missingMatches);
@@ -123,7 +124,7 @@ export const checkTTApiSync = async () => {
     );
   }
 
-  if (message) {
+  if (message !== defaultMessage) {
     await fetch(DISCORD_WEBHOOK_URL || "", {
       method: "POST",
       headers: {
