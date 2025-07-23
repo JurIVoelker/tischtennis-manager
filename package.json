@@ -24,6 +24,7 @@
     "3": "-------------------[other]--------------------",
     "import-games": "npx tsx ./scripts/mytt/importGames.ts",
     "import-players": "npx tsx ./scripts/mytt/import-players.ts",
+    "check-tt-api-sync": "npx tsx ./testing/scheduled/check-tt-api-sync.test.ts",
     "email:dev": "email dev",
     "email:test": "npx tsx ./scripts/test.ts"
   },

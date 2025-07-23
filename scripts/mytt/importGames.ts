@@ -7,7 +7,7 @@ if (!TT_API_KEY) {
   throw new Error("Missing TT_API_KEY");
 }
 
-type TTApiMatchesReturnType = {
+export type TTApiMatchesReturnType = {
   matches: {
     id: string;
     datetime: string;
@@ -49,6 +49,8 @@ type TTApiMatchesReturnType = {
     expiresAt: string;
   };
 };
+
+export type TTApiMatch = TTApiMatchesReturnType["matches"][number];
 
 (async () => {
   const matchesPromise = await fetch(
