@@ -9,6 +9,7 @@ if (!TT_API_KEY) {
 
 export type TTApiMatchesReturnType = {
   matches: {
+    isDuplicate?: boolean;
     id: string;
     datetime: string;
     location: {
@@ -81,13 +82,11 @@ export type TTApiMatch = TTApiMatchesReturnType["matches"][number];
   for (const match of matchData.matches) {
     const { street, city, zip } = match.location.address;
 
-    const teamName = match.isHomeGame
-      ? match.teams.home.name
-      : match.teams.away.name;
+    const condition = match.isDuplicate ? !match.isHomeGame : match.isHomeGame;
 
-    const enemyName = match.isHomeGame
-      ? match.teams.away.name
-      : match.teams.home.name;
+    const teamName = condition ? match.teams.home.name : match.teams.away.name;
+
+    const enemyName = condition ? match.teams.away.name : match.teams.home.name;
 
     const teamId =
       (
