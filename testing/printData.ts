@@ -4,4 +4,4 @@ const exec = async () => {
   return await prisma.team.findMany();
 };
 
-exec().then((res) => console.log(res));
+exec().then((res) => console.info(res));

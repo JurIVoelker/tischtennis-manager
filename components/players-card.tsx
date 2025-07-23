@@ -43,7 +43,6 @@ const PlayersCard = ({
   const isLeader = leaderAt?.some((team) => team.teamSlug === teamSlug);
 
   const handleLeaveTeam = () => {
-    console.log("Leaving team:", teamSlug);
     leaveTeam(teamSlug);
     window.location.reload();
   };

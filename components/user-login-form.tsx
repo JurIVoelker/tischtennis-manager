@@ -51,7 +51,6 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
       if (userId && players?.some((player) => player.id === userId)) {
         push(`/${clubSlug}/${teamSlug}`);
       } else {
-        console.log("LEAVE TEAM", teamSlug);
         leaveTeam(teamSlug);
         setLoading(false);
       }

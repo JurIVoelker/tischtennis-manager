@@ -36,7 +36,7 @@ export function DeleteTeamDialog({
     setLoading(true);
     const { error } = await deleteAPI("/api/team", { teamId, clubSlug });
     if (error) {
-      console.log(error);
+      console.error(error);
     }
     setLoading(false);
     router.refresh();

@@ -255,7 +255,7 @@ const executeDatabaseScripts = async () => {
 };
 
 const runScripts = async () => {
-  console.log("Adding test data...");
+  console.info("Adding test data...");
   const models = [
     "lineup",
     "location",
@@ -274,7 +274,7 @@ const runScripts = async () => {
     await prisma[model].deleteMany();
   }
   await executeDatabaseScripts();
-  console.log("Test data added successfully.");
+  console.info("Test data added successfully.");
 };
 
 runScripts().then(() => {
