@@ -2,12 +2,14 @@ import { useUserStore } from "@/store/store";
 import bcryptjs from "bcryptjs";
 
 type role = "member" | "leader" | "admin" | "viewer";
+
 export type permission =
   | "view:game-card-options"
   | "view:players-card-options"
   | "view:add-new-game"
   | "view:add-lineup-in-game-card-body"
   | "view:game-availability-buttons"
+  | "view:game-availability-overview-dialog"
   | "view:manage-leaders-button"
   | "view:manage-admin-button";
 
@@ -20,12 +22,16 @@ interface RoleProps {
 
 export const ROLES: RoleProps = {
   viewer: [],
-  member: ["view:game-availability-buttons"],
+  member: [
+    "view:game-availability-buttons",
+    "view:game-availability-overview-dialog",
+  ],
   leader: [
     "view:add-new-game",
     "view:game-card-options",
     "view:add-lineup-in-game-card-body",
     "view:players-card-options",
+    "view:game-availability-overview-dialog",
   ],
   admin: ["view:manage-admin-button", "view:manage-leaders-button"],
 } as const;

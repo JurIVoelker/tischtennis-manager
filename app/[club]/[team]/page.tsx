@@ -100,6 +100,7 @@ const ClubTeamPage = async ({
                     teamSlug={teamSlug}
                     clubSlug={clubSlug}
                     matchAvailabilityVotes={match.matchAvailabilityVotes}
+                    players={players}
                     match={match}
                     isLineup={isLineup}
                     key={id}
