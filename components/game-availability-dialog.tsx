@@ -36,7 +36,7 @@ const GameAvailabilityDialog = ({
             Abstimmungen anzeigen ({matchAvailabilityVotes.length})
           </>
         ) : (
-          <>Noch kleine Abstimmungen</>
+          <>Noch keine Abstimmungen</>
         )}
       </DialogTrigger>
       <DialogContent>
