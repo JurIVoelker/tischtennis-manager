@@ -12,12 +12,14 @@ import { useRouter } from "next/navigation";
 import { PLAYER_NOT_FOUND_ERROR } from "@/constants/APIError";
 import { handlePostRequestError } from "@/lib/apiResponseUtils";
 import { useUserStore } from "@/store/store";
+import { Player } from "@prisma/client";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
 interface AvailabiltyButtonsProps {
   defaultSelectedValue?: optionsType | undefined;
   matchAvailabilityVotes: AvailabilityVoteWithPlayer[];
+  allPlayers: Player[];
   teamSlug: string;
   clubSlug: string;
   matchId: string;
@@ -113,7 +115,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
   if (!isButtonsVisible) return <></>;
 
   return (
-    <div className="mt-8 space-y-2">
+    <div className="mt-8 space-y-3">
       <Typography variant="h5">Hast du Zeit zu spielen?</Typography>
       <div className="flex gap-2">
         {selectableOptions.map((option) => (
