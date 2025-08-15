@@ -1,8 +1,12 @@
 import { prisma } from "@/lib/prisma/prisma";
-import { TTApiMatch, TTApiMatchesReturnType } from "@/scripts/mytt/importGames";
+import {
+  categorizeMatchInconsistencies,
+  getTTApiMatches,
+} from "@/lib/syncUtils";
+import { TTApiMatch } from "@/scripts/mytt/importGames";
 import "dotenv/config";
 
-const { DISCORD_WEBHOOK_URL, TT_API_KEY } = process.env;
+const { DISCORD_WEBHOOK_URL } = process.env;
 
 const timeMapper = (m: TTApiMatch) => {
   const round = m.id.split("_")[1];
@@ -31,70 +35,21 @@ const getMessageString = (
 };
 
 export const checkTTApiSync = async () => {
-  let fetchedMatches;
-  try {
-    const request = await fetch(
-      "https://tt-api.ttc-klingenmuenster.de/api/v1/matches",
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: TT_API_KEY || "",
-        },
-      }
-    );
+  const fetchedMatches = await getTTApiMatches();
+  const ignoredIds = (await prisma.hiddenMatch.findMany()).map(
+    (match) => match.id
+  );
+  const filteredMatches = fetchedMatches.matches.filter(
+    (match) => !ignoredIds.includes(match.id)
+  );
 
-    if (!request.ok) {
-      console.error("Failed to fetch matches from TT API");
-      return;
-    }
+  const {
+    missingMatches,
+    unequalTimeMatches,
+    unequalHomeGameMatches,
+    unequalLocationMatches,
+  } = await categorizeMatchInconsistencies(filteredMatches);
 
-    fetchedMatches = (await request.json()) as TTApiMatchesReturnType;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Failed to fetch matches from TT API");
-  }
-
-  const missingMatches = [];
-  const unequalTimeMatches = [];
-  const unequalHomeGameMatches = [];
-  const unequalLocationMatches = [];
-
-  for (const fetchedMatch of fetchedMatches.matches) {
-    const match = await prisma.match.findFirst({
-      where: {
-        id: fetchedMatch.id,
-      },
-      include: {
-        location: true,
-      },
-    });
-
-    if (!match) {
-      missingMatches.push(fetchedMatch);
-      continue;
-    }
-
-    if (
-      new Date(match.matchDateTime).getTime() !==
-      new Date(fetchedMatch.datetime).getTime()
-    ) {
-      unequalTimeMatches.push(fetchedMatch);
-    }
-
-    if (match.isHomeGame !== fetchedMatch.isHomeGame) {
-      unequalHomeGameMatches.push(fetchedMatch);
-    }
-
-    const { city, street, zip } = fetchedMatch.location.address;
-
-    if (
-      match.location?.city !== city + " " + zip ||
-      match.location?.streetAddress !== street ||
-      match.location?.hallName !== fetchedMatch.location.name
-    ) {
-      unequalLocationMatches.push(fetchedMatch);
-    }
-  }
   const defaultMessage = `## Sync report ${new Date().toLocaleDateString()}:`;
   let message = defaultMessage;
 
