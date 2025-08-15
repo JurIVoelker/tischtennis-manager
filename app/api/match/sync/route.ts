@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     )
   );
 
-  revalidatePaths([...teamSlugs.map((slug) => `${clubSlug}/${slug}`)]);
+  revalidatePaths([...teamSlugs.map((slug) => `/${clubSlug}/${slug}`)]);
 
   await prisma.hiddenMatch.deleteMany({
     where: {
