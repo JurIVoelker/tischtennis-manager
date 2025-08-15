@@ -35,6 +35,7 @@ import { useState } from "react";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { deleteAPI } from "@/lib/APIUtils";
 import { CardHeader, CardTitle } from "../ui/card";
+import { cn } from "@/lib/utils";
 
 interface GameCardHeaderProps {
   match: MatchWithLineupAndLocation;
@@ -135,9 +136,17 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
   return (
     <AlertDialog>
       <CardHeader>
-        <CardTitle className="flex justify-between gap-4 h-10 items-center">
-          <Typography variant="h4">{match.enemyClubName}</Typography>
-          <div className="inline-flex gap-2 flex-wrap items-center">
+        <CardTitle className="flex justify-between gap-2 h-10 items-center">
+          <Typography
+            variant="h4"
+            className={cn(
+              "break-words flex-shrink overflow-hidden",
+              isGameCardOptionsVisible && "text-lg"
+            )}
+          >
+            {match.enemyClubName}
+          </Typography>
+          <div className="inline-flex gap-2 items-center flex-shrink-0">
             <Badge variant="default" className="h-fit">
               {match.isHomeGame ? "Heim" : "Auswärts"}
             </Badge>

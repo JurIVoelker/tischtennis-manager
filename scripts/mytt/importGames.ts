@@ -53,19 +53,7 @@ export type TTApiMatchesReturnType = {
 
 export type TTApiMatch = TTApiMatchesReturnType["matches"][number];
 
-(async () => {
-  const matchesPromise = await fetch(
-    "https://tt-api.ttc-klingenmuenster.de/api/v1/matches",
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: TT_API_KEY,
-      },
-    }
-  );
-
-  const matchData = (await matchesPromise.json()) as TTApiMatchesReturnType;
-
+async function processMatches(matches: TTApiMatch[]) {
   const clubId =
     (
       await prisma.club.findFirst({
@@ -79,7 +67,7 @@ export type TTApiMatch = TTApiMatchesReturnType["matches"][number];
     throw new Error("No club found in the database");
   }
 
-  for (const match of matchData.matches) {
+  for (const match of matches) {
     const { street, city, zip } = match.location.address;
 
     const condition = match.isDuplicate ? !match.isHomeGame : match.isHomeGame;
@@ -106,15 +94,10 @@ export type TTApiMatch = TTApiMatchesReturnType["matches"][number];
       isHomeGame: match.isHomeGame,
       matchDateTime: new Date(match.datetime),
       location: {
-        connectOrCreate: {
-          where: {
-            id: match.location.id,
-          },
-          create: {
-            city: city + " " + zip,
-            hallName: match.location.name,
-            streetAddress: street,
-          },
+        create: {
+          city: city + " " + zip,
+          hallName: match.location.name,
+          streetAddress: street,
         },
       },
       team: {
@@ -138,7 +121,7 @@ export type TTApiMatch = TTApiMatchesReturnType["matches"][number];
       },
     };
 
-    const upsertedMatch = await prisma.match.upsert({
+    await prisma.match.upsert({
       where: {
         id: match.id,
       },
@@ -148,8 +131,52 @@ export type TTApiMatch = TTApiMatchesReturnType["matches"][number];
       },
       create: matchData,
     });
+
+    const upsertedMatch = await prisma.match.findUnique({
+      where: {
+        id: match.id,
+      },
+      include: {
+        location: true,
+      },
+    });
+
+    if (upsertedMatch) {
+      await prisma.location.update({
+        where: {
+          matchId: upsertedMatch.id,
+        },
+        data: {
+          city: match.location.address.city + " " + match.location.address.zip,
+          hallName: match.location.name,
+          streetAddress: match.location.address.street,
+        },
+      });
+    }
+
     console.info(
-      `Upserted match: ${upsertedMatch.enemyClubName} (${upsertedMatch.matchDateTime.toLocaleDateString()})`
+      `Upserted match: ${upsertedMatch?.enemyClubName} (${upsertedMatch?.matchDateTime.toLocaleDateString()})`
     );
   }
-})();
+}
+
+export async function upsertMatchesByIds(matchIds: string[]) {
+  const matchesPromise = await fetch(
+    "https://tt-api.ttc-klingenmuenster.de/api/v1/matches",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        ...(TT_API_KEY && { Authorization: TT_API_KEY }),
+      },
+    }
+  );
+
+  const matchData = (await matchesPromise.json()) as TTApiMatchesReturnType;
+
+  const filteredMatches = matchData.matches.filter((match) =>
+    matchIds.includes(match.id)
+  );
+
+  await processMatches(filteredMatches);
+  return filteredMatches;
+}

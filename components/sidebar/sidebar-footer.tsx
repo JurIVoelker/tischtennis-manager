@@ -16,6 +16,7 @@ import {
   AddTeamIcon,
   LoginSquare01Icon,
   ShieldUserIcon,
+  TableTennisBatIcon,
   UserCircleIcon,
 } from "hugeicons-react";
 import { useIsPermitted } from "@/hooks/use-has-permission";
@@ -95,20 +96,36 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({ userClub }) => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               {isAdminButtonVisible && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    onClick={() =>
-                      handleClickLink(`/${userClub}/admin/mannschaftsfuehrer`)
-                    }
-                    className={cn(
-                      buttonVariants({ variant: "ghost" }),
-                      "justify-start"
-                    )}
-                  >
-                    <AddTeamIcon strokeWidth={2} />
-                    Mannschaften verwalten
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() =>
+                        handleClickLink(`/${userClub}/admin/mannschaftsfuehrer`)
+                      }
+                      className={cn(
+                        buttonVariants({ variant: "ghost" }),
+                        "justify-start"
+                      )}
+                    >
+                      <AddTeamIcon strokeWidth={2} />
+                      Mannschaften verwalten
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() =>
+                        handleClickLink(`/${userClub}/admin/spiele`)
+                      }
+                      className={cn(
+                        buttonVariants({ variant: "ghost" }),
+                        "justify-start"
+                      )}
+                    >
+                      <TableTennisBatIcon strokeWidth={2} />
+                      Datensynchronisation
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </>
               )}
               {isLeaderButtonVisible && (
                 <SidebarMenuItem>

@@ -36,7 +36,7 @@ const GameAvailabilityDialog = ({
             Abstimmungen anzeigen ({matchAvailabilityVotes.length})
           </>
         ) : (
-          <>Noch kleine Abstimmungen</>
+          <>Noch keine Abstimmungen</>
         )}
       </DialogTrigger>
       <DialogContent>
@@ -64,7 +64,9 @@ const GameAvailabilityDialog = ({
                 key={vote.playerId}
                 className={`flex justify-between p-2 rounded px-3 items-center ${bg}`}
               >
-                <span>{getPlayerName(vote.player, allPlayers)}</span>
+                <span className="text-sm">
+                  {getPlayerName(vote.player, allPlayers)}
+                </span>
                 <Icon className="size-5" />
               </div>
             );
