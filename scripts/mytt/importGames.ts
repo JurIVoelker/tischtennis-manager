@@ -178,4 +178,5 @@ export async function upsertMatchesByIds(matchIds: string[]) {
   );
 
   await processMatches(filteredMatches);
+  return filteredMatches;
 }
