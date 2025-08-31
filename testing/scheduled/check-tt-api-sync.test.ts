@@ -34,7 +34,7 @@ const getMessageString = (
     .join("\n")}${suffix}`;
 };
 
-export const checkTTApiSync = async () => {
+const checkTTApiSync = async () => {
   const fetchedMatches = await getTTApiMatches();
   const ignoredIds = (await prisma.hiddenMatch.findMany()).map(
     (match) => match.id

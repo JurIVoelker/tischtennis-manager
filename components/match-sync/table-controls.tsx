@@ -23,9 +23,9 @@ const TableControls = ({
   onDeleteHidden: () => void;
 }) => {
   return (
-    <div className="sticky bottom-0 w-full flex items-center left-0 justify-center bg-gradient-to-t from-background to-transparent pt-10 pointer-events-none">
-      <div className="relative bottom-2 md:bottom-4 bg-background p-3 rounded-md shadow-lg border flex justify-center gap-2 overflow-hidden pointer-events-auto flex-col items-center md:flex-row">
-        <div className="flex-col sm:flex-row gap-2 flex">
+    <div className="sticky bottom-0 w-full flex items-center left-0 justify-center bg-gradient-to-t from-background to-transparent h-40 pointer-events-none">
+      <div className="relative bottom-0 md:bottom-4 bg-background p-3 rounded-md shadow-lg border flex justify-center gap-2 overflow-hidden pointer-events-auto flex-col items-center md:flex-row w-full md:w-auto">
+        <div className="flex-row gap-2 flex">
           {!showHidden && (
             <Button
               variant="default"
@@ -35,7 +35,7 @@ const TableControls = ({
               isLoading={isLoading}
             >
               <EyeOff />
-              Ausgewählte ignorieren
+              Ignorieren
             </Button>
           )}
           {showHidden && (
@@ -47,7 +47,7 @@ const TableControls = ({
               isLoading={isLoading}
             >
               <Eye />
-              Ausgewählte nicht ignorieren
+              Nicht ignorieren
             </Button>
           )}
           <Button
@@ -58,7 +58,7 @@ const TableControls = ({
             isLoading={isLoading}
           >
             <PlusSignSquareIcon />
-            Ausgewählte importieren
+            Importieren
           </Button>
         </div>
         <Separator orientation="vertical" className="h-10 hidden md:block" />
