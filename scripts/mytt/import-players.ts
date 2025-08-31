@@ -8,6 +8,7 @@ import slugify from "slugify";
       headers: {
         Authorization: process.env.TT_API_KEY || "",
       },
+      cache: "no-store",
     }
   );
 

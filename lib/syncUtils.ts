@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma/prisma";
 import { TTApiMatch, TTApiMatchesReturnType } from "@/scripts/mytt/importGames";
 import "dotenv/config";
-
+import { isEqual } from "date-fns";
 const { TT_API_KEY } = process.env;
 
 export const categorizeMatchInconsistencies = async (
@@ -28,8 +28,7 @@ export const categorizeMatchInconsistencies = async (
     }
 
     if (
-      new Date(match.matchDateTime).getTime() !==
-      new Date(fetchedMatch.datetime).getTime()
+      !isEqual(new Date(match.matchDateTime), new Date(fetchedMatch.datetime))
     ) {
       unequalTimeMatches.push(fetchedMatch);
     }
@@ -67,6 +66,7 @@ export const getTTApiMatches = async () => {
           "Content-Type": "application/json",
           Authorization: TT_API_KEY || "",
         },
+        cache: "no-store",
       }
     );
 

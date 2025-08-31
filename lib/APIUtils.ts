@@ -76,6 +76,7 @@ export const getAPI = async (
   if (isLogging) console.info(`[GET] -> ${requestUrl}`);
   const response = await fetch(requestUrl, {
     headers: { ...headers },
+    next: { revalidate: 60 },
   });
   if (!response.ok) {
     if (isLogging) console.info(`[ERROR-${response.status}] -> ${requestUrl}`);

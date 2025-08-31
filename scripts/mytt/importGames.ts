@@ -168,6 +168,7 @@ export async function upsertMatchesByIds(matchIds: string[]) {
         "Content-Type": "application/json",
         ...(TT_API_KEY && { Authorization: TT_API_KEY }),
       },
+      cache: "no-store",
     }
   );
 
