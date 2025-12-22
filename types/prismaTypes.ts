@@ -56,20 +56,20 @@ export type TeamWithTeamLeadersAndTeamLeaderInvites = Team & {
 
 export type ClubWithTeams =
   | (Club & {
-      teams: TeamWithPlayersAndMatches[];
-    })
+    teams: TeamWithPlayersAndMatches[];
+  })
   | null;
 
 export type ClubWithTeamsWithoutMatches =
   | (Club & {
-      teams: TeamWithMatches[];
-    })
+    teams: TeamWithMatches[];
+  })
   | null;
 
 export type MatchWithLocation =
   | (Match & {
-      location: Location | null;
-    })
+    location: Location | null;
+  })
   | null;
 
 export type AvailabilityVoteWithPlayer = MatchAvailabilityVote & {

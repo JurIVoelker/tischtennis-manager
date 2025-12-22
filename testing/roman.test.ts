@@ -1,4 +1,5 @@
 import { orderRomanArray, romanToInt } from "@/lib/romanUtils";
+// @ts-expect-error bun not avaliable on prod
 import { expect, test } from "bun:test";
 
 const testRoman = (string: string, expected: number) => {
