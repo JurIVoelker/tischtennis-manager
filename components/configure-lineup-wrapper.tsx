@@ -22,6 +22,7 @@ import { putAPI } from "@/lib/APIUtils";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { romanToInt } from "@/lib/romanUtils";
 
 interface ConfigureLineupWrapperProps {
   mainPlayers: Player[];
@@ -128,6 +129,19 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
     }
   };
 
+  const splitTeamName = teamName.split(" ");
+  const teamType = splitTeamName.slice(0, -1).join(" ");
+  const teamIndex = romanToInt(splitTeamName[splitTeamName.length - 1]);
+
+  const availableAlternativeTeams = allTeams.filter((team) => {
+    const splitTeam = team.name.split(" ");
+    const teamIndexCurrent = romanToInt(splitTeam[splitTeam.length - 1]);
+    return (
+      (team.name !== teamName || team.name.startsWith(teamType)) &&
+      teamIndex < teamIndexCurrent
+    );
+  });
+
   return (
     <>
       {remainingMainPlayers.length > 0 && (
@@ -174,12 +188,14 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
           <AvailabilityColorsLegend />
         </Card>
       )}
-      <AddExistingPlayerDrawer
-        teams={allTeams.filter((team) => team.name !== teamName)}
-        value={selectedPlayers.map((player) => player.id)}
-        onChange={handleSelectExistingPlayer}
-        isExchangePlayers
-      />
+      {availableAlternativeTeams.length > 0 && (
+        <AddExistingPlayerDrawer
+          teams={availableAlternativeTeams}
+          value={selectedPlayers.map((player) => player.id)}
+          onChange={handleSelectExistingPlayer}
+          isExchangePlayers
+        />
+      )}
       <Card className="p-4">
         {selectedPlayers.length > 0 && (
           <>
