@@ -99,9 +99,7 @@ const PlayersCard = ({
             <Badge
               variant={userId === player.id ? "default" : "secondary"}
               key={player.id}
-            >{`${
-              userId === player.id ? "Du" : getPlayerName(player, players)
-            }`}</Badge>
+            >{`${userId === player.id ? "Du" : getPlayerName(player)}`}</Badge>
           ))}
       </div>
       {(inviteToken || userId || isLeader) && (

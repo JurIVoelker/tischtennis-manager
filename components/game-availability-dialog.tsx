@@ -69,9 +69,7 @@ const GameAvailabilityDialog = ({
                 key={vote.playerId}
                 className={`flex justify-between p-2 rounded px-3 items-center ${bg}`}
               >
-                <span className="text-sm">
-                  {getPlayerName(vote.player, allPlayers)}
-                </span>
+                <span className="text-sm">{getPlayerName(vote.player)}</span>
                 <Icon className="size-5" />
               </div>
             );
@@ -87,7 +85,7 @@ const GameAvailabilityDialog = ({
                   variant="outline"
                   className="bg-secondary/30"
                 >
-                  {player.firstName} {player.lastName}
+                  {getPlayerName(player)}
                 </Badge>
               ))}
             </div>

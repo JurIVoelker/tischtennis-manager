@@ -119,7 +119,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
                           <RadioGroupItem value={player.id} />
                         </FormControl>
                         <FormLabel className="font-normal inline">
-                          {getPlayerName(player, players)}
+                          {getPlayerName(player)}
                         </FormLabel>
                       </FormItem>
                     ))}

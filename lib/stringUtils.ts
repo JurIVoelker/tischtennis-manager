@@ -20,7 +20,7 @@ export const getInfoTextString = (match: MatchWithLineupAndLocation) => {
 
   const daysUntilMatch = Math.ceil(
     (match.matchDateTime.getTime() - new Date().getTime()) /
-      (1000 * 60 * 60 * 24)
+    (1000 * 60 * 60 * 24)
   );
 
   const { dateString, timeString } = getDateAndTime(match.matchDateTime);
@@ -44,25 +44,13 @@ export const getInfoTextString = (match: MatchWithLineupAndLocation) => {
     lineups: match.lineups.sort((a, b) => a.position - b.position),
   };
 
-  return `${textBeginning} Uhr findet das ${
-    match.isHomeGame ? "Heimspiel" : "Auswärtsspiel"
-  } gegen ${
-    match.enemyClubName
-  } statt. Wir spielen mit folgender Aufstellung: \n${sortedMatch.lineups
-    .map((lineup, index) => `  ${index + 1}. ${lineup?.player.firstName}`)
-    .join("\n")}`;
+  return `${textBeginning} Uhr findet das ${match.isHomeGame ? "Heimspiel" : "Auswärtsspiel"
+    } gegen ${match.enemyClubName
+    } statt. Wir spielen mit folgender Aufstellung: \n${sortedMatch.lineups
+      .map((lineup, index) => `  ${index + 1}. ${lineup?.player.firstName}`)
+      .join("\n")}`;
 };
 
-export const getPlayerName = (player: Player, allPlayersList?: Player[]) => {
-  if (allPlayersList) {
-    const isDuplicateName = allPlayersList.some(
-      (playerFromList) =>
-        playerFromList.firstName === player.firstName &&
-        playerFromList.id !== player.id
-    );
-    if (isDuplicateName) {
-      return `${player.firstName} ${player.lastName}`;
-    }
-  }
-  return `${player.firstName}`;
+export const getPlayerName = (player: Player) => {
+  return `${player.firstName} ${player.lastName}`;
 };

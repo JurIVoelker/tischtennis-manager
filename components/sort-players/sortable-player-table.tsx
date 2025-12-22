@@ -104,10 +104,7 @@ export const SortablePlayerTable: React.FC<PlayerTableProps> = ({
                               className={isDisabled ? "opacity-15" : ""}
                             />
                             <Typography variant="p">
-                              {getPlayerName(
-                                playerList.player,
-                                players.map((p) => p?.player)
-                              )}
+                              {getPlayerName(playerList.player)}
                             </Typography>
                           </div>
                           {isRemovable && (

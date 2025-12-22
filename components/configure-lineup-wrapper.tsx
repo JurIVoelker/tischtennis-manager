@@ -162,7 +162,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
                         : "secondary"
                 }
               >
-                {getPlayerName(player, remainingMainPlayers)}
+                {getPlayerName(player)}
                 {availability === "maybe" && <HelpCircleIcon strokeWidth={2} />}
                 {availability === "unavailable" && (
                   <Cancel01Icon strokeWidth={2} />
