@@ -1,6 +1,5 @@
 "use client";
 import { MatchAvailabilityVote, Player } from "@prisma/client";
-import { SortablePlayerTable } from "./sort-players/sortable-player-table";
 import { useMemo, useState } from "react";
 import { Button, buttonVariants } from "./ui/button";
 import { getPlayerName } from "@/lib/stringUtils";
@@ -11,7 +10,6 @@ import {
   MatchAvailablilites,
   TeamWithPlayers,
 } from "@/types/prismaTypes";
-import { arrayMove } from "@dnd-kit/sortable";
 import Typography from "./typography";
 import { Card } from "./ui/card";
 import Link from "next/link";
@@ -22,6 +20,8 @@ import { putAPI } from "@/lib/APIUtils";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import PlayerTable from "./lineup/player-table";
+import { getTeamsWithEqualType, sortPlayersByTeam } from "@/lib/teamUtils";
 
 interface ConfigureLineupWrapperProps {
   mainPlayers: Player[];
@@ -37,7 +37,6 @@ interface ConfigureLineupWrapperProps {
 
 const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
   mainPlayers,
-  disabledPlayerIds,
   teamName,
   allTeams,
   matchAvailablilityVotes,
@@ -61,42 +60,17 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
     [mainPlayers, selectedPlayers]
   );
 
-  const handleSortItems = (activeId: string, overId: string) => {
-    setSelectedPlayers((prev) => {
-      const oldIndex = prev.findIndex((item) => item.id === activeId);
-      const newIndex = prev.findIndex((item) => item.id === overId);
-      return arrayMove(prev, oldIndex, newIndex);
+  const onAddPlayer = (playerId: string) => {
+    const playerToAdd = mainPlayers.find((player) => player.id === playerId);
+    if (!playerToAdd) return;
+    setSelectedPlayers((prevList) => {
+      const players = [...prevList, playerToAdd];
+      const newList = sortPlayersByTeam(players, allTeams, teamName);
+      return newList;
     });
   };
 
-  const handleSelectPlayer = (playerId: string) => {
-    const playerToAdd = mainPlayers.find((player) => player.id === playerId);
-    if (playerToAdd)
-      setSelectedPlayers((prevList) => {
-        if (prevList.length === 0) {
-          return [playerToAdd];
-        }
-
-        const customPlayers = prevList.filter(
-          (player) => !mainPlayers.some((p) => p.id === player.id)
-        );
-        const customPlayerIndicies = customPlayers.map((player) =>
-          prevList.findIndex((p) => p.id === player.id)
-        );
-
-        const listWithNewPlayer = [...prevList, playerToAdd];
-        const newList: Player[] = mainPlayers.filter((player) =>
-          listWithNewPlayer.some((p) => p.id === player.id)
-        );
-
-        customPlayerIndicies.forEach((index, i) => {
-          newList.splice(index, 0, customPlayers[i]);
-        });
-        return newList;
-      });
-  };
-
-  const handleSelectExistingPlayer = (playerIds: string[]) => {
+  const onAddAlternativePlayer = (playerIds: string[]) => {
     const playersToAdd: Player[] = [];
     allTeams.forEach((team) => {
       team.players.forEach((player) => {
@@ -104,7 +78,11 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
       });
     });
 
-    setSelectedPlayers((prev) => [...prev, ...playersToAdd]);
+    setSelectedPlayers((prevList) => {
+      const players = [...prevList, ...playersToAdd];
+      const newList = sortPlayersByTeam(players, allTeams, teamName);
+      return newList;
+    });
   };
 
   const handleRemovePlayer = (id: string) => {
@@ -128,6 +106,12 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
     }
   };
 
+  const availableAlternativeTeams = getTeamsWithEqualType({
+    teamName,
+    teams: allTeams,
+    excludeOwn: true,
+  });
+
   return (
     <>
       {remainingMainPlayers.length > 0 && (
@@ -150,7 +134,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
             return (
               <Button
                 key={player.id}
-                onClick={() => handleSelectPlayer(player.id)}
+                onClick={() => onAddPlayer(player.id)}
                 className="w-full flex justify-between items-center"
                 variant={
                   availability === "available"
@@ -162,7 +146,7 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
                         : "secondary"
                 }
               >
-                {getPlayerName(player, remainingMainPlayers)}
+                {getPlayerName(player)}
                 {availability === "maybe" && <HelpCircleIcon strokeWidth={2} />}
                 {availability === "unavailable" && (
                   <Cancel01Icon strokeWidth={2} />
@@ -174,27 +158,23 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
           <AvailabilityColorsLegend />
         </Card>
       )}
-      <AddExistingPlayerDrawer
-        teams={allTeams.filter((team) => team.name !== teamName)}
-        value={selectedPlayers.map((player) => player.id)}
-        onChange={handleSelectExistingPlayer}
-        isExchangePlayers
-      />
+      {availableAlternativeTeams.length > 0 && (
+        <AddExistingPlayerDrawer
+          teams={availableAlternativeTeams}
+          value={selectedPlayers.map((player) => player.id)}
+          onChange={onAddAlternativePlayer}
+          isExchangePlayers
+        />
+      )}
       <Card className="p-4">
         {selectedPlayers.length > 0 && (
           <>
             <Typography variant="p-gray" className="mb-4">
               Ausgewählte Spieler
             </Typography>
-            <SortablePlayerTable
-              players={selectedPlayers.map((player) => ({
-                player,
-                id: player.id,
-              }))}
-              disabledPlayerIds={disabledPlayerIds}
-              isRemovable
+            <PlayerTable
+              players={selectedPlayers}
               handleRemovePlayer={handleRemovePlayer}
-              handleOnChange={handleSortItems}
             />
           </>
         )}

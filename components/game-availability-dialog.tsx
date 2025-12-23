@@ -9,6 +9,7 @@ import { getPlayerName } from "@/lib/stringUtils";
 import { Player } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { useIsPermitted } from "@/hooks/use-has-permission";
+import { Badge } from "./ui/badge";
 
 const GameAvailabilityDialog = ({
   matchAvailabilityVotes,
@@ -20,6 +21,10 @@ const GameAvailabilityDialog = ({
   const [isOpen, setIsOpen] = useState(false);
   const isVisible = useIsPermitted("view:game-availability-overview-dialog");
   if (!isVisible) return null;
+  const notVotedPlayers = allPlayers.filter(
+    (p) => !matchAvailabilityVotes.some((v) => v.playerId === p.id)
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
@@ -64,14 +69,28 @@ const GameAvailabilityDialog = ({
                 key={vote.playerId}
                 className={`flex justify-between p-2 rounded px-3 items-center ${bg}`}
               >
-                <span className="text-sm">
-                  {getPlayerName(vote.player, allPlayers)}
-                </span>
+                <span className="text-sm">{getPlayerName(vote.player)}</span>
                 <Icon className="size-5" />
               </div>
             );
           })}
         </div>
+        {notVotedPlayers.length > 0 && (
+          <div className="mt-3">
+            <h2 className="text-base font-semibold">Noch nicht abgestimmt:</h2>
+            <div className="flex gap-1.5 flex-wrap mt-2.5">
+              {notVotedPlayers.map((player) => (
+                <Badge
+                  key={player.id}
+                  variant="outline"
+                  className="bg-secondary/30"
+                >
+                  {getPlayerName(player)}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

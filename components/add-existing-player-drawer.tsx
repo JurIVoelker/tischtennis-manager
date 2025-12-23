@@ -48,10 +48,14 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="w-full mb-6" variant="outline">
-          {isExchangePlayers
+        <Button
+          className="w-full mb-6"
+          variant="outline"
+          disabled={teams.length === 0}
+        >
+          {teams.length === 0
             ? "Ersatzspieler hinzufügen"
-            : "Bestehenden Spieler hinzufügen"}
+            : "Ersatzspieler hinzufügen"}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -93,7 +97,7 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
                       {(isPlayerSelected || isPlayerDisabled) && (
                         <Tick01Icon strokeWidth={2} />
                       )}
-                      {getPlayerName(player, team.players)}
+                      {getPlayerName(player)}
                     </Button>
                   );
                 })}

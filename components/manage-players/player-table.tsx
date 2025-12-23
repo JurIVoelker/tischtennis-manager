@@ -100,7 +100,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
               {!isAddPlayers && (
                 <TableCell className="font-medium">{i + 1}</TableCell>
               )}
-              <TableCell>{getPlayerName(player, players)}</TableCell>
+              <TableCell>{getPlayerName(player)}</TableCell>
               <TableCell className="flex justify-end p-1.5">
                 {!isAddPlayers && (
                   <>
@@ -116,13 +116,13 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                             className="flex items-center gap-2 p-2 text-destructive"
                             onSelect={() =>
                               setPlayerToDelete({
-                                uniqueName: getPlayerName(player, players),
+                                uniqueName: getPlayerName(player),
                                 id: player.id,
                               })
                             }
                           >
-                            <UserMinus02Icon strokeWidth={2}/>
-                            {`${getPlayerName(player, players)} entfernen`}
+                            <UserMinus02Icon strokeWidth={2} />
+                            {`${getPlayerName(player)} entfernen`}
                           </DropdownMenuItem>
                         </AlertDialogTrigger>
 
@@ -130,7 +130,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                           className="flex items-center gap-2 p-2"
                           onSelect={handleClickOrderPlayers}
                         >
-                          <Move02Icon strokeWidth={2}/>
+                          <Move02Icon strokeWidth={2} />
                           Position verschieben
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -144,7 +144,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                     className="h-8 w-8 mt-1"
                     onClick={() => handleRemovePlayer(player.id)}
                   >
-                    <Cancel01Icon strokeWidth={2}/>
+                    <Cancel01Icon strokeWidth={2} />
                   </Button>
                 )}
               </TableCell>
@@ -161,7 +161,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
                     className="h-8 w-8 mt-1"
                     onClick={() => handleRemoveCustomPlayer(i)}
                   >
-                    <Cancel01Icon strokeWidth={2}/>
+                    <Cancel01Icon strokeWidth={2} />
                   </Button>
                 </TableCell>
               </TableRow>

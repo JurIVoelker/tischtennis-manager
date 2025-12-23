@@ -61,12 +61,7 @@ const LineupChild: React.FC<LineupChildProps> = ({
           key={lineup.id}
           variant={userId === lineup.player.id ? "black" : "light"}
         >
-          {userId === lineup.player.id
-            ? "Du"
-            : getPlayerName(
-                lineup.player,
-                lineups.map((l) => l.player)
-              )}
+          {userId === lineup.player.id ? "Du" : getPlayerName(lineup.player)}
         </PositonIndicator>
       ))}
     </>

@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "tsc --noEmit && next lint",
     "0": "------------------[database]------------------",
-    "db:run": "docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=devdb -p 5432:5432 --name ttm-postgres postgres",
+    "db:run": "docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=devdb -p 5432:5432 --name ttm-postgres postgres:17",
     "db:wait-for-connection": "wait-port localhost:5432",
     "db:migrate": "npx prisma migrate dev",
     "db:migrate-deploy": "npx prisma migrate deploy",
