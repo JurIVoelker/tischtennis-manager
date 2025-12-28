@@ -150,3 +150,9 @@ model EmailsSent {
 model HiddenMatch {
   id String @id @default(cuid())
 }
+
+model Settings {
+  id            String  @id @default(cuid())
+  includeRRSync Boolean @default(false)
+  autoSync      Boolean @default(false)
+}

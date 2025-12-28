@@ -10,7 +10,7 @@ import slugify from "slugify";
 export async function POST(request: NextRequest) {
   const { response, body } = await validateRequest(
     request,
-    ["admin"],
+    ["admin", "server"],
     API_PUT_POST_MATCH_SYNC_SCHEMA
   );
 
