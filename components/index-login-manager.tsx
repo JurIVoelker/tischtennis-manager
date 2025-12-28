@@ -37,12 +37,12 @@ const IndexLoginManager = () => {
   return (
     <>
       {redirectLink && (
-        <>
+        <div>
           <Separator className="my-8" />
           <Typography variant="h4" className="mt-2">
             Bereits eingeloggt
           </Typography>
-          <Typography variant="p" className="mt-2">
+          <Typography variant="p" className="mt-1 leading-6">
             Du scheinst bereits eingeloggt zu sein. Möchtest du weitergeleitet
             werden?
           </Typography>
@@ -55,7 +55,7 @@ const IndexLoginManager = () => {
           >
             Weiter
           </Link>
-        </>
+        </div>
       )}
       {error}
     </>

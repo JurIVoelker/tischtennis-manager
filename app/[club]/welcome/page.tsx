@@ -11,20 +11,20 @@ const IndexPage = () => {
   return (
     <div className="min-h-screen flex flex-col w-full">
       <div className="flex-1 flex items-center justify-center px-4 py-12 w-full">
-        <Card className="w-full max-w-2xl shadow-lg">
-          <CardHeader className="pb-0">
+        <Card className="w-full max-w-2xl shadow-none border-none p-1 md:shadow-lg md:p-8 md:border-solid">
+          <CardHeader className="p-0">
             <Headline>Tischtennis Manager</Headline>
           </CardHeader>
-          <CardContent className="pt-6 space-y-6">
-            <Typography variant="p">
+          <CardContent className="pt-6 space-y-6 p-0">
+            <Typography variant="p" className="leading-6">
               Willkommen beim TT-Manager. Um einer Mannschaft beizutreten, musst
               du den Einladungslink, den du von deinem Mannschaftsführer
               bekommen hast öffnen.
             </Typography>
 
             <div className="p-3.5 border rounded-md space-y-2">
-              <div className="flex items-center gap-1 font-semibold">
-                <AlertCircle className="size-5 shrink-0 text-destructive" />{" "}
+              <div className="flex items-center gap-1.5 font-semibold">
+                <AlertCircle className="size-5 shrink-0 text-destructive" />
                 Ungültiger Link
               </div>
               <div className="text-sm">
@@ -45,11 +45,11 @@ const IndexPage = () => {
 
             <Separator className="my-2" />
 
-            <div className="space-y-4">
+            <div className="space-y-2">
               <Typography variant="h4" className="mb-2">
                 Login für Mannschaftsführer
               </Typography>
-              <Typography variant="p">
+              <Typography variant="p" className="leading-6">
                 Falls du Mannschaftsführer bist, kannst du dich hier anmelden,
                 um deiner Mannschaft beizutreten.
               </Typography>
