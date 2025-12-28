@@ -65,7 +65,7 @@ const TeamLeaderJoinSuggestion: React.FC<TeamLeaderJoinSuggestionProps> = ({
             Möchtest du der Mannschaft beitreten?
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col md:flex-row gap-4">
+        <CardContent className="flex flex-col md:flex-row gap-2 md:gap-4">
           <Button className="w-full" variant="outline" onClick={handleDecline}>
             Nein
           </Button>
