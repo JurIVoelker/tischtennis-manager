@@ -323,3 +323,10 @@ export const API_PUT_LEADER_INVITE_TOKEN_SCHEMA = z.object({
   expiresAt: z.string(),
   clubSlug: validateClubSlug(),
 });
+
+
+export const API_POST_SYNC_SETTINGS_SCHEMA = z.object({
+  autoSync: z.boolean(),
+  includeRRSync: z.boolean(),
+  clubSlug: validateClubSlug(),
+});
