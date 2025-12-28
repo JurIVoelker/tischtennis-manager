@@ -11,7 +11,9 @@ export type permission =
   | "view:game-availability-buttons"
   | "view:game-availability-overview-dialog"
   | "view:manage-leaders-button"
-  | "view:manage-admin-button";
+  | "view:manage-admin-button"
+  | "view:sync-matches-overview"
+  ;
 
 interface RoleProps {
   viewer: permission[];
@@ -31,9 +33,8 @@ export const ROLES: RoleProps = {
     "view:game-card-options",
     "view:add-lineup-in-game-card-body",
     "view:players-card-options",
-    "view:game-availability-overview-dialog",
-  ],
-  admin: ["view:manage-admin-button", "view:manage-leaders-button"],
+    "view:game-availability-overview-dialog"],
+  admin: ["view:manage-admin-button", "view:manage-leaders-button", "view:sync-matches-overview"],
 } as const;
 
 export const getRole = (): role[] => {

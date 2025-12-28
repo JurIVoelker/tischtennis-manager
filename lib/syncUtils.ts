@@ -7,12 +7,34 @@ const { TT_API_KEY } = process.env;
 export const categorizeMatchInconsistencies = async (
   fetchedMatches: TTApiMatch[]
 ) => {
+  let filteredMatches: TTApiMatch[] = [];
+
+  if (process.env.EXCLUDE_RR_FROM_SYNC === "true") {
+    filteredMatches = fetchedMatches.filter((match) => {
+      const isRRMatch = new Date(match.datetime)
+        .getMonth() >= 0 && new Date(match.datetime).getMonth() <= 5
+
+      return !isRRMatch;
+    });
+  } else {
+    filteredMatches = fetchedMatches;
+  }
+
+  filteredMatches = filteredMatches.filter((match) => {
+    const matchDate = new Date(match.datetime);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    return matchDate >= currentDate;
+  })
+
   const missingMatches = [];
   const unequalTimeMatches = [];
+  const unequalTimeMatchesBefore = [];
   const unequalHomeGameMatches = [];
   const unequalLocationMatches = [];
+  const unequalLocationMatchesBefore = [];
 
-  for (const fetchedMatch of fetchedMatches) {
+  for (const fetchedMatch of filteredMatches) {
     const match = await prisma.match.findFirst({
       where: {
         id: fetchedMatch.id,
@@ -30,6 +52,7 @@ export const categorizeMatchInconsistencies = async (
     if (
       !isEqual(new Date(match.matchDateTime), new Date(fetchedMatch.datetime))
     ) {
+      unequalTimeMatchesBefore.push(match);
       unequalTimeMatches.push(fetchedMatch);
     }
 
@@ -45,6 +68,7 @@ export const categorizeMatchInconsistencies = async (
       match.location?.hallName !== fetchedMatch.location.name
     ) {
       unequalLocationMatches.push(fetchedMatch);
+      unequalLocationMatchesBefore.push(match);
     }
   }
 

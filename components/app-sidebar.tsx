@@ -116,8 +116,7 @@ export const AppSidebar = ({}) => {
 
   return (
     <Sidebar>
-      <SidebarHeader className="h-20"></SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="pt-20">
         {(joinedTeams?.length > 0 || leaderAt?.length > 0) && (
           <SidebarGroup>
             <SidebarGroupLabel>Meine Mannschaften</SidebarGroupLabel>

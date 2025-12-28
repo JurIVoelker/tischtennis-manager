@@ -197,7 +197,7 @@ const executeDatabaseScripts = async () => {
 
   await createClubAuth(clubId);
 
-  const teamName = "Herren I";
+  const teamName = "Erwachsene I";
   const players = [
     { firstName: "Max", lastName: "Mustermann" },
     { firstName: "Max", lastName: "Master" },
@@ -207,13 +207,13 @@ const executeDatabaseScripts = async () => {
   ];
   await createFullTeamSetup(clubId, teamName, players, enemyTeamNames, true);
 
-  const teamName2 = "Herren II";
+  const teamName2 = "Erwachsene II";
   await createFullTeamSetup(clubId, teamName2, players, enemyTeamNames);
 
-  const teamName3 = "Herren III";
+  const teamName3 = "Erwachsene III";
   await createFullTeamSetup(clubId, teamName3, players, enemyTeamNames, true);
 
-  const teamName4 = "Herren IV";
+  const teamName4 = "Erwachsene IV";
   const players4 = [
     { firstName: "Anna", lastName: "Mustermann" },
     { firstName: "Berta", lastName: "Mustermann" },
@@ -223,7 +223,7 @@ const executeDatabaseScripts = async () => {
   ];
   await createFullTeamSetup(clubId, teamName4, players4, enemyTeamNames);
 
-  const teamName5 = "Herren V";
+  const teamName5 = "Erwachsene V";
   const players5 = [
     { firstName: "Fritz", lastName: "Mustermann" },
     { firstName: "Gustav", lastName: "Mustermann" },
@@ -233,7 +233,7 @@ const executeDatabaseScripts = async () => {
   ];
   await createFullTeamSetup(clubId, teamName5, players5, enemyTeamNames);
 
-  const teamName6 = "Herren VI";
+  const teamName6 = "Erwachsene VI";
   const players6 = [
     { firstName: "Karl", lastName: "Mustermann" },
     { firstName: "Ludwig", lastName: "Mustermann" },
@@ -243,7 +243,7 @@ const executeDatabaseScripts = async () => {
   ];
   await createFullTeamSetup(clubId, teamName6, players6, enemyTeamNames);
 
-  const teamName7 = "Herren VII";
+  const teamName7 = "Erwachsene VII";
   const players7 = [
     { firstName: "Paula", lastName: "Mustermann" },
     { firstName: "Quentin", lastName: "Mustermann" },
