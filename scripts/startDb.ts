@@ -1,3 +1,4 @@
+// @ts-expect-error bun is not relevant on prod
 import { $ } from "bun"
 
 (async () => {
