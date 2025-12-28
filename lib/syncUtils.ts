@@ -9,7 +9,9 @@ export const categorizeMatchInconsistencies = async (
 ) => {
   let filteredMatches: TTApiMatch[] = [];
 
-  if (process.env.EXCLUDE_RR_FROM_SYNC === "true") {
+  const settings = await prisma.settings.findFirst();
+
+  if (settings?.includeRRSync === false) {
     filteredMatches = fetchedMatches.filter((match) => {
       const isRRMatch = new Date(match.datetime)
         .getMonth() >= 0 && new Date(match.datetime).getMonth() <= 5
