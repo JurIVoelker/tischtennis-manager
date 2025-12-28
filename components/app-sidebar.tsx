@@ -28,6 +28,7 @@ import {
   LEADER_LOGIN_PAGES_REGEX,
   INDEX_PAGE_REGEX,
   WELCOME_PAGE_REGEX,
+  GUIDE_REGEX,
 } from "@/constants/regex";
 import AppSidebarFooter from "./sidebar/sidebar-footer";
 import {
@@ -67,6 +68,7 @@ export const AppSidebar = ({}) => {
     LEADER_LOGIN_PAGES_REGEX,
     INDEX_PAGE_REGEX,
     WELCOME_PAGE_REGEX,
+    GUIDE_REGEX,
   ];
 
   if (excludedRoutes.some((regex) => regex.test(pathname))) {

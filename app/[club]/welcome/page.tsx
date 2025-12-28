@@ -4,6 +4,8 @@ import LoginLink from "@/components/login-link";
 import Typography from "@/components/typography";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { InfoIcon } from "lucide-react";
+import Link from "next/link";
 
 const IndexPage = () => {
   return (
@@ -19,6 +21,23 @@ const IndexPage = () => {
               du den Einladungslink, den du von deinem Mannschaftsführer
               bekommen hast öffnen.
             </Typography>
+
+            <div className="p-2 border rounded-md flex items-center gap-2 text-sm">
+              <InfoIcon className="size-5 shrink-0 text-primary" />
+              <span>
+                Der Link, den du aufgerufen hast, ist kein gültiger
+                Einladungslink. Bitte versuche es erneut oder kontaktiere deinen
+                Mannschaftsführer.{" "}
+                <Link
+                  href="/guide/link-kopieren"
+                  className="text-primary underline font-semibold"
+                >
+                  Hier
+                </Link>{" "}
+                erfährst du, wie man als Mannschaftsführer, den richtgen Link
+                kopiert.
+              </span>
+            </div>
 
             <IndexLoginManager />
 

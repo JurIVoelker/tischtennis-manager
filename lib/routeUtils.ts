@@ -9,6 +9,7 @@ export const isIgnoredMiddlewarePath = (urlPath: string): boolean => {
     /^\/.*\/mannschaftsfuehrer\/registrieren(\?.*)?(\/.*)?$/,
     /^\/.*\/mannschaftsfuehrer\/passwort-vergessen(\?.*)?(\/.*)?$/,
     /^\/.*\/mannschaftsfuehrer\/passwort-reset(\?.*)?(\/.*)?$/,
+    /^\/guide(\/.*)?(\?.*)?$/
   ];
   if (additionalRegexPaths.some((regex) => regex.test(urlPath))) return true;
   return false;
