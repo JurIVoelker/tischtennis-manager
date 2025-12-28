@@ -3,7 +3,7 @@ import { $ } from "bun"
 
 (async () => {
   const stdout = (await $`docker ps -a`.quiet()).text()
-
+  // @ts-expect-error bun is not relevant on prod
   const dbContainer = stdout.split("\n").find(line => line.includes("ttm-postgres"));
 
   if (!dbContainer) {
