@@ -62,7 +62,7 @@ export default function PasswortVergessen() {
       clubSlug,
     });
     if (res.ok) {
-      umami?.track("password-reset");
+      umami()?.track("password-reset");
       setSuccess(
         "Falls die E-Mail-Adresse in unserer Datenbank existiert, haben wir dir einen Link zum Zurücksetzen deines Passworts zugesendet."
       );

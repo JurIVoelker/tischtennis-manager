@@ -35,7 +35,7 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
 
   const handleAddPlayers = () => {
     onChange(selectedPlayers);
-    umami?.track("add-existing-players", {
+    umami()?.track("add-existing-players", {
       numberOfPlayers: selectedPlayers.length,
     });
     setSelectedPlayers([]);

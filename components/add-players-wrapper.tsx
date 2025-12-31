@@ -81,10 +81,10 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({
       })),
     });
     if (!res.ok) {
-      umami?.track("error:add-players-to-team");
+      umami()?.track("error:add-players-to-team");
       setUnknownErrorToastMessage();
     } else {
-      umami?.track("add-players-to-team");
+      umami()?.track("add-players-to-team");
       toast({ title: "Spieler erfolgreich hinzugefügt" });
       push("./verwalten?refresh=true");
     }

@@ -54,7 +54,7 @@ const ManagePlayersHeader: React.FC<ManagePlayersHeaderProps> = ({
     if (inviteToken) {
       const inviteLink = `${window.location.origin}/${clubSlug}/${teamSlug}/login?inviteToken=${inviteToken}`;
       navigator.clipboard.writeText(inviteLink);
-      umami?.track("copy-invite-link-in-players-menu");
+      umami()?.track("copy-invite-link-in-players-menu");
       toast({
         title: "Einladungslink kopiert",
         description: (

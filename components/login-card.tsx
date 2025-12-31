@@ -71,7 +71,7 @@ export default function LoginCard() {
         newErrors.password = "Ungültige E-Mail-Adresse oder Passwort";
       } else if (res?.status === 200) {
         push("./login/validieren");
-        umami?.track("sign-in");
+        umami()?.track("sign-in");
       }
       setErrors(newErrors);
     }

@@ -31,7 +31,7 @@ const GameAvailabilityDialog = ({
       <DialogTrigger
         onClick={() => {
           setIsOpen(true);
-          umami?.track("open-availability-dialog");
+          umami()?.track("open-availability-dialog");
         }}
         className={cn(
           buttonVariants({ variant: "outline" }),

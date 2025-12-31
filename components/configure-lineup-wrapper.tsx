@@ -100,10 +100,10 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
       teamSlug,
     });
     if (!res.ok) {
-      umami?.track("error:save-lineup");
+      umami()?.track("error:save-lineup");
       setUnknownErrorToastMessage();
     } else {
-      umami?.track("save-lineup");
+      umami()?.track("save-lineup");
       toast({ title: "Aufstellung gespeichert" });
       push("../../../?refresh=true");
     }

@@ -133,7 +133,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
       });
     }
     if (!res.ok || res.error) {
-      umami?.track(`error:${isCreate ? "create-match" : "edit-match"}`);
+      umami()?.track(`error:${isCreate ? "create-match" : "edit-match"}`);
       setUnknownErrorToastMessage();
     } else {
       toast({
@@ -141,7 +141,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
           isCreate ? "erstellt" : "bearbeitet"
         }.`,
       });
-      umami?.track(isCreate ? "create-match" : "edit-match");
+      umami()?.track(isCreate ? "create-match" : "edit-match");
       push(returnPath);
     }
   };

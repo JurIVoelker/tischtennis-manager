@@ -79,22 +79,22 @@ export const RegisterCard = () => {
     });
 
     if (res?.error?.error === LEADER_IS_NOT_EXISTING_ERROR) {
-      umami?.track("error:register", { reason: "leader-is-not-existing" });
+      umami()?.track("error:register", { reason: "leader-is-not-existing" });
       setError(
         "Deine E-Mail-Adresse ist keinem Mannschaftsführer zugewiesen. \
         Bitte einen Admin darum, dich als Mannschaftsführer in einer \
         Mannschaft aufzunehmen und versuche es erneut ."
       );
     } else if (res?.error?.error === TEAM_LEADER_ALREADY_EXISTS_ERROR) {
-      umami?.track("error:register", {
+      umami()?.track("error:register", {
         reason: "team-leader-already-registered",
       });
       setError(TEAM_LEADER_ALREADY_EXISTS_ERROR);
     } else if (res?.error || !res.ok) {
-      umami?.track("error:register", { reason: "unknown-error" });
+      umami()?.track("error:register", { reason: "unknown-error" });
       setError(UNKNOWN_ERROR);
     } else {
-      umami?.track("register");
+      umami()?.track("register");
       push("./login");
     }
     setIsSubmitting(false);

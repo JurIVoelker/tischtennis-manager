@@ -77,12 +77,12 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
     });
     if (!res.ok) {
       setUnknownErrorToastMessage();
-      umami?.track("error:remove-player-from-team");
+      umami()?.track("error:remove-player-from-team");
     } else {
       toast({
         title: "Spieler erfolgreich entfernt",
       });
-      umami?.track("remove-player-from-team");
+      umami()?.track("remove-player-from-team");
       refresh();
     }
   };

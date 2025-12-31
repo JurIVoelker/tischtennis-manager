@@ -45,10 +45,10 @@ const SortPlayersTableWrapper: React.FC<SortPlayersTableWrapperProps> = ({
       teamSlug,
     });
     if (!res.ok) {
-      umami?.track("error:save-player-positions");
+      umami()?.track("error:save-player-positions");
       setUnknownErrorToastMessage();
     } else {
-      umami?.track("save-player-positions");
+      umami()?.track("save-player-positions");
       toast({
         title: "Spielerpositionen erfolgreich gespeichert",
       });

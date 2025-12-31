@@ -57,7 +57,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
   } | null>(null);
 
   const handleCopy = () => {
-    umami?.track("copy-info-text");
+    umami()?.track("copy-info-text");
     const text = getInfoTextString(match);
     if (!text) {
       toast({
@@ -103,10 +103,10 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
       teamSlug,
     });
     if (!res.ok) {
-      umami?.track("error:delete-match");
+      umami()?.track("error:delete-match");
       setUnknownErrorToastMessage();
     } else {
-      umami?.track("delete-match");
+      umami()?.track("delete-match");
       refresh();
       toast({ title: "Spiel erfolgreich gelöscht" });
     }

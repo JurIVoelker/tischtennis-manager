@@ -17,13 +17,13 @@ export default function ThemeToggle() {
   const toggleTheme = () => {
     if (theme === "dark") {
       setTheme("light");
-      umami?.track("theme-toggle", { theme: "light" });
+      umami()?.track("theme-toggle", { theme: "light" });
     } else if (theme === "light") {
       setTheme("system");
-      umami?.track("theme-toggle", { theme: "system" });
+      umami()?.track("theme-toggle", { theme: "system" });
     } else {
       setTheme("dark");
-      umami?.track("theme-toggle", { theme: "dark" });
+      umami()?.track("theme-toggle", { theme: "dark" });
     }
   };
 

@@ -47,7 +47,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({ userClub }) => {
   };
 
   const handleSignOut = () => {
-    umami?.track("sign-out");
+    umami()?.track("sign-out");
     clear();
     signOut({
       callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/`,

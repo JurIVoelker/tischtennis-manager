@@ -11,4 +11,8 @@ declare global {
   }
 }
 
-export const umami = window.umami;
+export const umami = () => {
+  if (typeof window !== 'undefined' && window.umami) {
+    return window.umami;
+  }
+}

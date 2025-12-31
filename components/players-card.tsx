@@ -44,14 +44,14 @@ const PlayersCard = ({
   const isLeader = leaderAt?.some((team) => team.teamSlug === teamSlug);
 
   const handleLeaveTeam = () => {
-    umami?.track("leave-team");
+    umami()?.track("leave-team");
     leaveTeam(teamSlug);
     window.location.reload();
   };
 
   const handleClickCopy = () => {
     if (inviteToken) {
-      umami?.track("copy-invite-link");
+      umami()?.track("copy-invite-link");
       const inviteLink = `${window.location.origin}/${clubSlug}/${teamSlug}/login?inviteToken=${inviteToken}`;
       navigator.clipboard.writeText(inviteLink);
       toast({

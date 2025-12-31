@@ -95,7 +95,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
       playerId: userId || "",
     });
     if ((!res.data && !res.ok) || res?.error) {
-      umami?.track("error:vote", { status: res.status, error: res?.error });
+      umami()?.track("error:vote", { status: res.status, error: res?.error });
       handlePostRequestError(res, [
         {
           message: PLAYER_NOT_FOUND_ERROR,
@@ -110,7 +110,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
         },
       ]);
     } else {
-      umami?.track("vote");
+      umami()?.track("vote");
       refresh();
     }
   };
