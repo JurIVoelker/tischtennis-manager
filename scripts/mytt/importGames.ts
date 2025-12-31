@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma/prisma";
+import { MatchType } from "@prisma/client";
 import slugify from "slugify";
 
 const { TT_API_KEY } = process.env;
@@ -53,7 +54,7 @@ export type TTApiMatchesReturnType = {
 
 export type TTApiMatch = TTApiMatchesReturnType["matches"][number];
 
-async function processMatches(matches: TTApiMatch[]) {
+export async function processMatches(matches: TTApiMatch[]) {
   const clubId =
     (
       await prisma.club.findFirst({
@@ -88,11 +89,14 @@ async function processMatches(matches: TTApiMatch[]) {
         })
       )?.id || "";
 
+    const matchType: MatchType = match.league.name.toLowerCase().includes("pokal") ? "cup" : "regular";
+
     const matchData = {
       id: match.id,
       enemyClubName: enemyName,
       isHomeGame: match.isHomeGame,
       matchDateTime: new Date(match.datetime),
+      type: matchType,
       location: {
         create: {
           city: city + " " + zip,
@@ -128,6 +132,7 @@ async function processMatches(matches: TTApiMatch[]) {
       update: {
         matchDateTime: matchData.matchDateTime,
         isHomeGame: matchData.isHomeGame,
+        type: matchType,
       },
       create: matchData,
     });
@@ -160,7 +165,7 @@ async function processMatches(matches: TTApiMatch[]) {
   }
 }
 
-export async function upsertMatchesByIds(matchIds: string[]) {
+export async function fetchTtApiMatches() {
   const matchesPromise = await fetch(
     "https://tt-api.ttc-klingenmuenster.de/api/v1/matches",
     {
@@ -173,7 +178,12 @@ export async function upsertMatchesByIds(matchIds: string[]) {
   );
 
   const matchData = (await matchesPromise.json()) as TTApiMatchesReturnType;
+  return matchData;
+}
 
+
+export async function upsertMatchesByIds(matchIds: string[]) {
+  const matchData = await fetchTtApiMatches();
   const filteredMatches = matchData.matches.filter((match) =>
     matchIds.includes(match.id)
   );

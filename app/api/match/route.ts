@@ -10,6 +10,7 @@ import { revalidatePaths } from "@/lib/revalidateUtils";
 import { validateMatchId, validateRequest } from "@/lib/serversideAPIUtils";
 import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
+import z from "zod";
 
 export async function PUT(request: NextRequest) {
   const { response, body } = await validateRequest(
@@ -30,8 +31,8 @@ export async function PUT(request: NextRequest) {
     clubSlug,
     teamSlug,
     matchId,
-  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any = body;
+    matchType
+  } = body as z.infer<typeof API_PUT_GAME_DATA_SCHEMA>;
 
   const res = await validateMatchId(clubSlug, teamSlug, matchId);
   if (!res.success)
@@ -80,6 +81,7 @@ export async function PUT(request: NextRequest) {
               streetAddress,
             },
           },
+          type: matchType
         },
       });
     })
@@ -142,8 +144,8 @@ export async function POST(request: NextRequest) {
     clubSlug,
     teamSlug,
     enemyClubName,
-  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any = body;
+    matchType
+  } = body as z.infer<typeof API_POST_GAME_DATA_SCHEMA>;
 
   const matchDateTime = new Date(stringDate);
 
@@ -170,6 +172,7 @@ export async function POST(request: NextRequest) {
           teamId,
           matchDateTime: toUtcDate(matchDateTime),
           isHomeGame,
+          type: matchType,
           location: {
             create: {
               city,
@@ -212,7 +215,7 @@ export async function DELETE(request: NextRequest) {
     teamSlug,
     matchId,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any = body;
+    any = body;
 
   const res = await validateMatchId(clubSlug, teamSlug, matchId);
   if (!res.success)

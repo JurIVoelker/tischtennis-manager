@@ -11,6 +11,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum MatchType {
+  regular
+  cup
+}
+
 model Club {
   id     String  @id @default(cuid())
   slug   String  @unique
@@ -97,6 +102,7 @@ model Match {
   location               Location?
   lineups                Lineup[]
   matchAvailabilityVotes MatchAvailabilityVote[]
+  type                   MatchType               @default(regular)
 }
 
 model MatchAvailabilityVote {

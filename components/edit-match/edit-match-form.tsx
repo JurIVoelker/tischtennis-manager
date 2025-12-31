@@ -27,6 +27,7 @@ import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 
 export type Time = {
   hour: number;
@@ -73,6 +74,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
     city: z.string().min(1),
     isHomeGame: z.boolean(),
     enemyClubName: isCreate ? z.string().min(1) : z.undefined(),
+    isCupMatch: z.boolean().default(false),
   });
 
   const location = match?.location;
@@ -98,6 +100,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
       isHomeGame: match?.isHomeGame,
       date,
       time,
+      isCupMatch: match?.type === "cup",
     },
   });
 
@@ -118,12 +121,14 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
         teamSlug,
         clubSlug,
         matchId: match?.id || 0,
+        matchType: data.isCupMatch ? "cup" : "regular",
       });
     } else {
       res = await postAPI(`/api/match`, {
         ...data,
         teamSlug,
         clubSlug,
+        matchType: data.isCupMatch ? "cup" : "regular",
       });
     }
     if (!res.ok || res.error) {
@@ -300,6 +305,31 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
             )}
           />
         </Card>
+
+        <Card className="p-4 space-y-4">
+          <FormField
+            control={form.control}
+            name="isCupMatch"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <div className="flex w-full justify-between items-center">
+                    <Label htmlFor="isCupMatch" className="p-gray">
+                      Pokalspiel
+                    </Label>
+                    <Switch
+                      id="isCupMatch"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </Card>
+
         <div className="flex gap-2 w-full bottom-0 left-0 | bg-gradient-to-t from-background to-background/0 p-6 fixed | md:static md:p-0 | md:bg-transparent">
           <Link
             className={cn(buttonVariants({ variant: "outline" }), "w-full")}

@@ -136,24 +136,21 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
   return (
     <AlertDialog>
       <CardHeader>
-        <CardTitle className="flex justify-between gap-2 h-10 items-center">
-          <Typography
-            variant="h4"
-            className={cn(
-              "break-words flex-shrink overflow-hidden",
-              isGameCardOptionsVisible && "text-lg"
-            )}
-          >
-            {match.enemyClubName}
-          </Typography>
-          <div className="inline-flex gap-2 items-center flex-shrink-0">
-            <Badge variant="default" className="h-fit">
-              {match.isHomeGame ? "Heim" : "Auswärts"}
-            </Badge>
+        <CardTitle>
+          <div className="flex justify-between gap-2 h-10 items-center">
+            <Typography
+              variant="h4"
+              className={cn(
+                "break-words flex-shrink overflow-hidden",
+                isGameCardOptionsVisible && "text-lg"
+              )}
+            >
+              {match.enemyClubName}
+            </Typography>
             {isGameCardOptionsVisible && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="default" size="icon-lg">
+                  <Button variant="default" size="icon-lg" className="shrink-0">
                     <MoreHorizontal />
                   </Button>
                 </DropdownMenuTrigger>
@@ -203,22 +200,32 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Spiel gegen {matchToDelete?.name} löschen
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Bist du dir sicher, dass du das Spiel löschen möchtest?
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                <AlertDialogAction onClick={onDeleteMatch}>
-                  Spiel löschen
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
+          </div>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Spiel gegen {matchToDelete?.name} löschen
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Bist du dir sicher, dass du das Spiel löschen möchtest?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+              <AlertDialogAction onClick={onDeleteMatch}>
+                Spiel löschen
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+          <div className="space-x-1">
+            <Badge variant="default" className="h-fit">
+              {match.isHomeGame ? "Heim" : "Auswärts"}
+            </Badge>
+            {match.type === "cup" && (
+              <Badge variant="default" className="h-fit">
+                Pokal
+              </Badge>
+            )}
           </div>
         </CardTitle>
       </CardHeader>
