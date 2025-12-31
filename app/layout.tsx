@@ -34,7 +34,13 @@ export default function RootLayout({
   return (
     <html lang="de" className={inter.className} suppressHydrationWarning>
       <head>
-        {process.env.NODE_ENV !== "development" && (
+        {process.env.NODE_ENV === "development" ? (
+          <script
+            defer
+            src="https://umami.jurivoelker.de/script.js"
+            data-website-id="78bb6e61-6577-4d5b-b6cf-6f574c572e96"
+          />
+        ) : (
           <script
             defer
             src="https://umami.jurivoelker.de/script.js"

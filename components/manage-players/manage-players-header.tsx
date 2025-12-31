@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import { getAPI } from "@/lib/APIUtils";
 import { toast } from "@/hooks/use-toast";
 import Typography from "../typography";
+import { umami } from "@/lib/umami";
 
 interface ManagePlayersHeaderProps {
   clubSlug: string;
@@ -53,6 +54,7 @@ const ManagePlayersHeader: React.FC<ManagePlayersHeaderProps> = ({
     if (inviteToken) {
       const inviteLink = `${window.location.origin}/${clubSlug}/${teamSlug}/login?inviteToken=${inviteToken}`;
       navigator.clipboard.writeText(inviteLink);
+      umami?.track("copy-invite-link-in-players-menu");
       toast({
         title: "Einladungslink kopiert",
         description: (
@@ -77,7 +79,7 @@ const ManagePlayersHeader: React.FC<ManagePlayersHeaderProps> = ({
       <div className="flex gap-2 ">
         <Button variant="outline" asChild>
           <Link href="../">
-            <ArrowLeft01Icon strokeWidth={2}/>
+            <ArrowLeft01Icon strokeWidth={2} />
             Zurück
           </Link>
         </Button>
@@ -88,7 +90,7 @@ const ManagePlayersHeader: React.FC<ManagePlayersHeaderProps> = ({
         >
           {inviteToken && (
             <>
-              <Copy01Icon strokeWidth={2}/>
+              <Copy01Icon strokeWidth={2} />
               Einladungslink kopieren
             </>
           )}

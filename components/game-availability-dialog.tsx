@@ -10,6 +10,7 @@ import { Player } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { useIsPermitted } from "@/hooks/use-has-permission";
 import { Badge } from "./ui/badge";
+import { umami } from "@/lib/umami";
 
 const GameAvailabilityDialog = ({
   matchAvailabilityVotes,
@@ -28,7 +29,10 @@ const GameAvailabilityDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          umami?.track("open-availability-dialog");
+        }}
         className={cn(
           buttonVariants({ variant: "outline" }),
           "w-full justify-center"

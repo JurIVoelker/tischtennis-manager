@@ -21,6 +21,7 @@ import {
   TOO_MANY_EMAILS_SENT_ERROR,
   UNKNOWN_ERROR,
 } from "@/constants/APIError";
+import { umami } from "@/lib/umami";
 
 // Zod-Schema für die Formularvalidierung
 const formSchema = z.object({
@@ -61,6 +62,7 @@ export default function PasswortVergessen() {
       clubSlug,
     });
     if (res.ok) {
+      umami?.track("password-reset");
       setSuccess(
         "Falls die E-Mail-Adresse in unserer Datenbank existiert, haben wir dir einen Link zum Zurücksetzen deines Passworts zugesendet."
       );

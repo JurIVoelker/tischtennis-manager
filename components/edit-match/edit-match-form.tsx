@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
+import { umami } from "@/lib/umami";
 
 export type Time = {
   hour: number;
@@ -132,6 +133,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
       });
     }
     if (!res.ok || res.error) {
+      umami?.track(`error:${isCreate ? "create-match" : "edit-match"}`);
       setUnknownErrorToastMessage();
     } else {
       toast({
@@ -139,6 +141,7 @@ const EditMatchForm: React.FC<EditMatchFormProps> = ({
           isCreate ? "erstellt" : "bearbeitet"
         }.`,
       });
+      umami?.track(isCreate ? "create-match" : "edit-match");
       push(returnPath);
     }
   };

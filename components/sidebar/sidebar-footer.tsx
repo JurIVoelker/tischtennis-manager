@@ -23,6 +23,7 @@ import { useIsPermitted } from "@/hooks/use-has-permission";
 import { useUserStore } from "@/store/store";
 import Link from "next/link";
 import ThemeToggle from "../theme-toggle";
+import { umami } from "@/lib/umami";
 
 interface AppSidebarFooterProps {
   userClub: string;
@@ -46,6 +47,7 @@ const AppSidebarFooter: React.FC<AppSidebarFooterProps> = ({ userClub }) => {
   };
 
   const handleSignOut = () => {
+    umami?.track("sign-out");
     clear();
     signOut({
       callbackUrl: `${window.location.protocol}//${window.location.host}/${userClub}/`,

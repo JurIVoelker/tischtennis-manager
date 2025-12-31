@@ -16,6 +16,7 @@ import { postAPI } from "@/lib/APIUtils";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import { umami } from "@/lib/umami";
 
 interface AddPlayersWrapperProps {
   teams: TeamWithPlayers[];
@@ -80,8 +81,10 @@ const AddPlayersWrapper: React.FC<AddPlayersWrapperProps> = ({
       })),
     });
     if (!res.ok) {
+      umami?.track("error:add-players-to-team");
       setUnknownErrorToastMessage();
     } else {
+      umami?.track("add-players-to-team");
       toast({ title: "Spieler erfolgreich hinzugefügt" });
       push("./verwalten?refresh=true");
     }

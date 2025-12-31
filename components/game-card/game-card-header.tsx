@@ -36,6 +36,7 @@ import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { deleteAPI } from "@/lib/APIUtils";
 import { CardHeader, CardTitle } from "../ui/card";
 import { cn } from "@/lib/utils";
+import { umami } from "@/lib/umami";
 
 interface GameCardHeaderProps {
   match: MatchWithLineupAndLocation;
@@ -56,6 +57,7 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
   } | null>(null);
 
   const handleCopy = () => {
+    umami?.track("copy-info-text");
     const text = getInfoTextString(match);
     if (!text) {
       toast({
@@ -101,8 +103,10 @@ const GameCardHeader: React.FC<GameCardHeaderProps> = ({
       teamSlug,
     });
     if (!res.ok) {
+      umami?.track("error:delete-match");
       setUnknownErrorToastMessage();
     } else {
+      umami?.track("delete-match");
       refresh();
       toast({ title: "Spiel erfolgreich gelöscht" });
     }
