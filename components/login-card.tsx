@@ -17,6 +17,7 @@ import { Button } from "./ui/button";
 import { signIn } from "next-auth/react";
 import { Mail01Icon } from "hugeicons-react";
 import { useRouter } from "next/navigation";
+import { umami } from "@/lib/umami";
 
 export default function LoginCard() {
   // State for form fields
@@ -70,6 +71,7 @@ export default function LoginCard() {
         newErrors.password = "Ungültige E-Mail-Adresse oder Passwort";
       } else if (res?.status === 200) {
         push("./login/validieren");
+        umami()?.track("sign-in");
       }
       setErrors(newErrors);
     }

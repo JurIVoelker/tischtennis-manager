@@ -13,6 +13,7 @@ import { PLAYER_NOT_FOUND_ERROR } from "@/constants/APIError";
 import { handlePostRequestError } from "@/lib/apiResponseUtils";
 import { useUserStore } from "@/store/store";
 import { Player } from "@prisma/client";
+import { umami } from "@/lib/umami";
 
 type optionsType = "Ja" | "Nein" | "Vielleicht";
 
@@ -94,6 +95,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
       playerId: userId || "",
     });
     if ((!res.data && !res.ok) || res?.error) {
+      umami()?.track("error:vote", { status: res.status, error: res?.error });
       handlePostRequestError(res, [
         {
           message: PLAYER_NOT_FOUND_ERROR,
@@ -108,6 +110,7 @@ const AvailabiltyButtons: React.FC<AvailabiltyButtonsProps> = ({
         },
       ]);
     } else {
+      umami()?.track("vote");
       refresh();
     }
   };

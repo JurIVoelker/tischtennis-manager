@@ -11,6 +11,7 @@ import { postAPI } from "@/lib/APIUtils";
 import { setUnknownErrorToastMessage } from "@/lib/apiResponseUtils";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { umami } from "@/lib/umami";
 
 interface SortPlayersTableWrapperProps {
   defaultPlayers: Player[];
@@ -44,8 +45,10 @@ const SortPlayersTableWrapper: React.FC<SortPlayersTableWrapperProps> = ({
       teamSlug,
     });
     if (!res.ok) {
+      umami()?.track("error:save-player-positions");
       setUnknownErrorToastMessage();
     } else {
+      umami()?.track("save-player-positions");
       toast({
         title: "Spielerpositionen erfolgreich gespeichert",
       });
@@ -57,12 +60,12 @@ const SortPlayersTableWrapper: React.FC<SortPlayersTableWrapperProps> = ({
       <div className="flex gap-2">
         <Button variant="outline" asChild className="w-full">
           <Link href="./verwalten">
-            <Cancel01Icon strokeWidth={2}/>
+            <Cancel01Icon strokeWidth={2} />
             Abbrechen
           </Link>
         </Button>
         <Button className="w-full" onClick={onSave}>
-          <Tick01Icon strokeWidth={2}/>
+          <Tick01Icon strokeWidth={2} />
           Speichern
         </Button>
       </div>

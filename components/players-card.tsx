@@ -14,6 +14,7 @@ import { getAPI } from "@/lib/APIUtils";
 import { toast } from "@/hooks/use-toast";
 import { ConfirmModal } from "./popups/confirm-modal";
 import { useUserStore } from "@/store/store";
+import { umami } from "@/lib/umami";
 
 interface PlayersCardProps {
   players: Player[] | undefined;
@@ -43,12 +44,14 @@ const PlayersCard = ({
   const isLeader = leaderAt?.some((team) => team.teamSlug === teamSlug);
 
   const handleLeaveTeam = () => {
+    umami()?.track("leave-team");
     leaveTeam(teamSlug);
     window.location.reload();
   };
 
   const handleClickCopy = () => {
     if (inviteToken) {
+      umami()?.track("copy-invite-link");
       const inviteLink = `${window.location.origin}/${clubSlug}/${teamSlug}/login?inviteToken=${inviteToken}`;
       navigator.clipboard.writeText(inviteLink);
       toast({

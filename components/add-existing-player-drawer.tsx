@@ -16,6 +16,7 @@ import Typography from "./typography";
 import { getPlayerName } from "@/lib/stringUtils";
 import { PlusSignIcon, Tick01Icon } from "hugeicons-react";
 import { useState } from "react";
+import { umami } from "@/lib/umami";
 
 interface AddExistingPlayerDrawerProps {
   teams: TeamWithPlayers[];
@@ -34,6 +35,9 @@ const AddExistingPlayerDrawer: React.FC<AddExistingPlayerDrawerProps> = ({
 
   const handleAddPlayers = () => {
     onChange(selectedPlayers);
+    umami()?.track("add-existing-players", {
+      numberOfPlayers: selectedPlayers.length,
+    });
     setSelectedPlayers([]);
   };
 

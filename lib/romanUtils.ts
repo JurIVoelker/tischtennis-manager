@@ -11,6 +11,10 @@ export const romanToInt = (s: string): number => {
   let prevValue = 0;
   for (let i = s.length - 1; i >= 0; i--) {
     const currentValue = romanNumerals[s[i].toUpperCase()];
+    if (!currentValue) {
+      console.error(`Invalid Roman numeral character "${s[i]}" while trying to parse "${s}"`);
+      continue;
+    };
     if (currentValue < prevValue) {
       total -= currentValue;
     } else {

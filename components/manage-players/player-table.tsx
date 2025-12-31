@@ -35,6 +35,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { useState } from "react";
+import { umami } from "@/lib/umami";
 
 interface PlayerTableProps {
   className?: string;
@@ -76,10 +77,12 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({
     });
     if (!res.ok) {
       setUnknownErrorToastMessage();
+      umami()?.track("error:remove-player-from-team");
     } else {
       toast({
         title: "Spieler erfolgreich entfernt",
       });
+      umami()?.track("remove-player-from-team");
       refresh();
     }
   };

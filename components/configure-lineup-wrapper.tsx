@@ -22,6 +22,7 @@ import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import PlayerTable from "./lineup/player-table";
 import { getTeamsWithEqualType, sortPlayersByTeam } from "@/lib/teamUtils";
+import { umami } from "@/lib/umami";
 
 interface ConfigureLineupWrapperProps {
   mainPlayers: Player[];
@@ -99,8 +100,10 @@ const ConfigureLineupWrapper: React.FC<ConfigureLineupWrapperProps> = ({
       teamSlug,
     });
     if (!res.ok) {
+      umami()?.track("error:save-lineup");
       setUnknownErrorToastMessage();
     } else {
+      umami()?.track("save-lineup");
       toast({ title: "Aufstellung gespeichert" });
       push("../../../?refresh=true");
     }

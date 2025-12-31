@@ -139,6 +139,8 @@ export const validateSchema = async (
   return { success: true };
 };
 
+export const MATCH_TYPE_SCHEMA = z.enum(["regular", "cup"]);
+
 export const API_VOTE_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamSlug: validateTeamSlug(),
@@ -168,6 +170,7 @@ export const API_PUT_GAME_DATA_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamSlug: validateTeamSlug(),
   matchId: validateMatchId(),
+  matchType: MATCH_TYPE_SCHEMA.optional(),
 });
 
 export const API_PUT_POST_MATCH_SYNC_SCHEMA = z.object({
@@ -213,6 +216,7 @@ export const API_POST_GAME_DATA_SCHEMA = z.object({
   clubSlug: validateClubSlug(),
   teamSlug: validateTeamSlug(),
   enemyClubName: z.string(),
+  matchType: MATCH_TYPE_SCHEMA.optional(),
 });
 
 export const API_PUT_PLAYER_POSITIONS_SCHEMA = z.object({
