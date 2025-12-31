@@ -35,6 +35,10 @@ test("Test Roman: IX", () => {
   testRoman("IX", 9)
 });
 
+test("Test Roman: IXQ", () => {
+  testRoman("IXQ", 9)
+});
+
 test("Test Roman sorting", () => {
   const romanObjects = [{ roman: "X" }, { roman: "V" }, { roman: "IV" }, { roman: "IX" }, { roman: "III" }];
   const sortedArray = orderRomanArray<{ roman: string }>(romanObjects, "roman");
