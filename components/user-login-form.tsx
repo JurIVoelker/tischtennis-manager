@@ -23,6 +23,7 @@ import Typography from "./typography";
 import { Loader2 } from "lucide-react";
 import { getPlayerName } from "@/lib/stringUtils";
 import { useUserStore } from "@/store/store";
+import { umami } from "@/lib/umami";
 
 interface UserLoginFormProps {
   players: Player[] | undefined;
@@ -49,6 +50,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
   useEffect(() => {
     if (userId) {
       if (userId && players?.some((player) => player.id === userId)) {
+        umami()?.track("auto-join-team");
         push(`/${clubSlug}/${teamSlug}`);
       } else {
         leaveTeam(teamSlug);
@@ -81,6 +83,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({
     setLoading(true);
     const { playerId } = data;
     joinTeam(teamSlug, playerId);
+    umami()?.track("join-team");
     toast({
       title: "Login erfolgreich",
       description: (
