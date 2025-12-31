@@ -30,6 +30,7 @@ const defaultDummyMatch: MatchWithLineupAndLocation = {
   },
   matchDateTime: new Date(Date.now()),
   teamId: "Team ID",
+  type: "regular",
 };
 
 describe("test date and name", () => {
