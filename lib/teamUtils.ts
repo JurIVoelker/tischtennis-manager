@@ -12,9 +12,6 @@ export const sortPlayersByTeam = (players: Player[], teams: TeamWithPlayers[], t
 
   const sortPriorityList: { playerId: string, priority: number }[] = []
 
-  console.log("Target: " + players.flatMap(p => p.id));
-  console.log("teams: " + teams.flatMap(t => t.players).flatMap(p => p.id));
-
   teamsWithEqualType.forEach((team) => {
     team.players.forEach((player, index) => {
       const teamIndex = getTeamIndex(team.name);
@@ -25,7 +22,8 @@ export const sortPlayersByTeam = (players: Player[], teams: TeamWithPlayers[], t
     })
   })
 
-  const orderedPlayers: Player[] = sortPriorityList.map((item) => players.find((p) => p.id === item.playerId)).filter((player) => player !== undefined);
+  const orderedPlayers: Player[] = sortPriorityList.sort((a, b) => a.priority - b.priority).map((item) => players.find((p) => p.id === item.playerId)).filter((player) => player !== undefined);
+
   return orderedPlayers;
 }
 
