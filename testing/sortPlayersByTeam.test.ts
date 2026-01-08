@@ -10,7 +10,7 @@ const getTeamId = (index: number): string => `team-${index}`
 const getPlayerId = (teamIndex: number, pos: number): string => `id-${teamIndex * 100 + pos}`
 
 const getPlayer = (pos: number, teamIndex: number): Player => {
-  return { id: getPlayerId(teamIndex, pos), teamId: getTeamId(teamIndex), firstName: `FirstName${pos}`, lastName: `LastName${pos}` }
+  return { id: getPlayerId(teamIndex, pos), teamId: getTeamId(teamIndex), firstName: `FirstName${pos}`, lastName: `LastName${pos}`, positionPriority: pos }
 }
 
 test("Sort players by same team", () => {

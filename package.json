@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "next": "next dev",
-    "dev": "concurrently -p \"[{name}]\" -n \"db,next\" -c \"blue.bold,blue.bold\" \"bun db:run > NUL 2>&1\" \"bun db:wait-for-connection && bun db:migrate-deploy && bun db:setup-test-data && bun next\"",
+    "dev": "concurrently -p \"[{name}]\" -n \"db,next\" -c \"blue.bold,blue.bold\" \"bun db:run > NUL 2>&1\" \"bun db:wait-for-connection && bun db:migrate-deploy && bun next\"",
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit && next lint",

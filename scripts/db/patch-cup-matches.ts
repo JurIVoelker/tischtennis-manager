@@ -1,4 +1,4 @@
-import { fetchTtApiMatches, processMatches } from "./mytt/importGames";
+import { fetchTtApiMatches, processMatches } from "../mytt/importGames";
 
 (async () => {
   const matches = await fetchTtApiMatches();

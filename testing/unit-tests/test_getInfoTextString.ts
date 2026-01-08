@@ -10,6 +10,7 @@ const defaultDummyLineup = {
     id: "ID",
     lastName: "Last Name",
     teamId: "Team ID",
+    positionPriority: 1,
   },
   position: 1,
   matchId: "Match ID",

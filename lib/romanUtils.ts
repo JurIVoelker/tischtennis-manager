@@ -32,3 +32,8 @@ export const orderRomanArray = <T>(array: T[], key: keyof T): T[] => {
     return romanToInt(romanA) - romanToInt(romanB);
   });
 }
+
+export const getTeamIndex = (teamName: string): number => {
+  const romanPart = teamName.split(" ").pop() || "";
+  return romanToInt(romanPart);
+}
