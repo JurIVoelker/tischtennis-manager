@@ -14,6 +14,9 @@ const Lineup: React.FC<LineupProps> = async ({ matchId, teamSlug }) => {
   const lineups = await prisma.lineup.findMany({
     where: { matchId },
     include: { player: true },
+    orderBy: {
+      position: "asc",
+    },
   });
 
   const baseName = getTeamBaseName(teamSlug.replaceAll("-", " "));
