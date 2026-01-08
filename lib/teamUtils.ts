@@ -44,3 +44,21 @@ export const getTeamsWithEqualType = ({ teamName, teams, excludeOwn }: { teamNam
   });
   return availableAlternativeTeams;
 }
+
+
+export const getTeamBaseName = (_teamName: string) => {
+  const teamName = _teamName.replaceAll("ä", "ae").trim();
+  if (teamName.toLowerCase() === "maedchen 19") {
+    return "maedchen19";
+  }
+  if (teamName.toLowerCase() === "madchen 19") {
+    return "maedchen19";
+  }
+  const lowerTeamName = teamName.toLowerCase();
+  const splitTeamName = lowerTeamName.split(" ")
+  splitTeamName.pop();
+  const baseName = splitTeamName.join("");
+  return baseName;
+}
+
+export const emptyPosition = { "jugend19": 0, "jugend15": 0, "jugend12": 0, "damen": 0, "erwachsene": 0, "maedchen19": 0, "maedchen15": 0 }

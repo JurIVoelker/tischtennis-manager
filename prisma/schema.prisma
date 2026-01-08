@@ -88,6 +88,7 @@ model Player {
   lastName               String
   team                   Team                    @relation(fields: [teamId], references: [id])
   lineups                Lineup[]
+  positionPriority       Json                    @default("{\"jugend19\": 0, \"damen\": 0, \"erwachsene\": 0, \"maedchen19\": 0, \"jugend15\": 0, \"jugend12\": 0, \"maedchen15\": 0}")
   teamPosition           PlayerTeamPosition[]
   matchAvailabilityVotes MatchAvailabilityVote[]
 }
