@@ -18,7 +18,6 @@ import { resolve } from "path";
 
   if (!dbContainer) {
     console.log("Creating new Postgres container...")
-    // @ts-expect-error bun is not relevant on prod
     await $`docker run -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=devdb -p 5432:5432 --name ttm-postgres -d postgres`
     await new Promise((resolve) => setTimeout(resolve, 3000));
     if (await backupFile.exists()) {
