@@ -8,7 +8,6 @@ import { emptyPosition, getTeamBaseName } from "@/lib/teamUtils";
         equals: emptyPosition
       }
     },
-    distinct: ["firstName", "lastName"],
     include: {
       team: true
     }
