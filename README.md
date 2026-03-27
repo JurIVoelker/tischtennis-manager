@@ -1,3 +1,14 @@
+# ⚠️ Veraltet / Deprecated
+
+> **Dieses Repository wird nicht mehr weiterentwickelt.**
+>
+> Das Projekt wurde in separate Frontend- und Backend-Repositories aufgeteilt:
+>
+> - **Frontend:** [JurIVoelker/ttm-frontend](https://github.com/JurIVoelker/ttm-frontend)
+> - **Backend:** [JurIVoelker/ttm-backend](https://github.com/JurIVoelker/ttm-backend)
+
+---
+
 # Dokumentation
 
 Die Organisation der Tischtennisspiele in meinem Verein ist aktuell kompliziert und unübersichtlich. Abstimmungen erfolgen meist über WhatsApp, was aufwendig für die Mannschaftsführer ist und den Spielern oft unzureichende Informationen bietet.
